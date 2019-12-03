@@ -40,6 +40,16 @@ class User_Model extends CI_Model{
     return $result;
   }
 
+  public function get_user_list($company_id){
+    $query = $this->db->select('*')
+            ->where('company_id', $company_id)
+            ->where('is_admin', 0)
+            ->from('law_user')
+            ->get();
+    $result = $query->result();
+    return $result;
+  }
+
   public function get_info($id_type, $id, $tbl_name){
     $query = $this->db->select('*')
             ->where($id_type, $id)

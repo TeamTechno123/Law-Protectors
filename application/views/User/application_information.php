@@ -41,10 +41,16 @@ include('head.php');
             <?php } ?>
                 <div class="card-body row">
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="application_no" id="application_no" value="<?php echo $application_no; ?>" placeholder="Application No." readonly>
+                    <input type="text" class="form-control form-control-sm" name="application_no" id="application_no" value="<?php echo $application_no; ?>" title="Application No." placeholder="Application No." readonly>
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="application_date" id="date1" value="<?php if(isset($application_date)){ echo $application_date; } ?>" data-target="#date1" data-toggle="datetimepicker" placeholder="Application Date">
+                    <input type="text" class="form-control form-control-sm" name="application_date" id="date1" value="<?php if(isset($application_date)){ echo $application_date; } ?>" data-target="#date1" data-toggle="datetimepicker" title="Application Date" placeholder="Application Date">
+                  </div>
+                  <div class="form-group col-md-12">
+                    <select class="form-control select2 form-control-sm" name="gst_slab" title="Select Company" id="gst_slab" style="width: 100%;" required>
+                        <option selected="selected" value="" >Select Company </option>
+                          <option></option>
+                      </select>
                   </div>
                   <div class="form-group col-md-12">
                     <select class="form-control select2 form-control-sm" name="branch_id" id="branch_id" required>
@@ -53,6 +59,27 @@ include('head.php');
                         <option value="<?php echo $list->branch_id; ?>" <?php if(isset($branch_id)){ if($list->branch_id == $branch_id){ echo "selected"; } }  ?>><?php echo $list->branch_name; ?></option>
                       <?php } ?>
                     </select>
+                  </div>
+
+                  <div class="form-group col-md-12">
+                    <select class="form-control select2 form-control-sm" name="gst_slab" title="Select Manager" id="gst_slab" style="width: 100%;" required>
+                        <option selected="selected" value="" >Select Manager </option>
+                          <option></option>
+                      </select>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <select class="form-control select2 form-control-sm" name="gst_slab" title="Select TC" id="gst_slab" style="width: 100%;" required>
+                        <option selected="selected" value="" >Select TC </option>
+                          <option></option>
+                      </select>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <select class="form-control select2 form-control-sm" name="gst_slab" title="Select RC" id="gst_slab" style="width: 100%;" required>
+                        <option selected="selected" value="" >Select RC </option>
+                          <option></option>
+                      </select>
                   </div>
 
 
@@ -73,9 +100,9 @@ include('head.php');
                     </select>
                   </div>
                   <?php if(!isset($update)){ ?>
-                  <div class="form-group col-md-6">
+                  <!-- <div class="form-group col-md-6">
                     <input type="file" class="form-control form-control-sm" name="csv_file" id="csv_file" placeholder="" required>
-                  </div>
+                  </div> -->
                   <?php } ?>
 
                 </div>

@@ -43,10 +43,10 @@ include('head.php');
                 <input type="hidden" name="organization_id" value="<?php echo $organization_id; ?>">
                 <div class="card-body row">
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="NAME" id="NAME" value="<?php if(isset($NAME)){ echo $NAME; } ?>" placeholder="<?php if(isset($pl_name)){ echo $pl_name; } ?>">
+                    <input type="text" class="form-control form-control-sm" name="NAME" id="NAME" value="<?php if(isset($NAME)){ echo $NAME; } ?>" title="<?php if(isset($pl_name)){ echo $pl_name; } ?>" placeholder="<?php if(isset($pl_name)){ echo $pl_name; } ?>">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="NATIONALITY" id="NATIONALITY" value="<?php if(isset($NATIONALITY)){ echo $NATIONALITY; } ?>" placeholder="<?php if(isset($pl_nation)){ echo $pl_nation; } ?>">
+                    <input type="text" class="form-control form-control-sm" name="NATIONALITY" id="NATIONALITY" value="<?php if(isset($NATIONALITY)){ echo $NATIONALITY; } ?>" title="<?php if(isset($pl_nation)){ echo $pl_nation; } ?>" placeholder="<?php if(isset($pl_nation)){ echo $pl_nation; } ?>">
                   </div>
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control form-control-sm" name="MOBILE" id="MOBILE" value="<?php if(isset($MOBILE)){ echo $MOBILE; } ?>" placeholder="Mobile Number">
@@ -55,30 +55,30 @@ include('head.php');
                   <?php if(isset($organization_id) && $organization_id != 6 ){ ?>
                     <?php if(isset($organization_id) && ($organization_id == 2 || $organization_id == 3 || $organization_id == 4 || $organization_id == 8 || $organization_id == 9 ) ){ ?>
                       <div class="form-group col-md-12">
-                        <input type="text" class="form-control form-control-sm" name="ASSOCIATION" id="ASSOCIATION" value="<?php if(isset($ASSOCIATION)){ echo $ASSOCIATION; } ?>" placeholder="<?php if(isset($pl_association)){ echo $pl_association; } ?>">
+                        <input type="text" class="form-control form-control-sm" name="ASSOCIATION" id="ASSOCIATION" value="<?php if(isset($ASSOCIATION)){ echo $ASSOCIATION; } ?>" title="<?php if(isset($pl_association)){ echo $pl_association; } ?>" placeholder="<?php if(isset($pl_association)){ echo $pl_association; } ?>">
                       </div>
                     <?php } else{ ?>
                       <div class="form-group col-md-12">
-                        <input type="text" class="form-control form-control-sm" name="FATHER" id="FATHER" value="<?php if(isset($FATHER)){ echo $FATHER; } ?>" placeholder="<?php if(isset($pl_father)){ echo $pl_father; } ?>">
+                        <input type="text" class="form-control form-control-sm" name="FATHER" id="FATHER" value="<?php if(isset($FATHER)){ echo $FATHER; } ?>" title="<?php if(isset($pl_father)){ echo $pl_father; } ?>" placeholder="<?php if(isset($pl_father)){ echo $pl_father; } ?>">
                       </div>
                     <?php } ?>
                   <?php } ?>
 
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="ADDRESS" id="ADDRESS" value="<?php if(isset($ADDRESS)){ echo $ADDRESS; } ?>" placeholder="<?php if(isset($pl_res_addr)){ echo $pl_res_addr; } ?>">
+                    <input type="text" class="form-control form-control-sm" name="ADDRESS" id="ADDRESS" value="<?php if(isset($ADDRESS)){ echo $ADDRESS; } ?>" title="<?php if(isset($pl_res_addr)){ echo $pl_res_addr; } ?>" placeholder="<?php if(isset($pl_res_addr)){ echo $pl_res_addr; } ?>">
                   </div>
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="FIRMADDRESS" id="FIRMADDRESS" value="<?php if(isset($FIRMADDRESS)){ echo $FIRMADDRESS; } ?>" placeholder="Firm Address">
+                    <input type="text" class="form-control form-control-sm" name="FIRMADDRESS" id="FIRMADDRESS" value="<?php if(isset($FIRMADDRESS)){ echo $FIRMADDRESS; } ?>" title="Firm Address" placeholder="Firm Address">
                   </div>
 
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="ORGANIZATION" id="ORGANIZATION" value="<?php if(isset($ORGANIZATION)){ echo $ORGANIZATION; } ?>" placeholder="Organization Name">
+                    <input type="text" class="form-control form-control-sm" name="ORGANIZATION" id="ORGANIZATION" value="<?php if(isset($ORGANIZATION)){ echo $ORGANIZATION; } ?>" title="Organization Name" placeholder="Organization Name">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="$STATE" id="$STATE" value="<?php if(isset($STATE)){ echo $STATE; } ?>" placeholder="State">
+                    <input type="text" class="form-control form-control-sm" name="$STATE" id="$STATE" value="<?php if(isset($STATE)){ echo $STATE; } ?>" title="State" placeholder="State">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="AGE" id="AGE" value="<?php if(isset($AGE)){ echo $AGE; } ?>" placeholder="Age">
+                    <input type="text" class="form-control form-control-sm" name="AGE" id="AGE" value="<?php if(isset($AGE)){ echo $AGE; } ?>" title="Age" placeholder="Age">
                   </div>
                   <div class="col-md-12">
                     <div class="checkbox">
@@ -93,16 +93,16 @@ include('head.php');
                   </div>
 
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="BRAND" id="BRAND" value="<?php if(isset($BRAND)){ echo $BRAND; } ?>" placeholder="Mark Brand Name To Be Registered">
+                    <input type="text" class="form-control form-control-sm" name="BRAND" id="BRAND" value="<?php if(isset($BRAND)){ echo $BRAND; } ?>" title="Mark Brand Name To Be Registered" placeholder="Mark Brand Name To Be Registered">
                   </div>
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="SIGNIFICANCE" id="SIGNIFICANCE" value="<?php if(isset($SIGNIFICANCE)){ echo $SIGNIFICANCE; } ?>" placeholder="Significance of Mark">
+                    <input type="text" class="form-control form-control-sm" name="SIGNIFICANCE" id="SIGNIFICANCE" value="<?php if(isset($SIGNIFICANCE)){ echo $SIGNIFICANCE; } ?>"  title="Significance of Mark" placeholder="Significance of Mark">
                   </div>
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="TM" id="TM" value="<?php if(isset($TM)){ echo $TM; } ?>" placeholder="TM Class">
+                    <input type="text" class="form-control form-control-sm" name="TM" id="TM" value="<?php if(isset($TM)){ echo $TM; } ?>" title="TM Class" placeholder="TM Class">
                   </div>
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="SERVICES" id="SERVICES" value="<?php if(isset($SERVICES)){ echo $SERVICES; } ?>" placeholder="Goods Services Details">
+                    <input type="text" class="form-control form-control-sm" name="SERVICES" id="SERVICES" value="<?php if(isset($SERVICES)){ echo $SERVICES; } ?>" title="Goods Services Details" placeholder="Goods Services Details">
                   </div>
 
                   <div class="col-md-12">
@@ -117,23 +117,23 @@ include('head.php');
                   </div>
 
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="PROPOSED" id="date2" data-target="#date2" data-toggle="datetimepicker" value="<?php if(isset($PROPOSED)){ echo $PROPOSED; } ?>" placeholder="User Date Proposed to be" required>
+                    <input type="text" class="form-control form-control-sm" name="PROPOSED" id="date2" data-target="#date2" data-toggle="datetimepicker" value="<?php if(isset($PROPOSED)){ echo $PROPOSED; } ?>" title="User Date Proposed to be" placeholder="User Date Proposed to be" required>
                   </div>
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control form-control-sm" name="INFORMATION" id="INFORMATION" value="<?php if(isset($INFORMATION)){ echo $INFORMATION; } ?>" placeholder="Information Provided Name">
+                    <input type="text" class="form-control form-control-sm" name="INFORMATION" id="INFORMATION" value="<?php if(isset($INFORMATION)){ echo $INFORMATION; } ?>" title="Information Provided Name" placeholder="Information Provided Name">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="DATE" id="date1" data-target="#date1" data-toggle="datetimepicker" value="<?php if(isset($DATE)){ echo $DATE; } ?>" placeholder="Date">
+                    <input type="text" class="form-control form-control-sm" name="DATE" id="date1" data-target="#date1" data-toggle="datetimepicker" value="<?php if(isset($DATE)){ echo $DATE; } ?>" title="Date" placeholder="Date">
                   </div>
                   <div class="form-group col-md-6 ">
                     <input type="text" class="form-control form-control-sm" name="PLACE" id="PLACE" value="<?php if(isset($PLACE)){ echo $PLACE; } ?>" placeholder="Place">
                   </div>
 
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="AFF_DATE" id="date3" data-target="#date3" data-toggle="datetimepicker" value="<?php if(isset($AFF_DATE)){ echo $AFF_DATE; } ?>" placeholder="Affidavit Date">
+                    <input type="text" class="form-control form-control-sm" name="AFF_DATE" id="date3" data-target="#date3" data-toggle="datetimepicker" value="<?php if(isset($AFF_DATE)){ echo $AFF_DATE; } ?>" title="Affidavit Date" placeholder="Affidavit Date">
                   </div>
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control form-control-sm" name="COV_DATE" id="date4" data-target="#date4" data-toggle="datetimepicker" value="<?php if(isset($COV_DATE)){ echo $COV_DATE; } ?>" placeholder="Covering Letter Date">
+                    <input type="text" class="form-control form-control-sm" name="COV_DATE" id="date4" data-target="#date4" data-toggle="datetimepicker" value="<?php if(isset($COV_DATE)){ echo $COV_DATE; } ?>" title="Covering Letter Date" placeholder="Covering Letter Date">
                   </div>
 
                   <div class="col-md-6 offset-md-4">

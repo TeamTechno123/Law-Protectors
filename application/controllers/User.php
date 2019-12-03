@@ -314,6 +314,45 @@ class User extends CI_Controller{
       header('location:'.base_url().'User');
     }
   }
+
+  public function add_user(){
+    $this->load->view('User/add_user');
+  }
+
  // dhananjay....
+
+ public function user_information(){
+   $user_id = $this->session->userdata('law_user_id');
+   $company_id = $this->session->userdata('law_company_id');
+   $roll_id = $this->session->userdata('roll_id');
+   if($company_id){
+     $this->load->view('User/add_user');
+   } else{
+     header('location:'.base_url().'User');
+   }
+ }
+ // Service List...
+ public function user_information_list(){
+   $user_id = $this->session->userdata('law_user_id');
+   $company_id = $this->session->userdata('law_company_id');
+   $roll_id = $this->session->userdata('roll_id');
+   if($company_id){
+     $data['user_list'] = $this->User_Model->get_user_list($company_id);
+     $this->load->view('User/user_information_list',$data);
+   } else{
+     header('location:'.base_url().'User');
+   }
+ }
+
+ public function set_target(){
+   $user_id = $this->session->userdata('law_user_id');
+   $company_id = $this->session->userdata('law_company_id');
+   $roll_id = $this->session->userdata('roll_id');
+   if($company_id){
+     $this->load->view('User/set_target_information');
+   } else{
+     header('location:'.base_url().'User');
+   }
+ }
 }
 ?>

@@ -100,6 +100,7 @@ class Admin extends CI_Controller{
           'user_city'=>$this->input->post('company_city'),
           'user_mobile'=>$this->input->post('company_mob1'),
           'user_addedby'=>'Admin',
+          'is_admin'=>1,
         );
         $this->Admin_Model->save_data('law_user', $data2);
         header('location:'.base_url().'Admin/company_information_list');

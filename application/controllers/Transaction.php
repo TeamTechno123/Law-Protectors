@@ -869,5 +869,57 @@ class Transaction extends CI_Controller{
     $this->load->view('User/society_step2');
   }
 
+  public function copyright_step_one(){
+    $this->load->view('Include/head');
+    $this->load->view('Include/navbar');
+    $this->load->view('Transaction/copyright_step1');
+    $this->load->view('Include/footer');
+  }
+
+  public function copyright_step_two(){
+    $this->load->view('Include/head');
+    $this->load->view('Include/navbar');
+    $this->load->view('Transaction/copyright_step2');
+    $this->load->view('Include/footer');
+  }
+
+  public function other_service_step_one(){
+    $this->load->view('Include/head');
+    $this->load->view('Include/navbar');
+    $this->load->view('Transaction/other_service_step1');
+    $this->load->view('Include/footer');
+  }
+
+  public function other_service_step_two(){
+    $this->load->view('Include/head');
+    $this->load->view('Include/navbar');
+    $this->load->view('Transaction/other_service_step2');
+    $this->load->view('Include/footer');
+  }
+
+  public function document_uploading_form(){
+    $this->load->view('Include/head');
+    $this->load->view('Include/navbar');
+    $this->load->view('Transaction/document_uploading');
+    $this->load->view('Include/footer');
+  }
+
+  public function target_information(){
+    $this->load->view('Include/head');
+    $this->load->view('Include/navbar');
+    $this->load->view('Transaction/target_information');
+    $this->load->view('Include/footer');
+  }
+
+  public function add_work_details(){
+    $this->load->view('Include/head');
+    $this->load->view('Include/navbar');
+    $this->load->view('Transaction/add_work_details');
+    $this->load->view('Include/footer');
+  }
+
+
+
+
 
 }

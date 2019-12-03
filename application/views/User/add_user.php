@@ -23,12 +23,7 @@ include('head.php');
           <div class="col-sm-12 text-center mt-2">
             <h1>USER INFORMATION</h1>
           </div>
-          <!-- <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">General Form</li>
-            </ol>
-          </div> -->
+
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -50,17 +45,58 @@ include('head.php');
               <form role="form">
                 <div class="card-body row">
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control" name="" id="" placeholder="Enter Name of User">
+                    <select class="form-control select2 form-control-sm" name="gst_slab" title="Select Company" id="gst_slab" style="width: 100%;" required>
+                        <option selected="selected" value="" >Select Company </option>
+                          <option></option>
+                      </select>
+                  </div>
+                  <!-- <div class="form-group col-md-12">
+                    <select class="form-control select2 form-control-sm" name="gst_slab" title="Select Branch" id="gst_slab" style="width: 100%;" required>
+                        <option selected="selected" value="" >Select Branch </option>
+                          <option></option>
+                      </select>
+                  </div> -->
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <!-- <label>Multiple</label> -->
+                      <select class="select2 form-control form-control-sm" multiple="multiple" data-placeholder="Select Branch" style="width: 100%;">
+                        <option>Alabama</option>
+                        <option>Alaska</option>
+                        <option>California</option>
+                        <option>Delaware</option>
+                        <option>Tennessee</option>
+                        <option>Texas</option>
+                        <option>Washington</option>
+                      </select>
+                    </div>
                   </div>
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control" name="" id="" placeholder="Enter City">
+                    <select class="form-control select2 form-control-sm" name="gst_slab" title="Select Roll Name" id="gst_slab" style="width: 100%;" required>
+                        <option selected="selected" value="" >Select Roll Name </option>
+                          <option></option>
+                      </select>
                   </div>
-                  <div class="form-group col-md-12">
-                    <input type="number" class="form-control" name="" id="" placeholder="Enter Mobile No.">
+                  <div class="form-group col-md-6">
+                    <input type="text" class="form-control" name="" id="" title="First Name" placeholder="First Name">
                   </div>
-                  <div class="form-group col-md-12">
-                    <input type="password" class="form-control" name="" id="" placeholder="Enter Password">
+                  <div class="form-group col-md-6">
+                    <input type="text" class="form-control" name="" id="" title="Last Name" placeholder="Last Name">
                   </div>
+                  <div class="form-group col-md-6">
+                    <input type="text" class="form-control" name="" id="" title="Mobile No." placeholder="Mobile No.">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <input type="text" class="form-control" name="" id="" title="City" placeholder="City">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <input type="password" class="form-control" name="" id="" title="Enter Password" placeholder="Enter Password">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <input type="password" class="form-control" name="" id="" title="Confirm Password" placeholder="Confirm Password">
+                  </div>
+                </div>
+                  <div class="form-group col-md-6 pl-4">
+                  <input type="checkbox"> Disable This User
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

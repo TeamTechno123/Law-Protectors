@@ -44,23 +44,37 @@ include('head.php');
 
                 <div class="card-body row">
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control form-control-sm" name="CONTRACTAMOUNT" id="CONTRACTAMOUNT" value="<?php if(isset($CONTRACTAMOUNT)){ echo $CONTRACTAMOUNT;} ?>" placeholder="Contract Final Amount">
+                    <input type="text" class="form-control form-control-sm" name="CONTRACTAMOUNT" id="CONTRACTAMOUNT" value="<?php if(isset($CONTRACTAMOUNT)){ echo $CONTRACTAMOUNT;} ?>" title="Contract Final Amount" placeholder="Contract Final Amount">
                   </div>
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control form-control-sm" name="GSTAMOUNT" id="GSTAMOUNT" value="<?php if(isset($GSTAMOUNT)){ echo $GSTAMOUNT;} ?>" placeholder="GST Amount">
+                    <input type="text" class="form-control form-control-sm" name="GSTAMOUNT" id="GSTAMOUNT" value="<?php if(isset($GSTAMOUNT)){ echo $GSTAMOUNT;} ?>" title="GST Amount" placeholder="GST Amount">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="TOTALAMOUNT" id="TOTALAMOUNT" value="<?php if(isset($TOTALAMOUNT)){ echo $TOTALAMOUNT;} ?>" placeholder="Total Amount">
+                    <input type="text" class="form-control form-control-sm" name="TOTALAMOUNT" id="TOTALAMOUNT" value="<?php if(isset($TOTALAMOUNT)){ echo $TOTALAMOUNT;} ?>" title="Total Amount" placeholder="Total Amount">
                   </div>
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control form-control-sm" name="RECEVIEDAMOUNT" id="RECEVIEDAMOUNT" value="<?php if(isset($RECEVIEDAMOUNT)){ echo $RECEVIEDAMOUNT;} ?>" placeholder="Received Amount">
+                    <input type="text" class="form-control form-control-sm" name="RECEVIEDAMOUNT" id="RECEVIEDAMOUNT" value="<?php if(isset($RECEVIEDAMOUNT)){ echo $RECEVIEDAMOUNT;} ?>" title="Received Amount" placeholder="Received Amount">
                   </div>
 
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="BALANCEAMOUNT" id="BALANCEAMOUNT" value="<?php if(isset($BALANCEAMOUNT)){ echo $BALANCEAMOUNT;} ?>" placeholder="Balance Amount">
+                    <input type="text" class="form-control form-control-sm" name="BALANCEAMOUNT" id="BALANCEAMOUNT" value="<?php if(isset($BALANCEAMOUNT)){ echo $BALANCEAMOUNT;} ?>" title="Balance Amount" placeholder="Balance Amount">
                   </div>
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control form-control-sm" name="GSTNUMBER" id="GSTNUMBER" value="<?php if(isset($GSTNUMBER)){ echo $GSTNUMBER;} ?>" placeholder="GST Number">
+                    <input type="text" class="form-control form-control-sm" name="GSTNUMBER" id="GSTNUMBER" value="<?php if(isset($GSTNUMBER)){ echo $GSTNUMBER;} ?>" title="GST Number" placeholder="GST Number">
+                  </div>
+
+                  <div class="form-group col-md-6 ">
+                    <input type="text" class="form-control form-control-sm" name="" id="" value="" title="LP Amount" placeholder="LP Amount">
+                  </div>
+
+                  <div class="form-group col-md-6 ">
+                    <input type="text" class="form-control form-control-sm" name="" id="" value="" title="Govt Fees" placeholder="Govt Fees">
+                  </div>
+                  <div class="form-group col-md-6 ">
+                    <input type="text" class="form-control form-control-sm" name="" id="" value="" title="TDS" placeholder="TDS">
+                  </div>
+                  <div class="form-group col-md-6 ">
+                    <input type="text" class="form-control form-control-sm" name="" id="" value="" title="B2B" placeholder="B2B">
                   </div>
 
                   <div class="col-md-12">
@@ -77,24 +91,24 @@ include('head.php');
                   </div>
                   <br>
                   <div class="form-group col-md-3">
-                    <input type="text" class="form-control form-control-sm" name="CHEQUENUMBER" id="CHEQUENUMBER" value="<?php if(isset($CHEQUENUMBER)){ echo $CHEQUENUMBER;} ?>" placeholder="Cheque No.">
+                    <input type="text" class="form-control form-control-sm" name="CHEQUENUMBER" id="CHEQUENUMBER" value="<?php if(isset($CHEQUENUMBER)){ echo $CHEQUENUMBER;} ?>" title="Cheque No." placeholder="Cheque No.">
                   </div>
                   <div class="form-group col-md-3 ">
-                    <input type="text" class="form-control form-control-sm" name="CHQDATE" id="date1" data-target="#date1" data-toggle="datetimepicker" value="<?php if(isset($CHQDATE)){ echo $CHQDATE;} ?>" placeholder="Cheque Date">
+                    <input type="text" class="form-control form-control-sm" name="CHQDATE" id="date1" data-target="#date1" data-toggle="datetimepicker" value="<?php if(isset($CHQDATE)){ echo $CHQDATE;} ?>" title="Cheque Date" placeholder="Cheque Date">
                   </div>
                   <div class="form-group col-md-3 ">
-                    <input type="text" class="form-control form-control-sm" name="BANKNAME" id="BANKNAME" value="<?php if(isset($BANKNAME)){ echo $BANKNAME;} ?>" placeholder="Bank Name ">
+                    <input type="text" class="form-control form-control-sm" name="BANKNAME" id="BANKNAME" value="<?php if(isset($BANKNAME)){ echo $BANKNAME;} ?>" title="Bank Name" placeholder="Bank Name">
                   </div>
                   <div class="form-group col-md-3 ">
-                    <input type="text" class="form-control form-control-sm" name="CHEQUEAMOUNT" id="CHEQUEAMOUNT" value="<?php if(isset($CHEQUEAMOUNT)){ echo $CHEQUEAMOUNT;} ?>" placeholder="Amount">
+                    <input type="text" class="form-control form-control-sm" name="CHEQUEAMOUNT" id="CHEQUEAMOUNT" value="<?php if(isset($CHEQUEAMOUNT)){ echo $CHEQUEAMOUNT;} ?>" title="Amount" placeholder="Amount">
                   </div>
 
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="GROUNDOFCONTRACT" id="GROUNDOFCONTRACT" value="<?php if(isset($GROUNDOFCONTRACT)){ echo $GROUNDOFCONTRACT;} ?>" placeholder="Enter Ground Of Contract">
+                    <input type="text" class="form-control form-control-sm" name="GROUNDOFCONTRACT" id="GROUNDOFCONTRACT" value="<?php if(isset($GROUNDOFCONTRACT)){ echo $GROUNDOFCONTRACT;} ?>" title="Enter Ground Of Contract" placeholder="Enter Ground Of Contract">
                   </div>
-                  <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="FILE_REF_NO" id="FILE_REF_NO" value="<?php if(isset($FILE_REF_NO)){ echo $FILE_REF_NO;} ?>" placeholder="File Reference Number">
-                  </div>
+                  <!-- <div class="form-group col-md-6">
+                    <input type="text" class="form-control form-control-sm" name="FILE_REF_NO" id="FILE_REF_NO" value="<?php if(isset($FILE_REF_NO)){ echo $FILE_REF_NO;} ?>" title="File Reference Number" placeholder="File Reference Number">
+                  </div> -->
                   <div class="form-group col-md-6"></div>
                   <div class="col-md-12">
                     <div class="checkbox">
@@ -131,43 +145,13 @@ include('head.php');
                   $year1 = $PROPOSED_year - 5;
                   ?>
 
-                  <div class="col-md-12 mb-2">Sale amount year wise :  </div>
-                  <div class="form-group col-md-2">
-                    <input type="text" class="form-control form-control-sm" name="SALE_YR_AMT1" id="SALE_YR_AMT1" value="<?php if(isset($SALE_YR_AMT1)){ echo $SALE_YR_AMT1;} ?>" placeholder="<?php echo $year1.'-'.$year2; ?>">
-                  </div>
-                  <div class="form-group col-md-2">
-                    <input type="text" class="form-control form-control-sm" name="SALE_YR_AMT2" id="SALE_YR_AMT2" value="<?php if(isset($SALE_YR_AMT2)){ echo $SALE_YR_AMT2;} ?>" placeholder="<?php echo $year2.'-'.$year3; ?>">
-                  </div>
-                  <div class="form-group col-md-2">
-                    <input type="text" class="form-control form-control-sm" name="SALE_YR_AMT3" id="SALE_YR_AMT3" value="<?php if(isset($SALE_YR_AMT3)){ echo $SALE_YR_AMT3;} ?>" placeholder="<?php echo $year3.'-'.$year4; ?>">
-                  </div>
-                  <div class="form-group col-md-2">
-                    <input type="text" class="form-control form-control-sm" name="SALE_YR_AMT4" id="SALE_YR_AMT4" value="<?php if(isset($SALE_YR_AMT4)){ echo $SALE_YR_AMT4;} ?>" placeholder="<?php echo $year4.'-'.$year5; ?>">
-                  </div>
-                  <div class="form-group col-md-2">
-                    <input type="text" class="form-control form-control-sm" name="SALE_YR_AMT5" id="SALE_YR_AMT5" value="<?php if(isset($SALE_YR_AMT5)){ echo $SALE_YR_AMT5;} ?>" placeholder="<?php echo $year5.'-'.$PROPOSED_year; ?>">
-                  </div>
 
-                  <div class="col-md-12 mb-2">Advertisement amount year wise :  </div>
-                  <div class="form-group col-md-2">
-                    <input type="text" class="form-control form-control-sm" name="ADV_YR_AMT1" id="ADV_YR_AMT1" value="<?php if(isset($ADV_YR_AMT1)){ echo $ADV_YR_AMT1;} ?>" placeholder="<?php echo $year1.'-'.$year2; ?>">
-                  </div>
-                  <div class="form-group col-md-2">
-                    <input type="text" class="form-control form-control-sm" name="ADV_YR_AMT2" id="ADV_YR_AMT2" value="<?php if(isset($ADV_YR_AMT2)){ echo $ADV_YR_AMT2;} ?>" placeholder="<?php echo $year2.'-'.$year3; ?>">
-                  </div>
-                  <div class="form-group col-md-2">
-                    <input type="text" class="form-control form-control-sm" name="ADV_YR_AMT3" id="ADV_YR_AMT3" value="<?php if(isset($ADV_YR_AMT3)){ echo $ADV_YR_AMT3;} ?>" placeholder="<?php echo $year3.'-'.$year4; ?>">
-                  </div>
-                  <div class="form-group col-md-2">
-                    <input type="text" class="form-control form-control-sm" name="ADV_YR_AMT4" id="ADV_YR_AMT4" value="<?php if(isset($ADV_YR_AMT4)){ echo $ADV_YR_AMT4;} ?>" placeholder="<?php echo $year4.'-'.$year5; ?>">
-                  </div>
-                  <div class="form-group col-md-2">
-                    <input type="text" class="form-control form-control-sm" name="ADV_YR_AMT5" id="ADV_YR_AMT5" value="<?php if(isset($ADV_YR_AMT5)){ echo $ADV_YR_AMT5;} ?>" placeholder="<?php echo $year5.'-'.$PROPOSED_year; ?>">
-                  </div>
-
-                  <div class="form-group col-md-6">
-                    <input type="file" class="form-control" name="" id="" placeholder="Logo">
-                  </div>
+                  <div class="form-group col-md-12">
+                  <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="customFile" title="Browse Logo" placeholder="Logo">
+                      <label class="custom-file-label" for="customFile">Browse Logo</label>
+                    </div>
+                    </div>
 
                   <div class="col-md-6 offset-md-4">
                     <button type="submit" class="btn btn-primary  mr-3">Update & Finish</button>

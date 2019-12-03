@@ -49,6 +49,22 @@
                     <input type="text" class="form-control form-control-sm" name="service_alert_days" id="service_alert_days" value="<?php if(isset($service_alert_days)){ echo $service_alert_days; } ?>" placeholder="Alert Days of every" required>
                   </div>
                 <!-- /.card-body -->
+                <div class="form-group col-md-8">
+                  <label for=""> List Of Document Uploadation Required For this Service</label>
+                </div>
+                <div class="form-group col-md-4">
+                    <button type="button" id="add_row"  class="btn btn-success">Add Row</button>
+                </div>
+                <table id="myTable" width="100%">
+                  <tr>
+                    <td width="100%">
+                      <div class="form-group col-md-8">
+                        <input type="text" class="form-control form-control-sm" name="" id="" title="Enter Name Of Document" placeholder="Enter Name Of Document">
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+
               </div>
               <div class="card-footer">
                 <?php if(isset($update)){ ?>
@@ -79,5 +95,12 @@
 </div>
 <!-- ./wrapper -->
 <?php include('script.php') ?>
+<script type="text/javascript">
+$('#add_row').click(function(){
+  var row = '<tr><td><div class="form-group col-md-8"><input type="text" class="form-control form-control-sm" name="" id="" title="Enter Name Of Document" placeholder="Enter Name Of Document"></div></td></tr>';
+
+    $('#myTable').append(row);
+});
+</script>
 </body>
 </html>
