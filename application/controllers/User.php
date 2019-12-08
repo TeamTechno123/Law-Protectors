@@ -32,6 +32,7 @@ class User extends CI_Controller{
           $this->session->set_userdata('law_company_id', $login['company_id']);
           $this->session->set_userdata('roll_id', $login['roll_id']);
         }
+
         header('location:'.base_url().'User/dashboard');
       }
     }
@@ -47,7 +48,10 @@ class User extends CI_Controller{
       $data['service_count'] = $this->User_Model->get_count('service_id',$company_id,$key,'law_service');
       $data['open_count'] = $this->User_Model->get_count('application_id',$company_id,'open','law_application');
       $data['pro_count'] = $this->User_Model->get_count('application_id',$company_id,'In Process','law_application');
-      $this->load->view('User/dashboard',$data);
+      $this->load->view('Include/head', $data);
+      $this->load->view('Include/navbar', $data);
+      $this->load->view('User/dashboard', $data);
+      $this->load->view('Include/footer', $data);
     } else{
       header('location:'.base_url().'User');
     }
@@ -61,7 +65,10 @@ class User extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
       $data['company_list'] = $this->User_Model->get_list($company_id,'company_id','ASC','law_company');
-      $this->load->view('User/company_information_list',$data);
+      $this->load->view('Include/head', $data);
+      $this->load->view('Include/navbar', $data);
+      $this->load->view('User/company_information_list', $data);
+      $this->load->view('Include/footer', $data);
     } else{
       header('location:'.base_url().'User');
     }
@@ -82,7 +89,7 @@ class User extends CI_Controller{
           $data['company_city'] = $info->company_city;
           $data['company_state'] = $info->company_state;
           $data['company_district'] = $info->company_district;
-          $data['company_pincode'] = $info->company_pincode;
+          $data['company_statecode'] = $info->company_statecode;
           $data['company_mob1'] = $info->company_mob1;
           $data['company_mob2'] = $info->company_mob2;
           $data['company_email'] = $info->company_email;
@@ -94,7 +101,10 @@ class User extends CI_Controller{
           $data['company_start_date'] = $info->company_start_date;
           $data['company_end_date'] = $info->company_end_date;
         }
-        $this->load->view('User/company_information',$data);
+        $this->load->view('Include/head', $data);
+        $this->load->view('Include/navbar', $data);
+        $this->load->view('User/company_information', $data);
+        $this->load->view('Include/footer', $data);
       }
     } else{
       header('location:'.base_url().'User');
@@ -113,7 +123,7 @@ class User extends CI_Controller{
         'company_city' => $this->input->post('company_city'),
         'company_state' => $this->input->post('company_state'),
         'company_district' => $this->input->post('company_district'),
-        'company_pincode' => $this->input->post('company_pincode'),
+        'company_statecode' => $this->input->post('company_statecode'),
         'company_mob1' => $this->input->post('company_mob1'),
         'company_mob2' => $this->input->post('company_mob2'),
         'company_email' => $this->input->post('company_email'),
@@ -139,7 +149,11 @@ class User extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
-      $this->load->view('User/branch_information');
+      $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
+      $this->load->view('Include/head');
+      $this->load->view('Include/navbar');
+      $this->load->view('User/branch_information',$data);
+      $this->load->view('Include/footer');
     } else{
       header('location:'.base_url().'User');
     }
@@ -150,8 +164,11 @@ class User extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
-      $data['branch_list'] = $this->User_Model->get_list($company_id,'branch_id','ASC','law_branch');
+      $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
+      $this->load->view('Include/head',$data);
+      $this->load->view('Include/navbar',$data);
       $this->load->view('User/branch_information_list',$data);
+      $this->load->view('Include/footer',$data);
     } else{
       header('location:'.base_url().'User');
     }
@@ -163,8 +180,9 @@ class User extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
       $data = array(
-        'company_id' => $company_id,
+        'company_id' => $this->input->post('company_id'),
         'branch_name' => $this->input->post('branch_name'),
+        'branch_addedby' => $user_id,
       );
       $this->User_Model->save_data('law_branch', $data);
       header('location:'.base_url().'User/branch_information_list');
@@ -179,14 +197,19 @@ class User extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
       $branch_info = $this->User_Model->get_info('branch_id', $branch_id, 'law_branch');
+      $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
       if($branch_info){
         foreach($branch_info as $info){
           $data['update'] = 'update';
           $data['branch_id'] = $info->branch_id;
+          $data['company_id'] = $info->company_id;
           $data['branch_name'] = $info->branch_name;
           $data['branch_status'] = $info->branch_status;
         }
+        $this->load->view('Include/head',$data);
+        $this->load->view('Include/navbar',$data);
         $this->load->view('User/branch_information',$data);
+        $this->load->view('Include/footer',$data);
       }
     } else{
       header('location:'.base_url().'User');
@@ -200,7 +223,9 @@ class User extends CI_Controller{
     if($company_id){
       $branch_id = $this->input->post('branch_id');
       $data = array(
+        'company_id' => $this->input->post('company_id'),
         'branch_name' => $this->input->post('branch_name'),
+        'branch_addedby' => $user_id,
       );
       $this->User_Model->update_info('branch_id', $branch_id, 'law_branch', $data);
       header('location:'.base_url().'User/branch_information_list');
@@ -228,8 +253,10 @@ class User extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
-
+      $this->load->view('Include/head');
+      $this->load->view('Include/navbar');
       $this->load->view('User/service_information');
+      $this->load->view('Include/footer');
     } else{
       header('location:'.base_url().'User');
     }
@@ -239,9 +266,12 @@ class User extends CI_Controller{
     $user_id = $this->session->userdata('law_user_id');
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
-    if($company_id){
-      $data['service_list'] = $this->User_Model->get_list($company_id,'service_id','ASC','law_service');
+    if($user_id){
+      $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
+      $this->load->view('Include/head',$data);
+      $this->load->view('Include/navbar',$data);
       $this->load->view('User/service_information_list',$data);
+      $this->load->view('Include/footer',$data);
     } else{
       header('location:'.base_url().'User');
     }
@@ -253,10 +283,16 @@ class User extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
+      $document = '';
+      foreach($_POST['input'] as $data){
+        $document = $document.''.$data['document'].',';
+      }
+      // echo $doc;
       $data = array(
         'company_id' => $company_id,
         'service_name' => $this->input->post('service_name'),
         'service_alert_days' => $this->input->post('service_alert_days'),
+        'service_document' => $document,
       );
       $this->User_Model->save_data('law_service', $data);
       header('location:'.base_url().'User/service_information_list');
@@ -278,8 +314,13 @@ class User extends CI_Controller{
           $data['service_name'] = $info->service_name;
           $data['service_name'] = $info->service_name;
           $data['service_alert_days'] = $info->service_alert_days;
+          $data['service_document'] = $info->service_document;
+
         }
+        $this->load->view('Include/head',$data);
+        $this->load->view('Include/navbar',$data);
         $this->load->view('User/service_information',$data);
+        $this->load->view('Include/footer',$data);
       }
     } else{
       header('location:'.base_url().'User');
@@ -292,9 +333,15 @@ class User extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
       $service_id = $this->input->post('service_id');
+      $document = '';
+      foreach($_POST['input'] as $data){
+        $document = $document.''.$data['document'].',';
+      }
+      echo $document;
       $data = array(
         'service_name' => $this->input->post('service_name'),
         'service_alert_days' => $this->input->post('service_alert_days'),
+        'service_document' => $document,
       );
       $this->User_Model->update_info('service_id', $service_id, 'law_service', $data);
       header('location:'.base_url().'User/service_information_list');
@@ -315,21 +362,50 @@ class User extends CI_Controller{
     }
   }
 
-  public function add_user(){
-    $this->load->view('User/add_user');
-  }
-
  // dhananjay....
 
  public function user_information(){
    $user_id = $this->session->userdata('law_user_id');
    $company_id = $this->session->userdata('law_company_id');
    $roll_id = $this->session->userdata('roll_id');
-   if($company_id){
-     $this->load->view('User/add_user');
-   } else{
-     header('location:'.base_url().'User');
-   }
+   if(!$company_id || !$user_id){ header('location:'.base_url().'User'); }
+     $this->form_validation->set_rules('user_name', 'First Name', 'trim|required');
+     $this->form_validation->set_rules('user_lastname', 'Last Name', 'trim|required');
+     if ($this->form_validation->run() != FALSE) {
+       $user_status = $this->input->post('user_status');
+       if(!isset($user_status)){ $user_status = 'active'; }
+       $save_data = array(
+         'company_id' => $this->input->post('company_id'),
+         'branch_id' => $this->input->post('branch_id'),
+         'roll_id' => $this->input->post('roll_id'),
+         'user_name' => $this->input->post('user_name'),
+         'user_lastname' => $this->input->post('user_lastname'),
+         'user_mobile' => $this->input->post('user_mobile'),
+         'user_email' => $this->input->post('user_email'),
+         'user_password' => $this->input->post('user_password'),
+         'user_status' => $user_status,
+       );
+        $user_email = $this->input->post('user_email');
+        $company_id2 = $this->input->post('company_id');
+        $this->User_Model->save_data('law_user', $save_data);
+        header('location:'.base_url().'User/user_information_list');
+      //  $check = $this->User_Model->check_duplication($company_id2,$user_email,'user_email','law_user');
+      // if($check > 0){
+      //   $this->session->set_flashdata('check_email','exist');
+      //   header('location:'.base_url().'User/user_information');
+      // }
+      // else{
+      //   $this->User_Model->save_data('law_user', $save_data);
+      //   header('location:'.base_url().'User/user_information_list');
+      // }
+     }
+     $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
+     $data['roll_list'] = $this->User_Model->get_list2('roll_id','ASC','law_roll');
+     $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
+     $this->load->view('Include/head',$data);
+     $this->load->view('Include/navbar',$data);
+     $this->load->view('User/add_user',$data);
+     $this->load->view('Include/footer',$data);
  }
  // Service List...
  public function user_information_list(){
@@ -338,21 +414,106 @@ class User extends CI_Controller{
    $roll_id = $this->session->userdata('roll_id');
    if($company_id){
      $data['user_list'] = $this->User_Model->get_user_list($company_id);
+     $this->load->view('Include/head',$data);
+     $this->load->view('Include/navbar',$data);
      $this->load->view('User/user_information_list',$data);
+     $this->load->view('Include/footer',$data);
    } else{
      header('location:'.base_url().'User');
    }
  }
+ // Edit User...
+ public function edit_user($user_id2){
+   $user_id = $this->session->userdata('law_user_id');
+   $company_id = $this->session->userdata('law_company_id');
+   $roll_id = $this->session->userdata('roll_id');
+   if(!$company_id || !$user_id){ header('location:'.base_url().'User'); }
+   $this->form_validation->set_rules('user_name', 'First Name', 'trim|required');
+   $this->form_validation->set_rules('user_lastname', 'Last Name', 'trim|required');
+   if ($this->form_validation->run() != FALSE) {
+     $user_status = $this->input->post('user_status');
+     if(!isset($user_status)){ $user_status = 'active'; }
+     $save_data = array(
+       'company_id' => $this->input->post('company_id'),
+       'branch_id' => $this->input->post('branch_id'),
+       'roll_id' => $this->input->post('roll_id'),
+       'user_name' => $this->input->post('user_name'),
+       'user_lastname' => $this->input->post('user_lastname'),
+       'user_mobile' => $this->input->post('user_mobile'),
+       'user_email' => $this->input->post('user_email'),
+       'user_password' => $this->input->post('user_password'),
+       'user_status' => $user_status,
+     );
+     $this->User_Model->update_info('user_id', $user_id2, 'law_user', $save_data);
+     header('location:'.base_url().'User/user_information_list');
+   }
+   $user_details = $this->User_Model->get_info('user_id', $user_id2, 'law_user');
+   if($user_details == ''){ header('location:'.base_url().'User/user_information_list'); }
+   foreach ($user_details as $details) {
+     $data['update'] = 'update';
+     $data['company_id'] = $details->company_id;
+     $data['branch_id'] = $details->branch_id;
+     $data['roll_id'] = $details->roll_id;
+     $data['user_name'] = $details->user_name;
+     $data['user_lastname'] = $details->user_lastname;
+     $data['user_mobile'] = $details->user_mobile;
+     $data['user_email'] = $details->user_email;
+     $data['user_password'] = $details->user_password;
+     $data['user_status'] = $details->user_status;
+   }
 
+   // echo print_r($user_details);
+   $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
+   $data['roll_list'] = $this->User_Model->get_list2('roll_id','ASC','law_roll');
+   $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
+   $this->load->view('Include/head',$data);
+   $this->load->view('Include/navbar',$data);
+   $this->load->view('User/add_user',$data);
+   $this->load->view('Include/footer',$data);
+
+
+ }
+
+
+
+
+
+/******************************* Target **********************************/
+// Target Add and Save.............
  public function set_target(){
    $user_id = $this->session->userdata('law_user_id');
    $company_id = $this->session->userdata('law_company_id');
    $roll_id = $this->session->userdata('roll_id');
    if($company_id){
-     $this->load->view('User/set_target_information');
+     $this->form_validation->set_rules('target_from', 'From Date', 'trim|required');
+     $this->form_validation->set_rules('target_to', 'To Date', 'trim|required');
+     $this->form_validation->set_rules('branch_id', 'Branch', 'trim|required');
+     if($this->form_validation->run() != FALSE){
+       $save_data = array(
+         'target_from' => $this->input->post('target_from'),
+         'target_to' => $this->input->post('target_to'),
+         'branch_id' => $this->input->post('branch_id'),
+         'target_manager' => $this->input->post('target_manager'),
+         'target_rc' => $this->input->post('target_rc'),
+         'target_tc' => $this->input->post('target_tc'),
+         'target_addedby' => $user_id,
+       );
+       $this->User_Model->save_data('law_target', $save_data);
+       $this->session->flashdata('save_success','success');
+       header('location:'.base_url().'User/set_target');
+     }
+     $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
+     $this->load->view('Include/head',$data);
+     $this->load->view('Include/navbar',$data);
+     $this->load->view('User/set_target_information',$data);
+     $this->load->view('Include/footer',$data);
    } else{
      header('location:'.base_url().'User');
    }
  }
+ // Target Edit and Update..............
+
+
+
 }
 ?>

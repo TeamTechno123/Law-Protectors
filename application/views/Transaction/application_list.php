@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <?php
-$page = "make_information_list";
+$page = "application_list";
 ?>
 <style>
   td{
@@ -17,7 +17,7 @@ $page = "make_information_list";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1">
-            <h4>VIEW ALL BRANCH INFORMATION</h4>
+            <h4>VIEW ALL APPLICATION INFORMATION</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -31,10 +31,8 @@ $page = "make_information_list";
             <!-- general form elements -->
             <div class="card">
             <div class="card-header">
-              <h3 class="card-title"><i class="fa fa-list"></i> List Branch Information</h3>
-              <div class="card-tools">
-                <a href="<?php echo base_url(); ?>User/branch_information" class="btn btn-sm btn-block btn-primary">Add Branch</a>
-              </div>
+              <h3 class="card-title"><i class="fa fa-list"></i> List Application Information</h3>
+              <!--  -->
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -42,25 +40,42 @@ $page = "make_information_list";
                 <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>Branch Name</th>
+                  <th>Application No.</th>
+                  <th>Date</th>
+                  <th>Branch</th>
+                  <th>Service</th>
+                  <th>Status</th>
+                  <th>Upload</th>
+                  <th>Invoice</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
                 $i=0;
-                foreach ($branch_list as $list) {
+                foreach ($application_list as $list) {
                   $i++;
                 ?>
                 <tr>
                   <td><?php echo $i; ?></td>
+                  <td><?php echo $list->application_no; ?></td>
+                  <td><?php echo $list->application_date; ?></td>
                   <td><?php echo $list->branch_name; ?></td>
+                  <td><?php echo $list->service_name; ?></td>
+                  <td><?php echo $list->application_status; ?></td>
                   <td>
-                    <a href="<?php echo base_url(); ?>User/edit_branch/<?php echo $list->branch_id; ?>"> <i class="fa fa-edit"></i> </a>
-                    <a href="<?php echo base_url(); ?>User/delete_branch/<?php echo $list->branch_id; ?>" onclick="return confirm('Delete this Company');" class="ml-4"> <i class="fa fa-trash"></i> </a>
+                    <a href="<?php echo base_url(); ?>Transaction/document_uploading_form/<?php echo $list->application_id; ?>"> <i class="fa fa-upload"></i> </a>
+                  </td>
+                  <td>
+                    <a href="<?php echo base_url(); ?>Transaction/sale_invoice/<?php echo $list->application_id; ?>"> <i class="fa fa-plus"></i> </a>
+                  </td>
+                  <td>
+                    <a href="<?php echo base_url(); ?>Transaction/edit_application/<?php echo $list->application_id; ?>"> <i class="fa fa-edit"></i> </a>
+                    <a href="<?php echo base_url(); ?>Transaction/delete_application/<?php echo $list->application_id; ?>" onclick="return confirm('Delete this Application');" class="ml-4"> <i class="fa fa-trash"></i> </a>
                   </td>
                 </tr>
-              <?php } ?>
+                <?php } ?>
+                <tbody>
               </table>
             </div>
             <!-- /.card-body -->

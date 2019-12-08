@@ -2,15 +2,9 @@
 <html>
 <?php
   $page = "company_information";
-  include('head.php');
 ?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  <!-- Navbar -->
-  <?php include('navbar.php'); ?>
-  <!-- /.navbar -->
-  <!-- Main Sidebar Container -->
-  <?php include('sidebar.php'); ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -44,9 +38,11 @@
               <?php } ?>
                 <div class="card-body row">
                   <div class="form-group col-md-12">
-                    <select class="form-control select2 form-control-sm" name="gst_slab" title="Select Company Name" id="gst_slab" style="width: 100%;" required>
+                    <select class="form-control select2 form-control-sm" name="company_id" id="company_id" title="Select Company Name" style="width: 100%;" required>
                         <option selected="selected" value="" >Select Company Name </option>
-                          <option></option>
+                        <?php foreach ($company_list as $list) { ?>
+                          <option value="<?php echo $list->company_id; ?>" <?php if(isset($company_id)){ if($list->company_id == $company_id){ echo "selected"; } }  ?>><?php echo $list->company_name; ?></option>
+                        <?php } ?>
                       </select>
                     </div>
                   <div class="form-group col-md-12">
@@ -65,24 +61,10 @@
               </form>
             </div>
           </div>
-          <!--/.col (left) -->
-          <!-- right column -->
-          <!--/.col (right) -->
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
   </div>
-  <!-- /.content-wrapper -->
-  <?php include('footer.php'); ?>
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<?php include('script.php') ?>
 </body>
 </html>

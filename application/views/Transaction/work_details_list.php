@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <?php
-$page = "make_information_list";
+$page = "work_details_list";
 ?>
 <style>
   td{
@@ -17,7 +17,7 @@ $page = "make_information_list";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1">
-            <h4>VIEW ALL BRANCH INFORMATION</h4>
+            <h4>Work Details</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -30,11 +30,15 @@ $page = "make_information_list";
           <div class="col-md-12">
             <!-- general form elements -->
             <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><i class="fa fa-list"></i> List Branch Information</h3>
-              <div class="card-tools">
-                <a href="<?php echo base_url(); ?>User/branch_information" class="btn btn-sm btn-block btn-primary">Add Branch</a>
+            <div class="card-header row">
+              <div class="col-md-6">
+                <h3 class="card-title"><i class="fa fa-list"></i> List Work Details</h3>
               </div>
+              <div class="col-md-6 text-right">
+                <a href="<?php echo base_url(); ?>Transaction/add_work_details" class="btn btn-primary btn-sm" name="button">Add Work Details</a>
+              </div>
+
+              <!--  -->
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -42,25 +46,30 @@ $page = "make_information_list";
                 <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>Branch Name</th>
+                  <th>Vc. No.</th>
+                  <th>Party Name</th>
+                  <th>Date</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
                 $i=0;
-                foreach ($branch_list as $list) {
+                foreach ($work_list as $list) {
                   $i++;
                 ?>
                 <tr>
                   <td><?php echo $i; ?></td>
-                  <td><?php echo $list->branch_name; ?></td>
+                  <td><?php echo $list->vc_no; ?></td>
+                  <td><?php echo $list->party_name; ?></td>
+                  <td><?php echo $list->work_date; ?></td>
                   <td>
-                    <a href="<?php echo base_url(); ?>User/edit_branch/<?php echo $list->branch_id; ?>"> <i class="fa fa-edit"></i> </a>
-                    <a href="<?php echo base_url(); ?>User/delete_branch/<?php echo $list->branch_id; ?>" onclick="return confirm('Delete this Company');" class="ml-4"> <i class="fa fa-trash"></i> </a>
+                    <a href="<?php echo base_url(); ?>Transaction/edit_work_details/<?php echo $list->work_id; ?>"> <i class="fa fa-edit"></i> </a>
+                    <a href="<?php echo base_url(); ?>Transaction/delete_work_details/<?php echo $list->work_id; ?>" onclick="return confirm('Delete this Application');" class="ml-4"> <i class="fa fa-trash"></i> </a>
                   </td>
                 </tr>
-              <?php } ?>
+                <?php } ?>
+                <tbody>
               </table>
             </div>
             <!-- /.card-body -->

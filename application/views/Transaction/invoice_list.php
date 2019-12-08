@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <?php
-$page = "make_information_list";
+$page = "invoice_list";
 ?>
 <style>
   td{
@@ -17,11 +17,12 @@ $page = "make_information_list";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1">
-            <h4>VIEW ALL SERVICE / PRODUCT INFORMATION</h4>
+            <h4>Sale Invoice List</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
+
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -30,10 +31,8 @@ $page = "make_information_list";
             <!-- general form elements -->
             <div class="card">
             <div class="card-header">
-              <h3 class="card-title"><i class="fa fa-list"></i> List Product Information</h3>
-              <!-- <div class="card-tools">
-                <a href="<?php echo base_url(); ?>User/service_information" class="btn btn-sm btn-block btn-primary">Add Product</a>
-              </div> -->
+              <h3 class="card-title"><i class="fa fa-list"></i> List Sale Invoice</h3>
+              <!--  -->
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -41,26 +40,31 @@ $page = "make_information_list";
                 <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>product Name</th>
+                  <th>Invoice No.</th>
+                  <th>Company Name</th>
+                  <th>Date</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                  <?php
-                  $i=0;
-                  foreach ($service_list as $list) {
-                    $i++;
-                  ?>
-                  <tr>
-                    <td><?php echo $i; ?></td>
-                    <td><?php echo $list->service_name; ?></td>
-                    <td>
-                      <a href="<?php echo base_url(); ?>User/edit_service/<?php echo $list->service_id; ?>"> <i class="fa fa-edit"></i> </a>
-                      <!-- <a href="<?php echo base_url(); ?>User/delete_service/<?php echo $list->service_id; ?>" onclick="return confirm('Delete this Company');" class="ml-4"> <i class="fa fa-trash"></i> </a> -->
-                    </td>
-                  </tr>
+                <?php
+                $i=0;
+                foreach ($sale_invoice_list as $list) {
+                  $i++;
+                ?>
+                <tr>
+                  <td><?php echo $i; ?></td>
+                  <td><?php echo $list->invoice_no; ?></td>
+                  <td><?php echo $list->company_name; ?></td>
+                  <td><?php echo $list->invoice_date; ?></td>
+                  <td>
+                    <a href="<?php echo base_url(); ?>Transaction/edit_invoice/<?php echo $list->invoice_id; ?>"> <i class="fa fa-edit"></i> </a>
+                    <a class="ml-2" target="_blank" href="<?php echo base_url(); ?>Report/invoice_print/<?php echo $list->invoice_id; ?>"> <i class="fa fa-print"></i> </a>
+                    <a class="ml-2" href="<?php echo base_url(); ?>Transaction/delete_invoice/<?php echo $list->invoice_id; ?>" onclick="return confirm('Delete this Application');"> <i class="fa fa-trash"></i> </a>
+                  </td>
+                </tr>
                 <?php } ?>
-                </tbody>
+                <tbody>
               </table>
             </div>
             <!-- /.card-body -->

@@ -2,15 +2,9 @@
 <html>
 <?php
   $page = "company_information";
-  include('head.php');
 ?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  <!-- Navbar -->
-  <?php include('navbar.php'); ?>
-  <!-- /.navbar -->
-  <!-- Main Sidebar Container -->
-  <?php include('sidebar.php'); ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -61,7 +55,7 @@
                     <input type="text" class="form-control" name="company_district" id="company_district" value="<?php if(isset($company_district)){ echo $company_district; } ?>" placeholder="District">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="number" class="form-control" name="company_pincode" id="company_pincode" value="<?php if(isset($company_pincode)){ echo $company_pincode; } ?>" placeholder="Pincode">
+                    <input type="number" class="form-control" name="company_statecode" id="company_statecode" value="<?php if(isset($company_statecode)){ echo $company_statecode; } ?>" placeholder="Statecode">
                   </div>
                   <div class="form-group col-md-6">
                     <input type="number" class="form-control" name="company_mob1" id="company_mob1" value="<?php if(isset($company_mob1)){ echo $company_mob1; } ?>" placeholder="Mobile No. 1">
@@ -133,15 +127,5 @@
       </div><!-- /.container-fluid -->
     </section>
   </div>
-  <!-- /.content-wrapper -->
-  <?php include('footer.php'); ?>
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-<?php include('script.php') ?>
 </body>
 </html>

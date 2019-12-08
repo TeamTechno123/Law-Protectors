@@ -2,15 +2,9 @@
 <html>
 <?php
   $page = "company_information";
-  include('head.php');
 ?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  <!-- Navbar -->
-  <?php include('navbar.php'); ?>  <!-- /.navbar -->
-
-  <!-- Main Sidebar Container -->
-  <?php include('sidebar.php'); ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -55,17 +49,39 @@
                 <div class="form-group col-md-4">
                     <button type="button" id="add_row"  class="btn btn-success">Add Row</button>
                 </div>
-                <table id="myTable" width="100%">
+                <table id="myTable" width="70%">
+                  <?php
+                  if(isset($service_document)){
+                    $str_arr = explode (",", $service_document);
+                    $doc_count =  count($str_arr) - 1;
+                    $i = 0;
+                    for($i = 0; $i < $doc_count; $i++){
+                    //echo $str_arr[$i].'<br>';
+
+                  ?>
                   <tr>
-                    <td width="100%">
-                      <div class="form-group col-md-8">
-                        <input type="text" class="form-control form-control-sm" name="" id="" title="Enter Name Of Document" placeholder="Enter Name Of Document">
-                      </div>
+                    <td width="80%">
+                        <input type="text" class="form-control form-control-sm mt-2" name="input[<?php echo $i ?>][document]" value="<?php echo $str_arr[$i]; ?>" title="Enter Name Of Document" placeholder="Enter Name Of Document">
+                    </td>
+                    <td  width="20%" class="text-left pl-4">
+                    <?php if($i != 0){ ?>
+                      <a><i class="fa fa-trash text-danger"></i></a>
+                    <?php } ?>
                     </td>
                   </tr>
+                <?php } } else{ ?>
+                  <tr>
+                    <td width="80%">
+                        <input type="text" class="form-control form-control-sm" name="input[0][document]" id="" title="Enter Name Of Document" placeholder="Enter Name Of Document">
+                    </td>
+                    <td  width="20%" class="text-left pl-4">
+                    </td>
+                  </tr>
+                <?php } ?>
                 </table>
-
               </div>
+
+
               <div class="card-footer">
                 <?php if(isset($update)){ ?>
                   <button type="submit" class="btn btn-primary">Update</button>
@@ -85,21 +101,29 @@
       </div><!-- /.container-fluid -->
     </section>
   </div>
-  <!-- /.content-wrapper -->
-  <?php include('footer.php'); ?>
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-<?php include('script.php') ?>
 <script type="text/javascript">
-$('#add_row').click(function(){
-  var row = '<tr><td><div class="form-group col-md-8"><input type="text" class="form-control form-control-sm" name="" id="" title="Enter Name Of Document" placeholder="Enter Name Of Document"></div></td></tr>';
 
-    $('#myTable').append(row);
+<?php if(isset($service_document)){ ?>
+var i = <?php echo $i-1; ?>;
+<?php } else{ ?>
+  var i = 0;
+<?php } ?>
+
+
+$('#add_row').click(function(){
+  i++;
+  var row = '<tr>'+
+    '<td width="80%">'+
+        '<input type="text" class="form-control form-control-sm mt-2" name="input['+i+'][document]" id="" title="Enter Name Of Document" placeholder="Enter Name Of Document">'+
+    '</td>'+
+    '<td  width="20%" class="text-left pl-4">'+
+    '<a><i class="fa fa-trash text-danger"></i></a>'+
+    '</td>'+
+  '</tr>';
+  $('#myTable').append(row);
+});
+$('#myTable').on('click', 'a', function () {
+  $(this).closest('tr').remove();
 });
 </script>
 </body>
