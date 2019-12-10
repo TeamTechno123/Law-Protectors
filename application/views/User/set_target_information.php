@@ -5,7 +5,6 @@ $page = "set_target";
 ?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -18,7 +17,6 @@ $page = "set_target";
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -50,7 +48,11 @@ $page = "set_target";
                     </select>
                     <label class="text-red m-0 req-alert"> <?php echo form_error('branch_id'); ?> </label>
                   </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-12 row" id="user_list">
+
+                  </div>
+
+                  <!-- <div class="form-group col-md-4">
                     <input type="text" class="form-control" name="target_manager" id="target_manager" title="Manager Target" placeholder="Manager Target">
                   </div>
                   <div class="form-group col-md-4">
@@ -58,7 +60,7 @@ $page = "set_target";
                   </div>
                   <div class="form-group col-md-4">
                     <input type="text" class="form-control" name="target_tc" id="target_tc" title="TC Target" placeholder="TC Target">
-                  </div>
+                  </div> -->
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
@@ -77,5 +79,23 @@ $page = "set_target";
       </div><!-- /.container-fluid -->
     </section>
   </div>
+  <script type="text/javascript">
+  $('#branch_id').on('change',function(){
+    var branch_id = $(this).val();
+    $.ajax({
+      url:'<?php echo base_url(); ?>User/get_user_list_by_branch',
+      type: 'POST',
+      data: {"branch_id":branch_id},
+      context: this,
+      success: function(result){
+        $('#user_list').html(result);
+        // var data = JSON.parse(result)
+        // $('#manager_id').html(data['manager']);
+        // $('#rc_id').html(data['rc']);
+        // $('#tc_id').html(data['tc']);
+      }
+    });
+  })
+  </script>
 </body>
 </html>

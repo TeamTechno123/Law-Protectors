@@ -31,9 +31,9 @@ $page = "make_information_list";
             <div class="card">
             <div class="card-header">
               <h3 class="card-title"><i class="fa fa-list"></i> List Product Information</h3>
-              <!-- <div class="card-tools">
+              <div class="card-tools">
                 <a href="<?php echo base_url(); ?>User/service_information" class="btn btn-sm btn-block btn-primary">Add Product</a>
-              </div> -->
+              </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body">

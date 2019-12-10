@@ -109,11 +109,13 @@ $page = "step_1";
                       </label>
                     </div>
                   </div>
-
-                  <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="PROPOSED" id="date2" data-target="#date2" data-toggle="datetimepicker" value="<?php if(isset($PROPOSED)){ echo $PROPOSED; } ?>" title="User Date Proposed to be" placeholder="User Date Proposed to be" required>
+                  <div class="form-group col-md-4">
+                    <input type="checkbox" name="PROPOSED_TO_BE" id="PROPOSED_TO_BE" value="Proposed To Be Used" <?php if(isset($PROPOSED_TO_BE) && $PROPOSED_TO_BE != ''){ echo 'checked'; } ?>> Proposed To Be Used
                   </div>
-                  <div class="form-group col-md-6 ">
+                  <div class="form-group col-md-4">
+                    <input type="text" class="form-control form-control-sm" name="PROPOSED" id="date2" data-target="#date2" data-toggle="datetimepicker" value="<?php if(isset($PROPOSED)){ echo $PROPOSED; } ?>" title="User Date Proposed to be" placeholder="User Date Proposed to be">
+                  </div>
+                  <div class="form-group col-md-4 ">
                     <input type="text" class="form-control form-control-sm" name="INFORMATION" id="INFORMATION" value="<?php if(isset($INFORMATION)){ echo $INFORMATION; } ?>" title="Information Provided Name" placeholder="Information Provided Name">
                   </div>
                   <div class="form-group col-md-6">
@@ -137,7 +139,9 @@ $page = "step_1";
                       </label>
                     </div>
                   </div>
-
+                  <div class="form-group col-md-12">
+                    <input type="text" class="form-control form-control-sm" name="ASSOCIATE_MARK" id="ASSOCIATE_MARK" value="<?php if(isset($ASSOCIATE_MARK)){ echo $ASSOCIATE_MARK; } ?>" title="Associate of Mark" placeholder="Associate of Mark">
+                  </div>
                   <div class="col-md-6 offset-md-4">
                     <button type="submit" class="btn btn-primary  mr-3">Update & Next</button>
                     <button type="submit" class="btn btn-default ">Cancel</button>
@@ -155,9 +159,23 @@ $page = "step_1";
       </div><!-- /.container-fluid -->
     </section>
   </div>
-
+  <script type="text/javascript">
+  $(document).ready(function(){
+    <?php if(isset($PROPOSED_TO_BE) && $PROPOSED_TO_BE != ''){ ?>
+      $('#date2').attr('readonly', true);
+    <?php } else{ ?>
+      $('#date2').attr('readonly', false);
+    <?php } ?>
+  });
+  </script>
 <script type="text/javascript">
-
+  $('#PROPOSED_TO_BE').on('change',function() {
+    if(this.checked) {
+      $('#date2').attr('readonly', true);
+    } else{
+      $('#date2').attr('readonly', false);
+    }
+  });
 </script>
 </body>
 </html>

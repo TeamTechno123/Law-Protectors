@@ -47,6 +47,7 @@ $page = "application_list";
                   <th>Status</th>
                   <th>Upload</th>
                   <th>Invoice</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -68,6 +69,9 @@ $page = "application_list";
                   </td>
                   <td>
                     <a href="<?php echo base_url(); ?>Transaction/sale_invoice/<?php echo $list->application_id; ?>"> <i class="fa fa-plus"></i> </a>
+                  </td>
+                  <td>
+                    <a href="<?php echo base_url(); ?>Transaction/change_status/<?php echo $list->application_id; ?>"> <i class="fa fa-edit"></i> </a>
                   </td>
                   <td>
                     <a href="<?php echo base_url(); ?>Transaction/edit_application/<?php echo $list->application_id; ?>"> <i class="fa fa-edit"></i> </a>

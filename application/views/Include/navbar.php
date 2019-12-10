@@ -6,7 +6,13 @@
     </li>
   </ul>
   <!-- Right navbar links -->
+
   <ul class="navbar-nav ml-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="<?php echo base_url(); ?>User/logout">
+        <i class="fas fa-sign-out-alt"></i>
+      </a>
+    </li>
     <li class="nav-item">
       <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
         <i class="fas fa-th-large"></i>
@@ -140,36 +146,14 @@
           </li>
         </ul>
       </li>
-
-<li class="nav-item has-treeview">
-    <a href="#" class="nav-link">
-      <i class="nav-icon fas fa-chart-pie"></i>
-      <p>
-        Forms
-        <i class="right fas fa-angle-left"></i>
-      </p>
-    </a>
-    <ul class="nav nav-treeview" style="display: none;">
       <li class="nav-item">
-        <a href="<?php echo base_url(); ?>Report/invoice_print" class="nav-link">
-          <i class="far fa-circle nav-icon"></i>
+        <a href="<?php echo base_url(); ?>Transaction/printing_list" class="nav-link">
+          <i class="nav-icon fas fa-th"></i>
           <p>
-            Invoice
+            Printing
           </p>
         </a>
       </li>
-</ul>
-</li>
-
-
-<li class="nav-item">
-  <a href="<?php echo base_url(); ?>Transaction/printing_list" class="nav-link">
-    <i class="nav-icon fas fa-th"></i>
-    <p>
-      Printing
-    </p>
-  </a>
-</li>
 <!-- <li class="nav-item has-treeview">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-chart-pie"></i>

@@ -79,6 +79,7 @@ $page = "add_user";
                     <th>GST %</th>
                     <th>HSN/SAC</th>
                     <th>QTY</th>
+                    <th>GOV FEES</th>
                     <th>RATE</th>
                     <th>TOTAL</th>
                     <th>ACTION</th>
@@ -109,6 +110,9 @@ $page = "add_user";
                         <input type="number" min="0" class="form-control form-control-sm qty" name="input[<?php echo $i; ?>][qty]" value="<?php echo $details->qty; ?>" placeholder="">
                       </td>
                       <td class="td_w">
+                        <input type="number" min="1.00" step="0.01" class="form-control form-control-sm gov_fees" name="input[<?php echo $i; ?>][gov_fees]" value="<?php echo $details->gov_fees; ?>" placeholder="">
+                      </td>
+                      <td class="td_w">
                         <input type="number" min="1.00" step="0.01" class="form-control form-control-sm rate" name="input[<?php echo $i; ?>][rate]" value="<?php echo $details->rate; ?>" placeholder="">
                       </td>
                       <td class="td_w">
@@ -131,6 +135,9 @@ $page = "add_user";
                       </td>
                       <td class="td_w">
                         <input type="number" min="0" class="form-control form-control-sm qty" name="input[0][qty]" value="" placeholder="">
+                      </td>
+                      <td class="td_w">
+                        <input type="number" min="1.00" step="0.01" class="form-control form-control-sm gov_fees" name="input[0][gov_fees]" value="" placeholder="">
                       </td>
                       <td class="td_w">
                         <input type="number" min="1.00" step="0.01" class="form-control form-control-sm rate" name="input[0][rate]" value="" placeholder="">
@@ -158,6 +165,12 @@ $page = "add_user";
                     <label for="inputEmail3" class="col-form-label mr-3">GST Amount</label>
                     <div class="">
                       <input type="number"  class="form-control" name="gst_amt" id="gst_amt" value="<?php if(isset($gst_amt)){ echo $gst_amt; } ?>" readonly>
+                    </div>
+                  </div>
+                  <div class="form-group row float-right">
+                    <label for="inputEmail3" class=" col-form-label mr-3">TDS Amount</label>
+                    <div class="">
+                      <input type="number" class="form-control delivery_total" name="tds_amt" id="tds_amt" value="<?php if(isset($tds_amt)){ echo $tds_amt; } ?>" >
                     </div>
                   </div>
                   <div class="form-group row float-right">
@@ -228,6 +241,9 @@ $page = "add_user";
       '</td>'+
       '<td class="td_w">'+
         '<input type="number" min="0" class="form-control form-control-sm qty" name="input['+j+'][qty]" value="" placeholder="">'+
+      '</td>'+
+      '<td class="td_w">'+
+        '<input type="number" min="1.00" step="0.01" class="form-control form-control-sm gov_fees" name="input['+j+'][gov_fees]" value="" placeholder="">'+
       '</td>'+
       '<td class="td_w">'+
         '<input type="number" min="1.00" step="0.01" class="form-control form-control-sm rate" name="input['+j+'][rate]" value="" placeholder="">'+

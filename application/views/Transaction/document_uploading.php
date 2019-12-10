@@ -9,7 +9,6 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
   <!-- Navbar -->
-
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -21,7 +20,6 @@
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -29,15 +27,13 @@
           <div class="col-md-8  offset-md-2">
             <!-- general form elements -->
             <div class="card">
-            <!-- <div class="card-header">
-              <h3 class="card-title"><i class="fa fa-list"></i> List Party Information</h3>
-              <div class="card-tools">
-                <a href="party_information" class="btn btn-sm btn-block btn-primary">Add Party</a>
-              </div>
-            </div> -->
             <!-- /.card-header -->
             <div class="card-body" >
-              <form role="form" action="<?php echo base_url(); ?>/Transaction/save_document_upload" method="post" enctype="multipart/form-data">
+              <?php if(isset($change_status)){ ?>
+                <form role="form" action="<?php echo base_url(); ?>/Transaction/update_status" method="post" enctype="multipart/form-data">
+              <?php } else{ ?>
+                <form role="form" action="<?php echo base_url(); ?>/Transaction/save_document_upload" method="post" enctype="multipart/form-data">
+              <?php } ?>
                 <div class="card-body row">
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control form-control-sm" name="application_id" id="application_id" value="<?php if(isset($application_id)){ echo $application_id; } ?>" title="Application Reference No." placeholder="Application Reference No." readonly>
@@ -54,7 +50,6 @@
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="" id="" value="<?php if(isset($organization_name)){ echo $organization_name; } ?>" title="Organization Name" placeholder="Organization Name" readonly>
                   </div>
-
                   <?php
                   if(isset($service_document)){
                     $str_arr = explode (",", $service_document);
@@ -85,13 +80,12 @@
                         <input type="hidden" name="doc_type[]" value="<?php echo $str_arr[$i]; ?>">
                       </div>
                   <?php  }
-
                     ?>
+                  <?php } }
+                  //echo $application_status;
+                  ?>
 
-
-
-                  <?php } } ?>
-                  <?php if(isset($application_status) && $application_status != 'Filed Application'){ ?>
+                  <?php if(isset($application_status) && ($application_status != 'Filed Application' && $application_status != 'Application Closed')){ ?>
                   <style media="screen">
                     .dis-no{
                       display: none;
@@ -99,7 +93,7 @@
                   </style>
                 <?php } ?>
                     <div class="form-group col-md-6 ">
-                      <select class="form-control select2 form-control-sm" name="application_status" id="application_status" title="Select Status" style="width: 100%;" required>
+                      <select class="form-control select2 form-control-sm" name="application_status" id="application_status" title="Select Status" style="width: 100%;" required <?php if(isset($change_status)){ echo 'disabled'; } ?>>
                         <option selected="selected" value="" >Select Status </option>
                         <?php if(isset($application_status)){ ?> <option selected="selected"><?php echo $application_status; ?></option> <?php } ?>
                         <!-- <option>In Process</option> -->
@@ -108,26 +102,26 @@
                       </select>
                     </div>
                     <div class="form-group col-md-6">
-                      <input type="number" min="1" class="form-control form-control-sm" name="alert_days" id="alert_days" value="<?php if(isset($alert_days)){ echo $alert_days; } ?>" title="Enter No. Of Days" placeholder="Enter No. Of Days">
+                      <input type="number" min="1" class="form-control form-control-sm" name="alert_days" id="alert_days" value="<?php if(isset($alert_days)){ echo $alert_days; } ?>" title="Enter No. Of Days" placeholder="Enter No. Of Days" <?php if(isset($change_status)){ echo 'disabled'; } ?>>
                     </div>
                     <div class="form-group col-md-6 prn dis-no">
-                      <input type="text" class="form-control form-control-sm" name="prn_no" id="prn_no" value="<?php if(isset($prn_no)){ echo $prn_no; } ?>" title="PRN No." placeholder="PRN No.">
+                      <input type="text" class="form-control form-control-sm" name="prn_no" id="prn_no" value="<?php if(isset($prn_no)){ echo $prn_no; } ?>" title="PRN No." placeholder="PRN No." <?php if(isset($change_status)){ echo 'disabled'; } ?>>
                     </div>
                     <div class="form-group col-md-6 prn dis-no">
-                      <input type="text" class="form-control form-control-sm" name="prn_date" id="date2" data-target="#date2" data-toggle="datetimepicker" value="<?php if(isset($prn_date)){ echo $prn_date; } ?>" title="PRN Date" placeholder="PRN Date">
+                      <input type="text" class="form-control form-control-sm" name="prn_date" id="date2" data-target="#date2" data-toggle="datetimepicker" value="<?php if(isset($prn_date)){ echo $prn_date; } ?>" title="PRN Date" placeholder="PRN Date" <?php if(isset($change_status)){ echo 'disabled'; } ?>>
                     </div>
-
+                    <?php if(isset($change_status)){ ?>
+                      <div class="form-group col-md-6 prn dis-no">
+                        <input type="checkbox" name="complete_status" id="complete_status" value="Application Closed" <?php if(isset($application_status) && $application_status == 'Application Closed'){ echo 'checked'; } ?>>
+                        Application Closed
+                      </div>
+                    <?php } ?>
                   <div class="col-md-6 offset-md-4">
                     <button type="submit" class="btn btn-primary  mr-3">Add</button>
                     <button type="submit" class="btn btn-default ">Cancel</button>
                   </div>
                 </div>
               </form>
-
-
-
-
-
             </div>
             <!-- /.card-body -->
           </div>

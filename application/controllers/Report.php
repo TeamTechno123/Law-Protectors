@@ -57,6 +57,7 @@ class Report extends CI_Controller{
           $data['TRADE_1'] = $info->TRADE_1;
           $data['TRADE_2'] = $info->TRADE_2;
           $data['TRADE_3'] = $info->TRADE_3;
+          $data['ASSOCIATE_MARK'] = $info->ASSOCIATE_MARK;
           // $data['CONTRACTAMOUNT'] = $info->CONTRACTAMOUNT;
           // $data['GSTAMOUNT'] = $info->GSTAMOUNT;
           // $data['TOTALAMOUNT'] = $info->TOTALAMOUNT;
@@ -306,6 +307,7 @@ class Report extends CI_Controller{
         $data['company_website'] = $info->company_website;
         $data['company_pan_no'] = $info->company_pan_no;
         $data['company_gst_no'] = $info->company_gst_no;
+        $data['company_seal'] = $info->company_seal;
       }
       $data['invoice_details_list'] = $this->Transaction_Model->invoice_details_list($invoice_id);
       $invice_details = $this->Transaction_Model->invice_details($invoice_id);

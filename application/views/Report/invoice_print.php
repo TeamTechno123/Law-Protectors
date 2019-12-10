@@ -107,7 +107,7 @@
       </td>
       <td colspan="2" Width="40%" valign="top">
         <p> <b>Invoice No</b> : <?php echo $invoice_no; ?></p>
-        <p> <b>Dated </b> : <?php echo $invoice_date; ?></p>
+        <p> <b>Date </b> : <?php echo $invoice_date; ?></p>
         <p> <b>PO No. </b> : <?php echo $po_no; ?></p>
         <p> <b>PO Date </b> : <?php echo $po_date; ?></p>
         <p><b>State Code</b> : <?php echo $company_statecode; ?> </p>
@@ -177,7 +177,7 @@
       <th style="text-align:center;">HSN/SAC</th>
       <th style="text-align:center;" Width="9%" >QTY </th>
       <th style="text-align:center;" >RATE</th>
-      <th style="text-align:center;" >TOTAL</th>
+      <th style="text-align:center;" >AMOUNT</th>
     </tr>
 <?php
   $i=0;
@@ -196,8 +196,8 @@
 <?php } ?>
     <tr>
       <td colspan="4" rowspan="" valign="top">
-        <p>GST: <b> <?php echo $this->numbertowords->convert_number($gst_amt); ?> Only</b> </p><hr>
-        <p>Net Amount <b> <?php echo $this->numbertowords->convert_number($net_amt); ?> Only</b> </p>
+        <p style="margin-top:10px;"><b>GST Amount : <?php echo $this->numbertowords->convert_number($gst_amt); ?> Only</b> </p><hr style="margin-left:-10px;">
+        <p><b>Net Amount : <?php echo $this->numbertowords->convert_number($net_amt); ?> Only</b> </p>
 
       </td>
       <td colspan="2" Width="40%" valign="top">
@@ -225,7 +225,7 @@
           <p> <b>Declaration </b> : We declare that the invoice shows the actual price of the goods described and that all particulars are true and correct. </p>
       </td>
       <td colspan="1">
-        <img src="<?php echo base_url() ?>assets/img/stamp.png" alt="">
+        <img src="<?php echo base_url() ?>assets/images/<?php $company_seal; ?>" alt="">
       </td>
     </tr>
   </table>

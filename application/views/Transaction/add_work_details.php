@@ -43,7 +43,7 @@
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control form-control-sm" name="work_date" id="date1" value="<?php if(isset($work_date)){ echo $work_date;} ?>" data-target="#date1" data-toggle="datetimepicker" title="Date" placeholder="Date" required>
                   </div>
-                  <div class="form-group col-md-12 drop-sm">
+                  <div class="form-group col-md-12 drop-sm d-none">
                     <select class="form-control select2 form-control-sm" name="company_id" title="Select Company" id="company_id" required>
                       <option selected="selected" value="" >Select Company Name </option>
                       <?php foreach ($company_list as $list) { ?>
@@ -51,30 +51,30 @@
                       <?php } ?>
                     </select>
                   </div>
-                  <div class="form-group col-md-12 drop-sm branch">
+                  <div class="form-group col-md-12 drop-sm branch d-none">
                     <select class="form-control select2 form-control-sm" name="branch_id" title="Select Branch" id="branch_id" style="width: 100%;" required>
                       <option selected="selected" value="" >Select Branch </option>
                       <?php if(isset($branch_id)){ ?>  <option selected="selected" value="<?php echo $branch_id ?>" ><?php echo $branch_name ?> </option> <?php } ?>
                     </select>
                   </div>
 
-                  <div class="form-group col-md-12 drop-sm">
+                  <div class="form-group col-md-12 drop-sm d-none">
                     <select class="form-control select2 form-control-sm" name="manager_id" title="Select Manager" id="manager_id" style="width: 100%;" required>
                       <option selected="selected" value="" >Select Manager </option>
                       <?php if(isset($manager_id)){ ?>  <option selected="selected" value="<?php echo $manager_id ?>" ><?php echo $manager_name ?> </option> <?php } ?>
                     </select>
                   </div>
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="party_name" id="party_name" value="<?php if(isset($party_name)){ echo $party_name;} ?>" title="Name Of Party" placeholder="Name Of Party">
+                    <input type="text" class="form-control form-control-sm" name="party_name" id="party_name" value="<?php if(isset($party_name)){ echo $party_name;} ?>" title="Title of Work" placeholder="Title of Work">
                   </div>
                   <div class="form-group col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="party_address" id="party_address" value="<?php if(isset($party_address)){ echo $party_address;} ?>" title="Address" placeholder="Address">
+                    <input type="text" class="form-control form-control-sm d-none" name="party_address" id="party_address" value="<?php if(isset($party_address)){ echo $party_address;} ?>" title="Address" placeholder="Address">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="party_con1" id="party_con1" value="<?php if(isset($party_con1)){ echo $party_con1;} ?>" title="Contact 1" placeholder="Contact 1">
+                    <input type="text" class="form-control form-control-sm d-none" name="party_con1" id="party_con1" value="<?php if(isset($party_con1)){ echo $party_con1;} ?>" title="Contact 1" placeholder="Contact 1">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="party_con2" id="party_con2" value="<?php if(isset($party_con2)){ echo $party_con2;} ?>" title="Contact 2" placeholder="Contact 2">
+                    <input type="text" class="form-control form-control-sm d-none" name="party_con2" id="party_con2" value="<?php if(isset($party_con2)){ echo $party_con2;} ?>" title="Contact 2" placeholder="Contact 2">
                   </div>
 
                   <div class=" form-group col-md-12">
@@ -111,10 +111,10 @@
                   <button type="button" id="add_row"  class="btn btn-success btn-sm">Add More</button>
               </div>
                 <div class="form-group col-md-6">
-                  <input type="text" class="form-control form-control-sm" name="work_date2" id="date2" value="<?php if(isset($work_date2)){ echo $work_date2;} ?>" data-target="#date2" data-toggle="datetimepicker" title="Date" placeholder="Date">
+                  <input type="text" class="form-control form-control-sm  d-none" name="work_date2" id="date2" value="<?php if(isset($work_date2)){ echo $work_date2;} ?>" data-target="#date2" data-toggle="datetimepicker" title="Date" placeholder="Date">
                 </div>
                 <div class="form-group col-md-6">
-                  <input type="text" class="form-control form-control-sm" name="work_place" id="work_place" value="<?php if(isset($work_place)){ echo $work_place;} ?>" title="Place" placeholder="Place">
+                  <input type="text" class="form-control form-control-sm  d-none" name="work_place" id="work_place" value="<?php if(isset($work_place)){ echo $work_place;} ?>" title="Place" placeholder="Place">
                 </div>
 
                 </div>

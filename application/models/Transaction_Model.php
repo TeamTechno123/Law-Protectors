@@ -1,8 +1,8 @@
 <?php
 class Transaction_Model extends CI_Model{
-  public function get_count_no($company_id, $field_name, $tbl_name){
+  public function get_count_no($field_name, $tbl_name){
     $query = $this->db->select('MAX('.$field_name.') as num')
-    ->where('company_id', $company_id)
+    // ->where('company_id', $company_id)
     ->from($tbl_name)
     ->get();
     $result =  $query->result_array();
@@ -16,6 +16,7 @@ class Transaction_Model extends CI_Model{
     return $value = $value2;
   }
 
+  // Int Counter not depend on Company...
   public function get_count_no2($field_name, $tbl_name){
     $query = $this->db->select('MAX('.$field_name.') as num')
     ->from($tbl_name)
@@ -30,7 +31,7 @@ class Transaction_Model extends CI_Model{
     // $value2 = "" . sprintf('%06s', $value2);               //concatenating incremented value
     return $value = $value2;
   }
-
+  // Company wise Challan Number...
   public function get_count_no3($company_id,$field_name, $tbl_name){
     $query = $this->db->select('MAX('.$field_name.') as num')
     ->from($tbl_name)
@@ -48,11 +49,14 @@ class Transaction_Model extends CI_Model{
 
   //
   public function get_users_by_branch($roll_id,$branch_id){
-    $this->db->select('user.user_id,user.roll_id,user.user_name,user.user_lastname,user.user_mobile');
-    $this->db->where('roll_id',$roll_id);
-    $this->db->where('branch_id',$branch_id);
-    $this->db->where('user_status','active');
+    $this->db->select('user.user_id,user.roll_id,user.user_name,user.user_lastname,user.user_mobile,law_roll.roll_name');
     $this->db->from('law_user as user');
+    if($roll_id != ''){
+      $this->db->where('user.roll_id',$roll_id);
+    }
+    $this->db->where('user.branch_id',$branch_id);
+    $this->db->where('user.user_status','active');
+    $this->db->join('law_roll','user.roll_id = law_roll.roll_id','LEFT');
     $query = $this->db->get();
     $result = $query->result();
     return $result;
@@ -61,7 +65,7 @@ class Transaction_Model extends CI_Model{
   public function application_list($company_id,$status,$order){
     $this->db->select('application.*,branch.*,service.*');
     $this->db->from('law_application as application');
-    $this->db->where('application.company_id',$company_id);
+    // $this->db->where('application.company_id',$company_id);
     if($status){
       $this->db->where('application.application_status',$status);
     }
@@ -77,7 +81,7 @@ class Transaction_Model extends CI_Model{
   public function trade_mark_print_list($company_id,$status,$order){
     $this->db->select('application.*,branch.*,service.*,trade.*');
     $this->db->from('law_application as application');
-    $this->db->where('application.company_id',$company_id);
+    // $this->db->where('application.company_id',$company_id);
     if($status){
       $this->db->where('application.application_status',$status);
     }
@@ -220,6 +224,6 @@ class Transaction_Model extends CI_Model{
     return $result;
   }
 
-  
+
 }
 ?>

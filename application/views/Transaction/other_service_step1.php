@@ -49,15 +49,14 @@
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control form-control-sm" name="appl_email" id="appl_email" value="<?php if(isset($appl_email)){ echo $appl_email; } ?>" title="Email" placeholder="Email">
                   </div>
-
-
-                  <div class="col-md-12">
-                    <div class="checkbox " >
+                  <div class="form-group col-md-12">
+                    <input type="text" class="form-control form-control-sm" name="title_of_work" id="title_of_work" value="<?php if(isset($title_of_work)){ echo $title_of_work; } ?>" title="Title of Work" placeholder="Title of Work">
+                    <!-- <div class="checkbox " >
                     <label>Type Of Work : &nbsp;&nbsp;
                       <input type="checkbox" name="work_type1" value="Patent" <?php if(isset($work_type1) && $work_type1 != ''){ echo 'checked'; } ?>>&nbsp; Patent &nbsp;&nbsp;
                       <input type="checkbox" name="work_type2" value="Design" <?php if(isset($work_type2) && $work_type2 != ''){ echo 'checked'; } ?>> Design &nbsp;&nbsp;
                     </label>
-                  </div>
+                  </div> -->
                   </div>
                   <div class=" form-group col-md-12">
                 <textarea name="req_details" id="req_details" class="form-control" title="Requirement Details" placeholder="Requirement Details" rows="6" cols="100"><?php if(isset($req_details)){ echo $req_details; } ?></textarea>

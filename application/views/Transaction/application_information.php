@@ -62,20 +62,18 @@ $page = "application_information";
                   </div>
 
                   <div class="form-group col-md-6">
-                    <select class="form-control select2 form-control-sm" name="tc_id" title="Select TC" id="tc_id" style="width: 100%;" required>
+                    <select class="form-control select2 form-control-sm" name="tc_id" title="Select TC" id="tc_id" style="width: 100%;">
                       <option selected="selected" value="" >Select TC </option>
                       <?php if(isset($tc_id)){ ?>  <option selected="selected" value="<?php echo $tc_id ?>" ><?php echo $tc_name ?> </option> <?php } ?>
                     </select>
                   </div>
 
                   <div class="form-group col-md-6">
-                    <select class="form-control select2 form-control-sm" name="rc_id" title="Select RC" id="rc_id" style="width: 100%;" required>
+                    <select class="form-control select2 form-control-sm" name="rc_id" title="Select RC" id="rc_id" style="width: 100%;">
                         <option selected="selected" value="" >Select RC </option>
                         <?php if(isset($rc_id)){ ?>  <option selected="selected" value="<?php echo $rc_id ?>" ><?php echo $rc_name ?> </option> <?php } ?>
                       </select>
                   </div>
-
-
                   <div class="form-group col-md-12">
                     <select class="form-control select2 form-control-sm"  name="service_id" id="service_id" required >
                       <?php if(isset($update)){ ?>
@@ -86,7 +84,6 @@ $page = "application_information";
                         <option value="<?php echo $list->service_id; ?>" <?php if(isset($service_id)){ if($list->service_id == $service_id){ echo "selected"; } }  ?>><?php echo $list->service_name; ?></option>
                       <?php } } ?>
                     </select>
-
                   </div>
                   <div class="form-group col-md-12">
                     <select class="form-control select2 form-control-sm"  name="organization_id" id="organization_id" required <?php if(isset($update)){ echo 'readonly'; }?>>

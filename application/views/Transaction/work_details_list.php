@@ -47,7 +47,7 @@ $page = "work_details_list";
                 <tr>
                   <th>Sr. No.</th>
                   <th>Vc. No.</th>
-                  <th>Party Name</th>
+                  <th>Title of Work</th>
                   <th>Date</th>
                   <th>Action</th>
                 </tr>

@@ -56,6 +56,7 @@ $page = "application_list";
                 foreach ($application_list as $list) {
                   $i++;
                   $NAME = $list->NAME;
+                  echo $PROPOSED_TO_BE = $list->PROPOSED_TO_BE;
                   $single_name = explode(',', $NAME);
                 ?>
                 <tr>
@@ -72,7 +73,9 @@ $page = "application_list";
                     <a target="_blank" href="<?php echo base_url(); ?>Report/auth_print/<?php echo $list->application_id; ?>"> <i class="fa fa-print"></i> </a>
                   </td>
                   <td>
+                    <?php if($PROPOSED_TO_BE == 'Proposed To Be Used'){ ?>
                     <a target="_blank" href="<?php echo base_url(); ?>Report/affidavit/<?php echo $list->application_id; ?>"> <i class="fa fa-print"></i> </a>
+                  <?php } ?>
                   </td>
                   <td>
                     <a target="_blank" href="<?php echo base_url(); ?>Report/covering_letter/<?php echo $list->application_id; ?>"> <i class="fa fa-print"></i> </a>

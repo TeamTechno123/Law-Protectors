@@ -5,6 +5,7 @@ class User extends CI_Controller{
   public function __construct(){
     parent::__construct();
     $this->load->model('User_Model');
+    $this->load->model('Transaction_Model');
   }
   public function logout(){
     $this->session->sess_destroy();
@@ -21,7 +22,6 @@ class User extends CI_Controller{
       $password = $this->input->post('password');
 
       $login = $this->User_Model->check_login($email, $password);
-      // echo print_r($login);
       if($login == null){
         $this->session->set_flashdata('msg','login_error');
         header('location:'.base_url().'User');
@@ -32,7 +32,6 @@ class User extends CI_Controller{
           $this->session->set_userdata('law_company_id', $login['company_id']);
           $this->session->set_userdata('roll_id', $login['roll_id']);
         }
-
         header('location:'.base_url().'User/dashboard');
       }
     }
@@ -44,10 +43,19 @@ class User extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
       $key = '';
-      $data['branch_count'] = $this->User_Model->get_count('branch_id',$company_id,$key,'law_branch');
-      $data['service_count'] = $this->User_Model->get_count('service_id',$company_id,$key,'law_service');
-      $data['open_count'] = $this->User_Model->get_count('application_id',$company_id,'open','law_application');
-      $data['pro_count'] = $this->User_Model->get_count('application_id',$company_id,'In Process','law_application');
+      $data['branch_count'] = $this->User_Model->get_count2('branch_id',$key,'law_branch');
+      $data['comp_count'] = $this->User_Model->get_count2('company_id',$key,'law_company');
+      $data['user_count'] = $this->User_Model->get_count2('user_id',$key,'law_user');
+      $data['service_count'] = $this->User_Model->get_count2('service_id',$key,'law_service');
+      $data['open_count'] = $this->User_Model->get_count2('application_id','open','law_application');
+      $data['pro_count'] = $this->User_Model->get_count2('application_id','In Process','law_application');
+      $data['ready_count'] = $this->User_Model->get_count2('application_id','Ready To File','law_application');
+      $data['filled_count'] = $this->User_Model->get_count2('application_id','Filed Application','law_application');
+      $data['closed_count'] = $this->User_Model->get_count2('application_id','Application Closed','law_application');
+      $data['service_count_list'] = $this->User_Model->service_list_count();
+      $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
+      // $data['status_list'] = $this->User_Model->status_list_count();
+      // echo print_r($data['service_list']);
       $this->load->view('Include/head', $data);
       $this->load->view('Include/navbar', $data);
       $this->load->view('User/dashboard', $data);
@@ -64,7 +72,7 @@ class User extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
-      $data['company_list'] = $this->User_Model->get_list($company_id,'company_id','ASC','law_company');
+      $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
       $this->load->view('Include/head', $data);
       $this->load->view('Include/navbar', $data);
       $this->load->view('User/company_information_list', $data);
@@ -74,12 +82,13 @@ class User extends CI_Controller{
     }
   }
   // Edit Company...
-  public function edit_company($company_id){
+  public function edit_company($company_id2){
     $user_id = $this->session->userdata('law_user_id');
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
-      $company_info = $this->User_Model->get_info('company_id', $company_id, 'law_company');
+
+      $company_info = $this->User_Model->get_info('company_id', $company_id2, 'law_company');
       if($company_info){
         foreach($company_info as $info){
           $data['update'] = 'update';
@@ -116,7 +125,7 @@ class User extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
-      $company_id = $this->input->post('company_id');
+      $company_id2 = $this->input->post('company_id');
       $data = array(
         'company_name' => $this->input->post('company_name'),
         'company_address' => $this->input->post('company_address'),
@@ -135,7 +144,7 @@ class User extends CI_Controller{
         'company_start_date' => $this->input->post('company_start_date'),
         'company_end_date' => $this->input->post('company_end_date'),
       );
-      $this->User_Model->update_info('company_id', $company_id, 'law_company', $data);
+      $this->User_Model->update_info('company_id', $company_id2, 'law_company', $data);
       header('location:'.base_url().'User/company_information_list');
     } else{
       header('location:'.base_url().'User');
@@ -489,18 +498,22 @@ class User extends CI_Controller{
      $this->form_validation->set_rules('target_to', 'To Date', 'trim|required');
      $this->form_validation->set_rules('branch_id', 'Branch', 'trim|required');
      if($this->form_validation->run() != FALSE){
+
        $save_data = array(
          'target_from' => $this->input->post('target_from'),
          'target_to' => $this->input->post('target_to'),
          'branch_id' => $this->input->post('branch_id'),
-         'target_manager' => $this->input->post('target_manager'),
-         'target_rc' => $this->input->post('target_rc'),
-         'target_tc' => $this->input->post('target_tc'),
          'target_addedby' => $user_id,
        );
-       $this->User_Model->save_data('law_target', $save_data);
+       $target_id = $this->User_Model->save_data('law_target', $save_data);
+       foreach($_POST['input'] as $user){
+         $user['target_id'] = $target_id;
+         $this->db->insert('law_target_details', $user);
+       }
        $this->session->flashdata('save_success','success');
        header('location:'.base_url().'User/set_target');
+
+
      }
      $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
      $this->load->view('Include/head',$data);
@@ -509,6 +522,43 @@ class User extends CI_Controller{
      $this->load->view('Include/footer',$data);
    } else{
      header('location:'.base_url().'User');
+   }
+ }
+
+ public function get_user_list_by_branch(){
+   $user_id = $this->session->userdata('law_user_id');
+   $company_id = $this->session->userdata('law_company_id');
+   $roll_id = $this->session->userdata('roll_id');
+   if($user_id == null ){ header('location:'.base_url().'User'); }
+
+   $branch_id = $this->input->post('branch_id');
+   $user_list = $this->Transaction_Model->get_users_by_branch('',$branch_id);
+   if($user_list){
+     echo '<div class="form-group col-md-4 text-bold">
+       Roll
+     </div>
+     <div class="form-group col-md-4 text-bold">
+       Name of User
+     </div>
+     <div class="form-group col-md-4 text-bold">
+       Target Amount
+     </div>
+     ';
+   }
+   $i=0;
+   foreach ($user_list as $list) {
+     echo '
+     <div class="form-group col-md-4">
+       '.$list->roll_name.'
+     </div>
+     <div class="form-group col-md-4">
+       '.$list->user_name.' '.$list->user_lastname.'
+       <input type="hidden" name="input['.$i.'][user_id]" value="'.$list->user_id.'">
+     </div>
+     <div class="form-group col-md-4">
+       <input type="text" class="form-control" name="input['.$i.'][target_amount]" title="Target" placeholder="Target" required>
+     </div>';
+     $i++;
    }
  }
  // Target Edit and Update..............
