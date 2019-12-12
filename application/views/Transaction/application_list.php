@@ -35,52 +35,65 @@ $page = "application_list";
               <!--  -->
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
-              <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                  <th>Sr. No.</th>
-                  <th>Application No.</th>
-                  <th>Date</th>
-                  <th>Branch</th>
-                  <th>Service</th>
-                  <th>Status</th>
-                  <th>Upload</th>
-                  <th>Invoice</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                $i=0;
-                foreach ($application_list as $list) {
-                  $i++;
-                ?>
-                <tr>
-                  <td><?php echo $i; ?></td>
-                  <td><?php echo $list->application_no; ?></td>
-                  <td><?php echo $list->application_date; ?></td>
-                  <td><?php echo $list->branch_name; ?></td>
-                  <td><?php echo $list->service_name; ?></td>
-                  <td><?php echo $list->application_status; ?></td>
-                  <td>
-                    <a href="<?php echo base_url(); ?>Transaction/document_uploading_form/<?php echo $list->application_id; ?>"> <i class="fa fa-upload"></i> </a>
-                  </td>
-                  <td>
-                    <a href="<?php echo base_url(); ?>Transaction/sale_invoice/<?php echo $list->application_id; ?>"> <i class="fa fa-plus"></i> </a>
-                  </td>
-                  <td>
-                    <a href="<?php echo base_url(); ?>Transaction/change_status/<?php echo $list->application_id; ?>"> <i class="fa fa-edit"></i> </a>
-                  </td>
-                  <td>
-                    <a href="<?php echo base_url(); ?>Transaction/edit_application/<?php echo $list->application_id; ?>"> <i class="fa fa-edit"></i> </a>
-                    <a href="<?php echo base_url(); ?>Transaction/delete_application/<?php echo $list->application_id; ?>" onclick="return confirm('Delete this Application');" class="ml-4"> <i class="fa fa-trash"></i> </a>
-                  </td>
-                </tr>
-                <?php } ?>
-                <tbody>
-              </table>
+            <div class="card-body" >
+              <div class="" style="overflow-x:auto;">
+                <table id="example1" class="table table-bordered table-striped tbl_add">
+                  <thead>
+                  <tr>
+                    <th class="sr_no">Sr. No.</th>
+                    <th class="sr_no">Application No.</th>
+                    <th>Date</th>
+                    <th>Branch</th>
+                    <th>Service</th>
+                    <th>Org. Name</th>
+                    <th>Status</th>
+                    <th class="sr_no">Upload</th>
+                    <th class="sr_no">Invoice</th>
+                    <th class="sr_no">Status</th>
+                    <th class="sr_no">Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <?php
+                  $i=0;
+                  foreach ($application_list as $list) {
+                    $service_id = $list->service_id;
+                    $i++;
+                  ?>
+                  <tr>
+                    <td class="sr_no"><?php echo $i; ?></td>
+                    <td class="sr_no"><?php echo $list->application_no; ?></td>
+                    <td><?php echo $list->application_date; ?></td>
+                    <td><?php echo $list->branch_name; ?></td>
+                    <td><?php echo $list->service_name; ?></td>
+                    <?php if($service_id == 1){ ?>
+                      <td><?php echo $list->ORGANIZATION; ?></td>
+                    <?php } elseif ($service_id == 2) { ?>
+                      <td><?php echo $list->org_name; ?></td>
+                    <?php } else{ ?>
+                      <td><?php echo $list->appl_org_name; ?></td>
+                    <?php } ?>
+                    <td><?php echo $list->application_status; ?></td>
+                    <td class="sr_no">
+                      <a href="<?php echo base_url(); ?>Transaction/document_uploading_form/<?php echo $list->application_id; ?>"> <i class="fa fa-upload"></i> </a>
+                    </td>
+                    <td class="sr_no">
+                      <a href="<?php echo base_url(); ?>Transaction/sale_invoice/<?php echo $list->application_id; ?>"> <i class="fa fa-plus"></i> </a>
+                    </td>
+                    <td class="sr_no">
+                      <a href="<?php echo base_url(); ?>Transaction/change_status/<?php echo $list->application_id; ?>"> <i class="fa fa-edit"></i> </a>
+                    </td>
+                    <td class="sr_no">
+                      <a href="<?php echo base_url(); ?>Transaction/edit_application/<?php echo $list->application_id; ?>"> <i class="fa fa-edit"></i> </a>
+                      <a href="<?php echo base_url(); ?>Transaction/delete_application/<?php echo $list->application_id; ?>" onclick="return confirm('Delete this Application');" class="ml-4"> <i class="fa fa-trash"></i> </a>
+                    </td>
+                  </tr>
+                  <?php } ?>
+                  <tbody>
+                </table>
+              </div>
+
+
             </div>
             <!-- /.card-body -->
           </div>

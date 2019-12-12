@@ -63,15 +63,17 @@ class Transaction_Model extends CI_Model{
   }
   // Application List...
   public function application_list($company_id,$status,$order){
-    $this->db->select('application.*,branch.*,service.*');
+    $this->db->select('application.*,branch.*,service.*,trade.*,copy.*,other.*');
     $this->db->from('law_application as application');
-    // $this->db->where('application.company_id',$company_id);
     if($status){
       $this->db->where('application.application_status',$status);
     }
     $this->db->order_by('application.application_id',$order);
     $this->db->join('law_branch as branch','application.branch_id = branch.branch_id','LEFT');
     $this->db->join('law_service as service','application.service_id = service.service_id','LEFT');
+    $this->db->join('law_trademark as trade','application.application_id = trade.application_id','LEFT');
+    $this->db->join('law_copyright as copy','application.application_id = copy.application_id','LEFT');
+    $this->db->join('law_otherservice as other','application.application_id = other.application_id','LEFT');
     // $this->db->join('law_trademark as appl','application.application_id = appl.application_id','LEFT');
     $query = $this->db->get();
     $result = $query->result();
@@ -85,6 +87,7 @@ class Transaction_Model extends CI_Model{
     if($status){
       $this->db->where('application.application_status',$status);
     }
+    $this->db->where('application.service_id',1);
     $this->db->order_by('application.application_id',$order);
     $this->db->join('law_branch as branch','application.branch_id = branch.branch_id','LEFT');
     $this->db->join('law_service as service','application.service_id = service.service_id','LEFT');

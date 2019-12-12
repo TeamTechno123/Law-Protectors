@@ -79,10 +79,11 @@ $page = "add_user";
                     <th>GST %</th>
                     <th>HSN/SAC</th>
                     <th>QTY</th>
-                    <th>GOV FEES</th>
+                    <th class="td_w">GOV FEES</th>
                     <th>RATE</th>
+                    <th>GST AMT</th>
                     <th>TOTAL</th>
-                    <th>ACTION</th>
+                    <th class="sr_no">ACTION</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -96,12 +97,11 @@ $page = "add_user";
                     <input type="hidden" name="input[<?php echo $i; ?>][invoice_details_id]" value="<?php echo $details->invoice_details_id; ?>">
                     <tr>
                       <td class="sr_no"><?php echo $j; ?></td>
-                      <td class="td_w">
+                      <td class="">
                       <textarea name="input[<?php echo $i; ?>][descr]" class="form-control form-control-sm " rows="2" cols="20"><?php echo $details->descr; ?></textarea>
                       </td>
                       <td class="td_w">
                         <input type="number" min="0" class="form-control form-control-sm gst_per" name="input[<?php echo $i; ?>][gst_per]" value="<?php echo $details->gst_per; ?>" placeholder="">
-                        <input type="hidden" class="form-control form-control-sm gst_amount" name="input[<?php echo $i; ?>][gst_amount]" value="<?php echo $details->gst_amount; ?>" placeholder="">
                       </td>
                       <td class="td_w">
                         <input type="text" class="form-control form-control-sm " name="input[<?php echo $i; ?>][hsn]" value="<?php echo $details->hsn; ?>" placeholder="">
@@ -116,14 +116,17 @@ $page = "add_user";
                         <input type="number" min="1.00" step="0.01" class="form-control form-control-sm rate" name="input[<?php echo $i; ?>][rate]" value="<?php echo $details->rate; ?>" placeholder="">
                       </td>
                       <td class="td_w">
-                        <input type="number" min="1.00" step="0.01" class="form-control form-control-sm total" name="input[<?php echo $i; ?>][total]" value="<?php echo $details->total; ?>" placeholder="" readonly>
+                        <input type="number" min="1.00" step="0.01" class="form-control form-control-sm gst_amount" name="input[<?php echo $i; ?>][gst_amount]" value="<?php echo $details->gst_amount; ?>" placeholder="">
                       </td>
-                      <td class="td_w"> <?php if($j > 1){ ?> <a><i class="fa fa-trash text-danger"></i></a> <?php } ?></td>
+                      <td class="td_w">
+                        <input type="number" min="1.00" step="0.01" class="form-control form-control-sm total" name="input[<?php echo $i; ?>][total]" value="<?php echo $details->total; ?>" placeholder="">
+                      </td>
+                      <td class="sr_no"> <?php if($j > 1){ ?> <a><i class="fa fa-trash text-danger"></i></a> <?php } ?></td>
                     </tr>
                   <?php  $i++; } } else{ ?>
                     <tr>
                       <td class="sr_no">1</td>
-                      <td class="td_w">
+                      <td class="">
                       <textarea name="input[0][descr]" class="form-control form-control-sm " rows="2" cols="20"></textarea>
                       </td>
                       <td class="td_w">
@@ -143,9 +146,12 @@ $page = "add_user";
                         <input type="number" min="1.00" step="0.01" class="form-control form-control-sm rate" name="input[0][rate]" value="" placeholder="">
                       </td>
                       <td class="td_w">
-                        <input type="number" min="1.00" step="0.01" class="form-control form-control-sm total" name="input[0][total]" value="" placeholder="" readonly>
+                        <input type="number" min="1.00" step="0.01" class="form-control form-control-sm gst_amount" name="input[0][gst_amount]" value="" placeholder="">
                       </td>
-                      <td class="td_w"></td>
+                      <td class="td_w">
+                        <input type="number" min="1.00" step="0.01" class="form-control form-control-sm total" name="input[0][total]" value="" placeholder="">
+                      </td>
+                      <td class="sr_no"></td>
                     </tr>
                   <?php } ?>
                   </tbody>
@@ -158,13 +164,13 @@ $page = "add_user";
                   <div class="form-group row pt-4 float-right">
                     <label for="inputEmail3" class="col-form-label mr-3">Basic Amount</label>
                     <div class="">
-                      <input type="number" class="form-control" name="basic_amt" id="basic_amt" value="<?php if(isset($basic_amt)){ echo $basic_amt; } ?>" readonly>
+                      <input type="number" class="form-control" name="basic_amt" id="basic_amt" value="<?php if(isset($basic_amt)){ echo $basic_amt; } ?>">
                     </div>
                   </div>
                   <div class="form-group row float-right">
                     <label for="inputEmail3" class="col-form-label mr-3">GST Amount</label>
                     <div class="">
-                      <input type="number"  class="form-control" name="gst_amt" id="gst_amt" value="<?php if(isset($gst_amt)){ echo $gst_amt; } ?>" readonly>
+                      <input type="number"  class="form-control" name="gst_amt" id="gst_amt" value="<?php if(isset($gst_amt)){ echo $gst_amt; } ?>">
                     </div>
                   </div>
                   <div class="form-group row float-right">
@@ -182,13 +188,13 @@ $page = "add_user";
                   <div class="form-group row float-right">
                     <label for="inputEmail3" class=" col-form-label mr-3">Balance Payment</label>
                     <div class="">
-                      <input type="number" class="form-control delivery_total" name="bal_amt" id="bal_amt" value="<?php if(isset($bal_amt)){ echo $bal_amt; } ?>" readonly>
+                      <input type="number" class="form-control delivery_total" name="bal_amt" id="bal_amt" value="<?php if(isset($bal_amt)){ echo $bal_amt; } ?>" >
                     </div>
                   </div>
                   <div class="form-group row float-right">
                     <label for="inputEmail3" class=" col-form-label mr-3">Net Amount</label>
                     <div class="">
-                      <input type="number" class="form-control delivery_total" name="net_amt" id="net_amt" value="<?php if(isset($net_amt)){ echo $net_amt; } ?>" readonly>
+                      <input type="number" class="form-control delivery_total" name="net_amt" id="net_amt" value="<?php if(isset($net_amt)){ echo $net_amt; } ?>" >
                     </div>
                   </div>
                 </div>
@@ -249,7 +255,10 @@ $page = "add_user";
         '<input type="number" min="1.00" step="0.01" class="form-control form-control-sm rate" name="input['+j+'][rate]" value="" placeholder="">'+
       '</td>'+
       '<td class="td_w">'+
-        '<input type="number" min="1.00" step="0.01" class="form-control form-control-sm total" name="input['+j+'][total]" value="" placeholder="" readonly>'+
+        '<input type="number" min="1.00" step="0.01" class="form-control form-control-sm gst_amount" name="input['+j+'][gst_amount]" value="" placeholder="">'+
+      '</td>'+
+      '<td class="td_w">'+
+        '<input type="number" min="1.00" step="0.01" class="form-control form-control-sm total" name="input['+j+'][total]" value="" placeholder="">'+
       '</td>'+
       '<td class="td_w"><a> <i class="fa fa-trash text-danger"></i> </a></td>'+
     '</tr>';
@@ -258,112 +267,80 @@ $page = "add_user";
 
     $('#myTable').on('click', 'a', function () {
       $(this).closest('tr').remove();
-
-      var basic_amount = 0;
-      $(".total").each(function() {
-          var total = $(this).val();
-          if(!isNaN(total) && total.length != 0) {
-              basic_amount += parseFloat(total);
-          }
-      });
-      // alert(basic_amount);
-      $('#basic_amt').val(basic_amount.toFixed(2));
-      //
-      var gst_val = 0;
-      $(".gst_amount").each(function() {
-          var gst_amt = $(this).val();
-          if(!isNaN(gst_amt) && gst_amt.length != 0) {
-              gst_val += parseFloat(gst_amt);
-          }
-      });
-      // alert(gst_val);
-      $('#gst_amt').val(gst_val.toFixed(2));
-
-      var total_amount = basic_amount + gst_val;
-      total_amount = Math.ceil(total_amount);
-      $('#net_amt').val(total_amount);
     });
 
 
 
     // Calculate Amount... Check Valid Quantity..
-  $('#myTable').on('change', 'input.gst_per,input.qty, input.rate', function () {
-    var gst =   $(this).closest('tr').find('.gst_per').val();
-    var qty =   $(this).closest('tr').find('.qty').val();
-    var rate =   $(this).closest('tr').find('.rate').val();
-    if(gst == ''){
-      gst = 0;
-    }
-    if(qty == ''){
-      qty = 0;
-    }
-    if(rate == ''){
-      rate = 0;
-    }
-    var gst = parseInt(gst);
-    var qty = parseInt(qty);
-    var rate = parseFloat(rate);
+  // $('#myTable').on('change', 'input.gst_per,input.qty, input.rate', function () {
+  //   var gst =   $(this).closest('tr').find('.gst_per').val();
+  //   var qty =   $(this).closest('tr').find('.qty').val();
+  //   var rate =   $(this).closest('tr').find('.rate').val();
+  //   if(gst == ''){
+  //     gst = 0;
+  //   }
+  //   if(qty == ''){
+  //     qty = 0;
+  //   }
+  //   if(rate == ''){
+  //     rate = 0;
+  //   }
+  //   var gst = parseInt(gst);
+  //   var qty = parseInt(qty);
+  //   var rate = parseFloat(rate);
+  //   var amount_without_gst = qty * rate;
+  //   var gst_amount = (gst/100) * amount_without_gst;
+  //   var amount_with_gst = amount_without_gst + gst_amount;
+  //
+  //   $(this).closest('tr').find('.total').val(amount_without_gst.toFixed(2));
+  //   $(this).closest('tr').find('.gst_amount').val(gst_amount.toFixed(2));
+  //
+  //   var basic_amount = 0;
+  //   $(".total").each(function() {
+  //       var total = $(this).val();
+  //       if(!isNaN(total) && total.length != 0) {
+  //           basic_amount += parseFloat(total);
+  //       }
+  //   });
+  //   $('#basic_amt').val(basic_amount.toFixed(2));
+  //   var gst_val = 0;
+  //   $(".gst_amount").each(function() {
+  //       var gst_amt = $(this).val();
+  //       if(!isNaN(gst_amt) && gst_amt.length != 0) {
+  //           gst_val += parseFloat(gst_amt);
+  //       }
+  //   });
+  //   $('#gst_amt').val(gst_val.toFixed(2));
+  //   var total_amount = basic_amount + gst_val;
+  //   $('#net_amt').val(total_amount.toFixed(0));
+  //   var adv_amt =   $('#adv_amt').val();
+  //   var net_amt =   $('#net_amt').val();
+  //   if(adv_amt == ''){
+  //     adv_amt = 0;
+  //   }
+  //   if(net_amt == ''){
+  //     net_amt = 0;
+  //   }
+  //   var adv_amt = parseInt(adv_amt);
+  //   var net_amt = parseInt(net_amt);
+  //   var bal_amt = net_amt - adv_amt;
+  //   $('#bal_amt').val(bal_amt.toFixed(2));
+  // });
 
-    var amount_without_gst = qty * rate;
-    var gst_amount = (gst/100) * amount_without_gst;
-    var amount_with_gst = amount_without_gst + gst_amount;
-
-    $(this).closest('tr').find('.total').val(amount_without_gst.toFixed(2));
-    $(this).closest('tr').find('.gst_amount').val(gst_amount.toFixed(2));
-
-    var basic_amount = 0;
-    $(".total").each(function() {
-        var total = $(this).val();
-        if(!isNaN(total) && total.length != 0) {
-            basic_amount += parseFloat(total);
-        }
-    });
-    // alert(basic_amount);
-    $('#basic_amt').val(basic_amount.toFixed(2));
-    //
-    var gst_val = 0;
-    $(".gst_amount").each(function() {
-        var gst_amt = $(this).val();
-        if(!isNaN(gst_amt) && gst_amt.length != 0) {
-            gst_val += parseFloat(gst_amt);
-        }
-    });
-    // alert(gst_val);
-    $('#gst_amt').val(gst_val.toFixed(2));
-
-    var total_amount = basic_amount + gst_val;
-    // total_amount = Math.ceil(total_amount);
-    // $('#net_amt').val(total_amount);
-    $('#net_amt').val(total_amount.toFixed(0));
-
-    var adv_amt =   $('#adv_amt').val();
-    var net_amt =   $('#net_amt').val();
-    if(adv_amt == ''){
-      adv_amt = 0;
-    }
-    if(net_amt == ''){
-      net_amt = 0;
-    }
-    var adv_amt = parseInt(adv_amt);
-    var net_amt = parseInt(net_amt);
-    var bal_amt = net_amt - adv_amt;
-    $('#bal_amt').val(bal_amt.toFixed(2));
-  });
-
-  $('#adv_amt').change(function(){
-    var adv_amt =   $('#adv_amt').val();
-    var net_amt =   $('#net_amt').val();
-    if(adv_amt == ''){
-      adv_amt = 0;
-    }
-    if(net_amt == ''){
-      net_amt = 0;
-    }
-    var adv_amt = parseInt(adv_amt);
-    var net_amt = parseInt(net_amt);
-    var bal_amt = net_amt - adv_amt;
-    $('#bal_amt').val(bal_amt.toFixed(2));
-  });
+  // $('#adv_amt').change(function(){
+  //   var adv_amt =   $('#adv_amt').val();
+  //   var net_amt =   $('#net_amt').val();
+  //   if(adv_amt == ''){
+  //     adv_amt = 0;
+  //   }
+  //   if(net_amt == ''){
+  //     net_amt = 0;
+  //   }
+  //   var adv_amt = parseInt(adv_amt);
+  //   var net_amt = parseInt(net_amt);
+  //   var bal_amt = net_amt - adv_amt;
+  //   $('#bal_amt').val(bal_amt.toFixed(2));
+  // });
   </script>
 </body>
 </html>

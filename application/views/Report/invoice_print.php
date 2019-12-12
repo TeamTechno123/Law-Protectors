@@ -32,8 +32,7 @@
     table, td, th{
     border :1px solid #000;
     padding-left: 10px;
-
-  }
+    }
 
       .invoice-table tr, td, th{
           border: 1px solid #000!important;
@@ -179,12 +178,11 @@
       <th style="text-align:center;" >RATE</th>
       <th style="text-align:center;" >AMOUNT</th>
     </tr>
-<?php
-  $i=0;
-  foreach ($invoice_details_list as $list) {
-  $i++;
-?>
-
+  <?php
+    $i=0;
+    foreach ($invoice_details_list as $list) {
+    $i++;
+  ?>
     <tr>
       <td style="text-align:center;"><?php echo $i; ?></td>
       <td style="text-align:center;"><?php echo $list->descr; ?></td>
@@ -193,7 +191,19 @@
       <td style="text-align:center;"><?php echo $list->rate; ?></td>
       <td style="text-align:center;"><?php echo $list->total; ?></td>
     </tr>
-<?php } ?>
+  <?php } ?>
+  <?php
+  $k=13-$i;
+  for ($j=0; $j < $k ; $j++) { ?>
+    <tr>
+      <td style="text-align:center; height:15px;"></td>
+      <td style="text-align:center;"></td>
+      <td style="text-align:center;" ></td>
+      <td style="text-align:center;"></td>
+      <td style="text-align:center;"></td>
+      <td style="text-align:center;"></td>
+    </tr>
+  <?php } ?>
     <tr>
       <td colspan="4" rowspan="" valign="top">
         <p style="margin-top:10px;"><b>GST Amount : <?php echo $this->numbertowords->convert_number($gst_amt); ?> Only</b> </p><hr style="margin-left:-10px;">
@@ -202,6 +212,7 @@
       </td>
       <td colspan="2" Width="40%" valign="top">
         <p><b>Basic Amount</b> : <?php echo number_format($basic_amt,2); ?></p> <hr style="margin-left:-10px;">
+        <p><b>TDS Amount</b> : <?php echo number_format($tds_amt,2); ?></p> <hr style="margin-left:-10px;">
         <?php
         $roundup = ($basic_amt + $gst_amt) - $net_amt;
         if($company_statecode == $party_statecode){
@@ -225,7 +236,7 @@
           <p> <b>Declaration </b> : We declare that the invoice shows the actual price of the goods described and that all particulars are true and correct. </p>
       </td>
       <td colspan="1">
-        <img src="<?php echo base_url() ?>assets/images/<?php $company_seal; ?>" alt="">
+        <img src="<?php echo base_url() ?>assets/images/<?php echo $company_seal; ?>" alt="">
       </td>
     </tr>
   </table>

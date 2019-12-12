@@ -354,10 +354,8 @@ class Transaction extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
-
       $application_id = $this->input->post('application_id');
       $organization_id = $this->input->post('organization_id');
-
       $MARK_0 = $this->input->post('MARK_0');
       $MARK_1 = $this->input->post('MARK_1');
       $MARK_2 = $this->input->post('MARK_2');
@@ -422,7 +420,7 @@ class Transaction extends CI_Controller{
 
       $this->User_Model->update_info('application_id', $application_id, 'law_trademark', $uodate_data);
       // header('location:'.base_url().'Transaction/process_step_two');
-      header('location:'.base_url().'Transaction/sale_invoice_list');
+      header('location:'.base_url().'Transaction/application_list');
     } else{
       header('location:'.base_url().'User');
     }
@@ -539,7 +537,7 @@ class Transaction extends CI_Controller{
     );
 
     $this->User_Model->update_info('application_id', $application_id, 'law_copyright', $update_data);
-    header('location:'.base_url().'Transaction/process_step_two');
+    header('location:'.base_url().'Transaction/application_list');
   }
 
   public function process_step_two(){
@@ -632,7 +630,6 @@ class Transaction extends CI_Controller{
       $this->User_Model->update_info('application_id', $application_id, 'law_application', $app_data);
 
       if($service_id == 1){
-
         header('location:'.base_url().'Transaction/trade_mark_step_one');
       }
       elseif ($service_id == 2) {
@@ -640,9 +637,9 @@ class Transaction extends CI_Controller{
       } else{
         header('location:'.base_url().'Transaction/other_service_step_one');
       }
-
+      //header('location:'.base_url().'Transaction/application_list');
       // header('location:'.base_url().'Transaction/document_uploading_form/'.$application_id);
-      header('location:'.base_url().'Transaction/sale_invoice_list');
+      // header('location:'.base_url().'Transaction/sale_invoice_list');
   }
 
 /**************************** Othjer Services ****************************/
@@ -703,9 +700,9 @@ class Transaction extends CI_Controller{
       'other_date' => $this->input->post('other_date'),
       'other_place' => $this->input->post('other_place'),
     );
-
     $this->User_Model->update_info('application_id', $application_id, 'law_otherservice', $update_data);
-    header('location:'.base_url().'Transaction/process_step_two');
+    header('location:'.base_url().'Transaction/application_list');
+    // header('location:'.base_url().'Transaction/process_step_two');
   }
 
 

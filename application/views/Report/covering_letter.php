@@ -79,18 +79,30 @@
           <td>Logo Of Your Brand</td>
           <td class="wdt"></td>
         </tr>
-
         <tr>
           <td>2</td>
           <td>User Evidences</td>
           <td class="wdt"></td>
         </tr>
-        <?php if(isset($IS_MSME_REQ) && $IS_MSME_REQ = 'Yes'){ ?>
-          <tr>
-            <td>3</td>
-            <td>MSME</td>
-            <td class="wdt"></td>
-          </tr>
+        <?php
+          $i = 2;
+        if(isset($IS_MSME_REQ) && $IS_MSME_REQ == 'Yes'){
+          $i = 3;
+        ?>
+        <tr>
+          <td>3</td>
+          <td>MSME</td>
+          <td class="wdt"></td>
+        </tr>
+        <?php } ?>
+        <?php if(isset($BALANCEAMOUNT) && $BALANCEAMOUNT > 0){
+          $i++;
+        ?>
+        <tr>
+          <td><?php echo $i; ?></td>
+          <td>Balance Payment</td>
+          <td class="wdt"><?php echo $BALANCEAMOUNT; ?></td>
+        </tr>
         <?php } ?>
 
       </table>

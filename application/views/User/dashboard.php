@@ -122,7 +122,7 @@
             </div>
           </div>
           <div class="col-md-2 col-6">
-            <div class="small-box bg-green">
+            <div class="small-box bg-blue">
               <div class="inner">
                 <h3><?php echo $closed_count; ?></h3>
                 <p>Closed </p>
@@ -131,6 +131,18 @@
                 <i class="ion ion-bag"></i>
               </div>
               <a href="<?php echo base_url() ?>Transaction/application_list2/5" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <div class="col-md-2 col-6">
+            <div class="small-box bg-red">
+              <div class="inner">
+                <h3><?php echo $invoice_count; ?></h3>
+                <p>Invoice </p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+              <a href="<?php echo base_url() ?>Transaction/sale_invoice_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
         </div>

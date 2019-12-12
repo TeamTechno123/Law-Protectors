@@ -58,6 +58,7 @@
       <?php if(isset($TRADE_3)){ echo $TRADE_3.', '; } ?>
       <?php if(isset($TRADE_4)){ echo $TRADE_4.', '; } ?> by my concern.</p>
       <p style="font-size:12px; text-align:justify; ">4.	Sales of the said goods in India by my concern have been considerable and I give details thereof:  </p>
+
       <table>
         <style media="print">
         table {
@@ -77,44 +78,34 @@
           <th>YEAR</th>
           <th>AMOUNT(Rs.)</th>
         </tr>
+
+        <?php
+        $PROPOSED_DATE = strtotime($PROPOSED);
+        $PROPOSED_year = date('Y',$PROPOSED_DATE);
+        $curr_year = date('Y');
+        $next_year = $curr_year+1;
+        $k=0;
+        for($i=$PROPOSED_year; $i<$next_year; $i++){
+          $j = $i+1;
+        ?>
         <tr>
-          <td></td>
+          <td><?php echo $i.'-'.$j; ?></td>
           <td></td>
         </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
+        <?php $k++; } ?>
       </table>
+
       <p style="font-size:12px; text-align:justify; ">5.	I have spent approximately Rs.________________/- (Rupees only) on account of advertising as follows. </p>
       <table>
         <style media="print">
         table {
           border-collapse: collapse;
+          margin-left:auto;
+          margin-right:auto;
         }
 
         table td, th{
-        padding: 8px 30px;
+        padding: 8px 13px;
         }
         table, td, th{
           border :1px solid #000;
@@ -124,34 +115,21 @@
           <th>YEAR</th>
           <th>AMOUNT(Rs.)</th>
         </tr>
+
+        <?php
+        $PROPOSED_DATE = strtotime($PROPOSED);
+        $PROPOSED_year = date('Y',$PROPOSED_DATE);
+        $curr_year = date('Y');
+        $next_year = $curr_year+1;
+        $k=0;
+        for($i=$PROPOSED_year; $i<$next_year; $i++){
+          $j = $i+1;
+        ?>
         <tr>
-          <td></td>
+          <td><?php echo $i.'-'.$j; ?></td>
           <td></td>
         </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
+        <?php $k++; } ?>
       </table>
       <p style="font-size:12px; text-align:justify; ">6. Annexed hereto and collectively marked Exhibit A-1, are a bunch of invoices showing that goods bearing Trade Mark have been supplied to various clients and Exhibit A-2 has the copies of advertisement material in respect of the above trademark.</p>
       <p style="font-size:12px; text-align:justify; ">7. The said goods are of high standard and by reason of such and by the use of Trade Mark in relation to said goods the Trade Mark denotes to those trades a distinctive symbol of the <?php if(isset($TRADE_0)){ echo $TRADE_0.', '; } ?>

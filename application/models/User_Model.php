@@ -125,5 +125,37 @@ class User_Model extends CI_Model{
     return $result[0]['count'];
   }
 
+  public function target_list(){
+    $this->db->select('law_target.*,law_branch.*,law_company.company_name');
+    $this->db->from('law_target');
+    $this->db->join('law_branch','law_target.branch_id = law_branch.branch_id','LEFT');
+    $this->db->join('law_company','law_company.company_id = law_branch.company_id','LEFT');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
+  public function target_info($target_id){
+    $this->db->select('law_target.*,law_branch.*,law_company.company_name');
+    $this->db->from('law_target');
+    $this->db->where('law_target.target_id',$target_id);
+    $this->db->join('law_branch','law_target.branch_id = law_branch.branch_id','LEFT');
+    $this->db->join('law_company','law_company.company_id = law_branch.company_id','LEFT');
+    $query = $this->db->get();
+    $result = $query->result_array();
+    return $result;
+  }
+
+  public function target_details($target_id){
+    $this->db->select('law_target_details.*,law_user.roll_id,law_user.user_name,law_user.user_lastname,law_roll.*');
+    $this->db->from('law_target_details');
+    $this->db->where('law_target_details.target_id',$target_id);
+    $this->db->join('law_user','law_target_details.user_id = law_user.user_id','LEFT');
+    $this->db->join('law_roll','law_user.roll_id = law_roll.roll_id','LEFT');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
 }
 ?>

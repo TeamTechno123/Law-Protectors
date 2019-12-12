@@ -47,13 +47,16 @@ class User extends CI_Controller{
       $data['comp_count'] = $this->User_Model->get_count2('company_id',$key,'law_company');
       $data['user_count'] = $this->User_Model->get_count2('user_id',$key,'law_user');
       $data['service_count'] = $this->User_Model->get_count2('service_id',$key,'law_service');
-      $data['open_count'] = $this->User_Model->get_count2('application_id','open','law_application');
+      $data['open_count'] = $this->User_Model->get_count2('application_id','Open','law_application');
       $data['pro_count'] = $this->User_Model->get_count2('application_id','In Process','law_application');
       $data['ready_count'] = $this->User_Model->get_count2('application_id','Ready To File','law_application');
       $data['filled_count'] = $this->User_Model->get_count2('application_id','Filed Application','law_application');
       $data['closed_count'] = $this->User_Model->get_count2('application_id','Application Closed','law_application');
+      $data['invoice_count'] = $this->User_Model->get_count2('invoice_id',$key,'law_invoice');
+
       $data['service_count_list'] = $this->User_Model->service_list_count();
       $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
+
       // $data['status_list'] = $this->User_Model->status_list_count();
       // echo print_r($data['service_list']);
       $this->load->view('Include/head', $data);
@@ -498,7 +501,6 @@ class User extends CI_Controller{
      $this->form_validation->set_rules('target_to', 'To Date', 'trim|required');
      $this->form_validation->set_rules('branch_id', 'Branch', 'trim|required');
      if($this->form_validation->run() != FALSE){
-
        $save_data = array(
          'target_from' => $this->input->post('target_from'),
          'target_to' => $this->input->post('target_to'),
@@ -511,11 +513,71 @@ class User extends CI_Controller{
          $this->db->insert('law_target_details', $user);
        }
        $this->session->flashdata('save_success','success');
-       header('location:'.base_url().'User/set_target');
-
-
+       header('location:'.base_url().'User/target_list');
      }
      $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
+     $this->load->view('Include/head',$data);
+     $this->load->view('Include/navbar',$data);
+     $this->load->view('User/set_target_information',$data);
+     $this->load->view('Include/footer',$data);
+   } else{
+     header('location:'.base_url().'User');
+   }
+ }
+
+ public function target_list(){
+   $user_id = $this->session->userdata('law_user_id');
+   $company_id = $this->session->userdata('law_company_id');
+   $roll_id = $this->session->userdata('roll_id');
+   if($user_id == null ){ header('location:'.base_url().'User'); }
+
+   $data['target_list'] = $this->User_Model->target_list();
+   $this->load->view('Include/head',$data);
+   $this->load->view('Include/navbar',$data);
+   $this->load->view('User/target_list',$data);
+   $this->load->view('Include/footer',$data);
+ }
+
+ public function edit_target($target_id){
+   $user_id = $this->session->userdata('law_user_id');
+   $company_id = $this->session->userdata('law_company_id');
+   $roll_id = $this->session->userdata('roll_id');
+   if($company_id){
+     $this->form_validation->set_rules('target_from', 'From Date', 'trim|required');
+     $this->form_validation->set_rules('target_to', 'To Date', 'trim|required');
+     if($this->form_validation->run() != FALSE){
+       $save_data = array(
+         'target_from' => $this->input->post('target_from'),
+         'target_to' => $this->input->post('target_to'),
+         'target_addedby' => $user_id,
+       );
+       foreach($_POST['input'] as $user){
+         if(isset($user['target_details_id'])){
+           $target_details_id = $user['target_details_id'];
+           if(!isset($user['user_id'])){
+             $this->User_Model->delete_info('target_details_id', $target_details_id, 'law_target_details');
+           }else{
+               $this->User_Model->update_info('target_details_id', $target_details_id, 'law_target_details', $user);
+           }
+         }
+         else{
+           $user['target_id'] = $target_id;
+           $this->db->insert('law_target_details', $user);
+         }
+       }
+       $this->session->flashdata('update_success','success');
+       header('location:'.base_url().'User/target_list');
+     }
+
+     $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
+     $target_info = $this->User_Model->target_info($target_id);
+     if($target_info == ''){ header('location:'.base_url().'User/target_list'); }
+     $data['update'] = 'update';
+     $data['target_from'] = $target_info[0]['target_from'];
+     $data['target_to'] = $target_info[0]['target_to'];
+     $data['branch_id'] = $target_info[0]['branch_id'];
+     $data['target_details'] = $this->User_Model->target_details($target_id);
+
      $this->load->view('Include/head',$data);
      $this->load->view('Include/navbar',$data);
      $this->load->view('User/set_target_information',$data);

@@ -1,8 +1,8 @@
 <footer class="main-footer">
-  <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
+  <strong>Copyright &copy; 2019 <a href="http://lawprotectorsipr.in/">Lawprotectors</a>.</strong>
   All rights reserved.
   <div class="float-right d-none d-sm-inline-block">
-    <b>Version</b> 3.0.0-rc.5
+    <b>Version</b> 1.0
   </div>
 </footer>
 
@@ -64,19 +64,19 @@
 
 <script type="text/javascript">
   $('#date1').datetimepicker({
-    format: 'DD-M-Y'
+    format: 'DD-MM-Y'
   });
   $('#date2').datetimepicker({
-    format: 'DD-M-Y'
+    format: 'DD-MM-Y'
   });
   $('#date3').datetimepicker({
-    format: 'DD-M-Y'
+    format: 'DD-MM-Y'
   })
   $('#date4').datetimepicker({
-    format: 'DD-M-Y'
+    format: 'DD-MM-Y'
   })
   $('#date5').datetimepicker({
-    format: 'DD-M-Y'
+    format: 'DD-MM-Y'
   })
 </script>
 <script>

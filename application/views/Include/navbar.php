@@ -6,7 +6,6 @@
     </li>
   </ul>
   <!-- Right navbar links -->
-
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
       <a class="nav-link" href="<?php echo base_url(); ?>User/logout">
@@ -20,7 +19,6 @@
     </li>
   </ul>
 </nav>
-
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="index3.html" class="brand-link">
@@ -93,10 +91,11 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url(); ?>User/set_target" class="nav-link">
+                <a href="<?php echo base_url(); ?>User/target_list" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                     Target Information
+                    <!-- set_target -->
                   </p>
                 </a>
               </li>
@@ -146,6 +145,49 @@
           </li>
         </ul>
       </li>
+      <li class="nav-item has-treeview">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-chart-pie"></i>
+        <p>
+          Report
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview" style="display: none;">
+        <li class="nav-item">
+          <a href="<?php echo base_url(); ?>Report/application_report" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>
+              Application Report
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="<?php echo base_url(); ?>Report/manager_report" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>
+              Manager Report
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="<?php echo base_url(); ?>Report/outstanding_report" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>
+            Outstanding Report
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="<?php echo base_url(); ?>Report/invoice_report" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>
+              Invoice Report
+            </p>
+          </a>
+        </li>
+      </ul>
+      </li>
       <li class="nav-item">
         <a href="<?php echo base_url(); ?>Transaction/printing_list" class="nav-link">
           <i class="nav-icon fas fa-th"></i>
@@ -154,49 +196,7 @@
           </p>
         </a>
       </li>
-<!-- <li class="nav-item has-treeview">
-      <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-chart-pie"></i>
-        <p>
-          print Format
-          <i class="right fas fa-angle-left"></i>
-        </p>
-      </a>
-      <ul class="nav nav-treeview" style="display: none;">
-        <li class="nav-item">
-          <a href="<?php echo base_url(); ?>Transaction/form_tm" class="nav-link">
-            <i class="far fa-circle nav-icon"></i>
-            <p>
-              From TM A
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url(); ?>Transaction/auth_print" class="nav-link">
-            <i class="far fa-circle nav-icon"></i>
-            <p>
-              Authorization
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url(); ?>Transaction/affidavit" class="nav-link">
-            <i class="far fa-circle nav-icon"></i>
-            <p>
-            Affidavit
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url(); ?>Transaction/covering_letter" class="nav-link">
-            <i class="far fa-circle nav-icon"></i>
-            <p>
-              Covering letter
-            </p>
-          </a>
-        </li>
-        <ul>
-      </li> -->
+
     </nav>
     <!-- /.sidebar-menu -->
   </div>
