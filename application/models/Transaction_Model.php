@@ -12,7 +12,7 @@ class Transaction_Model extends CI_Model{
       $old_num = 0;
     }             //separating numeric part
     $value2 = $old_num + 1;                            //Incrementing numeric part
-    $value2 = "" . sprintf('%06s', $value2);               //concatenating incremented value
+    // $value2 = "" . sprintf('%06s', $value2);               //concatenating incremented value
     return $value = $value2;
   }
 
@@ -63,7 +63,7 @@ class Transaction_Model extends CI_Model{
   }
   // Application List...
   public function application_list($company_id,$status,$order){
-    $this->db->select('application.*,branch.*,service.*,trade.*,copy.*,other.*');
+    $this->db->select('application.*,application.application_id as appl_id,branch.*,service.*,trade.*,copy.*,other.*');
     $this->db->from('law_application as application');
     if($status){
       $this->db->where('application.application_status',$status);
@@ -154,6 +154,37 @@ class Transaction_Model extends CI_Model{
     $this->db->select('*');
     $this->db->from('law_workdetails_doc');
     $this->db->where('work_id',$work_id);
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
+  public function get_payment_info($application_id){
+    $this->db->select('*');
+    $this->db->from('law_payment');
+    $this->db->where('application_id',$application_id);
+    $this->db->where('is_master',1);
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+  public function get_received_amount($application_id){
+    $this->db->select('SUM(RECEVIEDAMOUNT) as received_amount');
+    $this->db->from('law_payment');
+    $this->db->where('application_id',$application_id);
+    $query = $this->db->get();
+    $result = $query->result_array();
+    return $result[0]['received_amount'];
+  }
+
+  public function receipt_list(){
+    $this->db->select('law_payment.*,application.*,application.application_id as appl_id,trade.*,copy.*,other.*');
+    $this->db->from('law_payment');
+    $this->db->order_by('law_payment.payment_id','DESC');
+    $this->db->join('law_application as application','law_payment.application_id = application.application_id','LEFT');
+    $this->db->join('law_trademark as trade','application.application_id = trade.application_id','LEFT');
+    $this->db->join('law_copyright as copy','application.application_id = copy.application_id','LEFT');
+    $this->db->join('law_otherservice as other','application.application_id = other.application_id','LEFT');
     $query = $this->db->get();
     $result = $query->result();
     return $result;

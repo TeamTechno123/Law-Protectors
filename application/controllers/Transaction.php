@@ -141,7 +141,7 @@ class Transaction extends CI_Controller{
     }
   }
 
-  // Edit Application...
+  // Edit Application....
   public function edit_application($application_id){
     $user_id = $this->session->userdata('law_user_id');
     $company_id = $this->session->userdata('law_company_id');
@@ -553,13 +553,14 @@ class Transaction extends CI_Controller{
     $service_name = $appl_details->service_name;
     $service_name = $appl_details->service_name;
 
-    $payment_details = $this->User_Model->get_info('application_id', $application_id, 'law_payment');
+    $payment_details = $this->Transaction_Model->get_payment_info($application_id);
     if(!$payment_details){ header('location:'.base_url().'Transaction/application_list');  }
     foreach ($payment_details as $info) {
       $data['application_id'] = $application_id;
       $data['organization_id'] = $organization_id;
       $data['title'] = $service_name;
 
+      $data['payment_id'] = $info->payment_id;
       $data['CONTRACTAMOUNT'] = $info->CONTRACTAMOUNT;
       $data['GSTAMOUNT'] = $info->GSTAMOUNT;
       $data['TOTALAMOUNT'] = $info->TOTALAMOUNT;
@@ -591,11 +592,9 @@ class Transaction extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
 
-
-
       $application_id = $this->input->post('application_id');
       $organization_id = $this->input->post('organization_id');
-
+      $payment_id = $this->input->post('payment_id');
       $application_details = $this->Transaction_Model->application_details($application_id);
       foreach ($application_details as $appl_details) {  }
       $service_name = $appl_details->service_name;
@@ -624,8 +623,10 @@ class Transaction extends CI_Controller{
       $uodate_data['BANKNAME'] = $this->input->post('BANKNAME');
       $uodate_data['CHEQUEAMOUNT'] = $this->input->post('CHEQUEAMOUNT');
       $uodate_data['GROUNDOFCONTRACT'] = $this->input->post('GROUNDOFCONTRACT');
+      $uodate_data['payment_date'] = date('d-m-Y');
+      $uodate_data['is_master'] = 1;
 
-      $this->User_Model->update_info('application_id', $application_id, 'law_payment', $uodate_data);
+      $this->User_Model->update_info('payment_id', $payment_id, 'law_payment', $uodate_data);
       $app_data['application_status'] = 'In Process';
       $this->User_Model->update_info('application_id', $application_id, 'law_application', $app_data);
 
@@ -1207,6 +1208,145 @@ class Transaction extends CI_Controller{
     }
     header('location:'.base_url().'Transaction/sale_invoice_list');
   }
+
+  /************************ Receipt Payment **********************/
+  public function add_receipt(){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id == null ){ header('location:'.base_url().'User'); }
+    $this->form_validation->set_rules('RECEVIEDAMOUNT', 'Received Amount', 'trim|required');
+    if($this->form_validation->run() != FALSE){
+      $PAYMENTMODE_0 = $this->input->post('PAYMENTMODE_0');
+      $PAYMENTMODE_1 = $this->input->post('PAYMENTMODE_1');
+      if(!isset($PAYMENTMODE_0))( $PAYMENTMODE_0 = '');
+      if(!isset($PAYMENTMODE_1))( $PAYMENTMODE_1 = '');
+
+      $save_data['application_id'] = $this->input->post('application_id');
+      $save_data['GSTAMOUNT'] = $this->input->post('GSTAMOUNT');
+      $save_data['RECEVIEDAMOUNT'] = $this->input->post('RECEVIEDAMOUNT');
+      $save_data['BALANCEAMOUNT'] = $this->input->post('BALANCEAMOUNT');
+      $save_data['LP_AMOUNT'] = $this->input->post('LP_AMOUNT');
+      $save_data['GOVT_FEES'] = $this->input->post('GOVT_FEES');
+      $save_data['TDS'] = $this->input->post('TDS');
+      $save_data['B2B'] = $this->input->post('B2B');
+      $save_data['PAYMENTMODE_0'] = $PAYMENTMODE_0;
+      $save_data['PAYMENTMODE_1'] = $PAYMENTMODE_1;
+      $save_data['CHEQUENUMBER'] = $this->input->post('CHEQUENUMBER');
+      $save_data['CHQDATE'] = $this->input->post('CHQDATE');
+      $save_data['BANKNAME'] = $this->input->post('BANKNAME');
+      $save_data['CHEQUEAMOUNT'] = $this->input->post('CHEQUEAMOUNT');
+      $save_data['payment_date'] = date('d-m-Y');
+      $this->User_Model->save_data('law_payment', $save_data);
+      header('location:'.base_url().'Transaction/receipt_list');
+    }
+    $status = '';
+    $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'DESC');
+    $this->load->view('Include/head', $data);
+    $this->load->view('Include/navbar', $data);
+    $this->load->view('Transaction/add_receipt', $data);
+    $this->load->view('Include/footer', $data);
+  }
+
+  public function get_appl_amounts(){
+    $application_id = $this->input->post('application_id');
+    $payment_details = $this->Transaction_Model->get_payment_info($application_id);
+    //if($payment_details == ''){ header('location:'.base_url().'Transaction/application_list'); }
+    foreach ($payment_details as $p_details) {
+      $contract_amount = $p_details->CONTRACTAMOUNT;
+    }
+    $received_amount = $this->Transaction_Model->get_received_amount($application_id);
+    $outstanding_amount = $contract_amount - $received_amount;
+    $data['contract_amount'] = $contract_amount;
+    $data['outstanding_amount'] = $outstanding_amount;
+    echo json_encode($data);
+  }
+
+  public function receipt_list(){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id == null ){ header('location:'.base_url().'User'); }
+
+    $data['receipt_list'] = $this->Transaction_Model->receipt_list();
+    $this->load->view('Include/head', $data);
+    $this->load->view('Include/navbar', $data);
+    $this->load->view('Transaction/receipt_list', $data);
+    $this->load->view('Include/footer', $data);
+  }
+
+  public function edit_receipt($payment_id){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id == null ){ header('location:'.base_url().'User'); }
+    $payment_details = $this->User_Model->get_info('payment_id',$payment_id,'law_payment');
+    if(!$payment_details){ header('location:'.base_url().'Transaction/application_list');  }
+    foreach ($payment_details as $info) {
+      $data['update'] = 'update';
+      $data['application_id'] = $info->application_id;
+      $data['payment_id'] = $info->payment_id;
+      $data['GSTAMOUNT'] = $info->GSTAMOUNT;
+      $data['TOTALAMOUNT'] = $info->TOTALAMOUNT;
+      $data['RECEVIEDAMOUNT'] = $info->RECEVIEDAMOUNT;
+      $data['BALANCEAMOUNT'] = $info->BALANCEAMOUNT;
+      $data['LP_AMOUNT'] = $info->LP_AMOUNT;
+      $data['GOVT_FEES'] = $info->GOVT_FEES;
+      $data['TDS'] = $info->TDS;
+      $data['B2B'] = $info->B2B;
+      $data['PAYMENTMODE_0'] = $info->PAYMENTMODE_0;
+      $data['PAYMENTMODE_1'] = $info->PAYMENTMODE_1;
+      $data['CHEQUENUMBER'] = $info->CHEQUENUMBER;
+      $data['CHQDATE'] = $info->CHQDATE;
+      $data['BANKNAME'] = $info->BANKNAME;
+      $data['CHEQUEAMOUNT'] = $info->CHEQUEAMOUNT;
+    }
+    $application_id = $info->application_id;
+    $payment_details = $this->Transaction_Model->get_payment_info($application_id);
+    //if($payment_details == ''){ header('location:'.base_url().'Transaction/application_list'); }
+    foreach ($payment_details as $p_details) {
+      $contract_amount = $p_details->CONTRACTAMOUNT;
+    }
+    $received_amount = $this->Transaction_Model->get_received_amount($application_id);
+    $outstanding_amount = $contract_amount - $received_amount;
+
+
+    $this->form_validation->set_rules('RECEVIEDAMOUNT', 'Received Amount', 'trim|required');
+    if($this->form_validation->run() != FALSE){
+      $PAYMENTMODE_0 = $this->input->post('PAYMENTMODE_0');
+      $PAYMENTMODE_1 = $this->input->post('PAYMENTMODE_1');
+      if(!isset($PAYMENTMODE_0))( $PAYMENTMODE_0 = '');
+      if(!isset($PAYMENTMODE_1))( $PAYMENTMODE_1 = '');
+
+      $update_data['application_id'] = $this->input->post('application_id');
+      $update_data['GSTAMOUNT'] = $this->input->post('GSTAMOUNT');
+      $update_data['RECEVIEDAMOUNT'] = $this->input->post('RECEVIEDAMOUNT');
+      $update_data['BALANCEAMOUNT'] = $this->input->post('BALANCEAMOUNT');
+      $update_data['LP_AMOUNT'] = $this->input->post('LP_AMOUNT');
+      $update_data['GOVT_FEES'] = $this->input->post('GOVT_FEES');
+      $update_data['TDS'] = $this->input->post('TDS');
+      $update_data['B2B'] = $this->input->post('B2B');
+      $update_data['PAYMENTMODE_0'] = $PAYMENTMODE_0;
+      $update_data['PAYMENTMODE_1'] = $PAYMENTMODE_1;
+      $update_data['CHEQUENUMBER'] = $this->input->post('CHEQUENUMBER');
+      $update_data['CHQDATE'] = $this->input->post('CHQDATE');
+      $update_data['BANKNAME'] = $this->input->post('BANKNAME');
+      $update_data['CHEQUEAMOUNT'] = $this->input->post('CHEQUEAMOUNT');
+      $update_data['payment_date'] = date('d-m-Y');
+
+      $this->User_Model->update_info('payment_id', $payment_id, 'law_payment', $update_data);
+      header('location:'.base_url().'Transaction/receipt_list');
+    }
+    $data['contract_amount'] = $contract_amount;
+    $data['outstanding_amount'] = $outstanding_amount + $data['RECEVIEDAMOUNT'];
+    $status = '';
+    $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'DESC');
+    $this->load->view('Include/head', $data);
+    $this->load->view('Include/navbar', $data);
+    $this->load->view('Transaction/add_receipt', $data);
+    $this->load->view('Include/footer', $data);
+  }
+
 
   /************ Printing List ******************/
   public function printing_list(){

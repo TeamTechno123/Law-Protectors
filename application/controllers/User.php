@@ -491,31 +491,68 @@ class User extends CI_Controller{
 
 
 /******************************* Target **********************************/
+
+public function target_range(){
+  $user_id = $this->session->userdata('law_user_id');
+  $company_id = $this->session->userdata('law_company_id');
+  $roll_id = $this->session->userdata('roll_id');
+  if($user_id == null ){ header('location:'.base_url().'User'); }
+  $this->form_validation->set_rules('target_from', 'From Date', 'trim|required');
+  $this->form_validation->set_rules('target_to', 'To Date', 'trim|required');
+  if($this->form_validation->run() != FALSE){
+    $save_data = array(
+      'target_title' => $this->input->post('target_title'),
+      'target_from' => $this->input->post('target_from'),
+      'target_to' => $this->input->post('target_to'),
+      // 'branch_id' => $this->input->post('branch_id'),
+      'target_addedby' => $user_id,
+    );
+    $target_id = $this->User_Model->save_data('law_target', $save_data);
+    foreach($_POST['input'] as $user){
+      $user['target_id'] = $target_id;
+      $this->db->insert('law_target_details', $user);
+    }
+    $this->session->flashdata('save_success','success');
+    header('location:'.base_url().'User/target_list');
+  }
+  $this->load->view('Include/head');
+  $this->load->view('Include/navbar');
+  $this->load->view('User/target_range');
+  $this->load->view('Include/footer');
+}
+
+public function target_range_list(){
+  $user_id = $this->session->userdata('law_user_id');
+  $company_id = $this->session->userdata('law_company_id');
+  $roll_id = $this->session->userdata('roll_id');
+  if($user_id == null ){ header('location:'.base_url().'User'); }
+
+  $data['target_list'] = $this->User_Model->target_range_list();
+  $this->load->view('Include/head',$data);
+  $this->load->view('Include/navbar',$data);
+  $this->load->view('User/target_range_list',$data);
+  $this->load->view('Include/footer',$data);
+}
 // Target Add and Save.............
  public function set_target(){
    $user_id = $this->session->userdata('law_user_id');
    $company_id = $this->session->userdata('law_company_id');
    $roll_id = $this->session->userdata('roll_id');
    if($company_id){
-     $this->form_validation->set_rules('target_from', 'From Date', 'trim|required');
-     $this->form_validation->set_rules('target_to', 'To Date', 'trim|required');
      $this->form_validation->set_rules('branch_id', 'Branch', 'trim|required');
      if($this->form_validation->run() != FALSE){
-       $save_data = array(
-         'target_from' => $this->input->post('target_from'),
-         'target_to' => $this->input->post('target_to'),
-         'branch_id' => $this->input->post('branch_id'),
-         'target_addedby' => $user_id,
-       );
-       $target_id = $this->User_Model->save_data('law_target', $save_data);
+       $target_id = $this->input->post('target_id');
+       $branch_id = $this->input->post('branch_id');
        foreach($_POST['input'] as $user){
          $user['target_id'] = $target_id;
+         $user['branch_id'] = $branch_id;
          $this->db->insert('law_target_details', $user);
        }
        $this->session->flashdata('save_success','success');
        header('location:'.base_url().'User/target_list');
      }
      $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
+     $data['target_list'] = $this->User_Model->get_list2('target_id','ASC','law_target');
      $this->load->view('Include/head',$data);
      $this->load->view('Include/navbar',$data);
      $this->load->view('User/set_target_information',$data);
@@ -547,10 +584,12 @@ class User extends CI_Controller{
      $this->form_validation->set_rules('target_to', 'To Date', 'trim|required');
      if($this->form_validation->run() != FALSE){
        $save_data = array(
+         'target_title' => $this->input->post('target_title'),
          'target_from' => $this->input->post('target_from'),
          'target_to' => $this->input->post('target_to'),
          'target_addedby' => $user_id,
        );
+       $this->User_Model->update_info('target_id', $target_id, 'law_target', $save_data);
        foreach($_POST['input'] as $user){
          if(isset($user['target_details_id'])){
            $target_details_id = $user['target_details_id'];
@@ -573,6 +612,8 @@ class User extends CI_Controller{
      $target_info = $this->User_Model->target_info($target_id);
      if($target_info == ''){ header('location:'.base_url().'User/target_list'); }
      $data['update'] = 'update';
+     $data['target_id'] = $target_info[0]['target_id'];
+     $data['target_title'] = $target_info[0]['target_title'];
      $data['target_from'] = $target_info[0]['target_from'];
      $data['target_to'] = $target_info[0]['target_to'];
      $data['branch_id'] = $target_info[0]['branch_id'];

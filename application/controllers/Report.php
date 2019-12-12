@@ -328,11 +328,22 @@ class Report extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null){ header('location:'.base_url().'User'); }
-
-    $this->load->view('Include/head');
-    $this->load->view('Include/navbar');
-    $this->load->view('Report/manager_report');
-    $this->load->view('Include/footer');
+    $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
+    $this->form_validation->set_rules('from_date', 'From Date', 'trim|required');
+    $this->form_validation->set_rules('to_date', 'To Date', 'trim|required');
+    if($this->form_validation->run() != FALSE){
+      $from_date = $this->input->post('from_date');
+      $to_date = $this->input->post('to_date');
+      $company_id = $this->input->post('company_id');
+      $branch_id = $this->input->post('branch_id');
+      $manager_id = $this->input->post('manager_id');
+      $data['manager_report'] = 'load';
+      $data['manager_report_list'] = $this->Report_Model->manager_report_list($from_date,$to_date,$company_id,$branch_id,$manager_id);
+    }
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Report/manager_report',$data);
+    $this->load->view('Include/footer',$data);
   }
 
   public function outstanding_report(){

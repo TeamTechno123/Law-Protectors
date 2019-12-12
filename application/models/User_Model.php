@@ -126,6 +126,17 @@ class User_Model extends CI_Model{
   }
 
   public function target_list(){
+    $this->db->select('law_target_details.*,law_branch.*,law_company.company_name,law_target.*');
+    $this->db->from('law_target_details');
+    $this->db->join('law_branch','law_target_details.branch_id = law_branch.branch_id','LEFT');
+    $this->db->join('law_company','law_company.company_id = law_branch.company_id','LEFT');
+    $this->db->join('law_target','law_target.target_id = law_target_details.target_id','LEFT');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
+  public function target_range_list(){
     $this->db->select('law_target.*,law_branch.*,law_company.company_name');
     $this->db->from('law_target');
     $this->db->join('law_branch','law_target.branch_id = law_branch.branch_id','LEFT');
@@ -156,6 +167,5 @@ class User_Model extends CI_Model{
     $result = $query->result();
     return $result;
   }
-
 }
 ?>

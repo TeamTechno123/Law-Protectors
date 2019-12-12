@@ -30,7 +30,19 @@ $page = "set_target";
               <!-- /.card-header -->
               <!-- form start -->
               <form role="form" method="post">
+                <!-- <input type="hidden" name="target_id" value="<?php if(isset($target_id)){ echo $target_id; } ?>"> -->
                 <div class="card-body row">
+                  <div class="form-group col-md-12 drop-lg">
+                    <select class="form-control select2 " name="target_id" id="target_id" title="Select Target" style="width: 100%;" <?php if(isset($update)){ echo 'disabled'; } else{ echo 'required'; } ?>>
+                      <option selected="selected" value="" >Select Target </option>
+                      <?php foreach ($target_list as $list) { ?>
+                      <option value="<?php echo $list->target_id; ?>" <?php if(isset($target_id)){ if($list->target_id == $target_id){ echo "selected"; } }  ?>><?php echo $list->target_title; ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                  <!-- <div class="form-group col-md-12">
+                    <input type="text" class="form-control" name="target_title" value="<?php if(isset($target_title)){ echo $target_title; } ?>" title="Title of Target" placeholder="Title of Target" required>
+                  </div>
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control" name="target_from" id="date1" value="<?php if(isset($target_from)){ echo $target_from; } ?>" data-target="#date1" data-toggle="datetimepicker" title="From Date" placeholder="From Date" required>
                     <label class="text-red m-0 req-alert"> <?php echo form_error('target_from'); ?> </label>
@@ -38,7 +50,7 @@ $page = "set_target";
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control" name="target_to" id="date2" value="<?php if(isset($target_to)){ echo $target_to; } ?>" data-target="#date2" data-toggle="datetimepicker" title="To Date" placeholder="To Date" required>
                     <label class="text-red m-0 req-alert"> <?php echo form_error('target_to'); ?> </label>
-                  </div>
+                  </div> -->
                   <div class="form-group col-md-12 drop-lg">
                     <select class="form-control select2 " name="branch_id" id="branch_id" title="Select Branch" style="width: 100%;" <?php if(isset($update)){ echo 'disabled'; } else{ echo 'required'; } ?>>
                       <option selected="selected" value="" >Select Branch </option>

@@ -35,7 +35,7 @@ $page = "invoice_list";
                 <h3 class="card-title"><i class="fa fa-list"></i> Target List</h3>
               </div>
               <div class="col-md-6 text-right">
-                <a href="<?php echo base_url(); ?>User/set_target" class="btn btn-primary btn-sm">Add Target</a>
+                <a href="<?php echo base_url(); ?>User/target_range" class="btn btn-primary btn-sm">Add Target</a>
               </div>
             </div>
             <!-- /.card-header -->
@@ -44,8 +44,6 @@ $page = "invoice_list";
                 <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>Company</th>
-                  <th>Branch</th>
                   <th>Title</th>
                   <th>From Date</th>
                   <th>To Date</th>
@@ -60,8 +58,6 @@ $page = "invoice_list";
                 ?>
                 <tr>
                   <td><?php echo $i; ?></td>
-                  <td><?php echo $list->company_name; ?></td>
-                  <td><?php echo $list->branch_name; ?></td>
                   <td><?php echo $list->target_title; ?></td>
                   <td><?php echo $list->target_from; ?></td>
                   <td><?php echo $list->target_to; ?></td>

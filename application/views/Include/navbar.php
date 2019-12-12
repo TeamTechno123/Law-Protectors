@@ -91,6 +91,14 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="<?php echo base_url(); ?>User/target_range_list" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Target Range
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="<?php echo base_url(); ?>User/target_list" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
@@ -140,6 +148,14 @@
               <i class="far fa-circle nav-icon"></i>
               <p>
                 Invoice List
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>Transaction/receipt_list" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>
+                Receipt
               </p>
             </a>
           </li>

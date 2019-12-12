@@ -61,6 +61,7 @@ $page = "application_list";
                     $i++;
                   ?>
                   <tr>
+                    <?php //echo print_r($list).'<br><br>';  ?>
                     <td class="sr_no"><?php echo $i; ?></td>
                     <td class="sr_no"><?php echo $list->application_no; ?></td>
                     <td><?php echo $list->application_date; ?></td>
@@ -75,17 +76,17 @@ $page = "application_list";
                     <?php } ?>
                     <td><?php echo $list->application_status; ?></td>
                     <td class="sr_no">
-                      <a href="<?php echo base_url(); ?>Transaction/document_uploading_form/<?php echo $list->application_id; ?>"> <i class="fa fa-upload"></i> </a>
+                      <a href="<?php echo base_url(); ?>Transaction/document_uploading_form/<?php echo $list->appl_id; ?>"> <i class="fa fa-upload"></i> </a>
                     </td>
                     <td class="sr_no">
-                      <a href="<?php echo base_url(); ?>Transaction/sale_invoice/<?php echo $list->application_id; ?>"> <i class="fa fa-plus"></i> </a>
+                      <a href="<?php echo base_url(); ?>Transaction/sale_invoice/<?php echo $list->appl_id; ?>"> <i class="fa fa-plus"></i> </a>
                     </td>
                     <td class="sr_no">
-                      <a href="<?php echo base_url(); ?>Transaction/change_status/<?php echo $list->application_id; ?>"> <i class="fa fa-edit"></i> </a>
+                      <a href="<?php echo base_url(); ?>Transaction/change_status/<?php echo $list->appl_id; ?>"> <i class="fa fa-edit"></i> </a>
                     </td>
                     <td class="sr_no">
-                      <a href="<?php echo base_url(); ?>Transaction/edit_application/<?php echo $list->application_id; ?>"> <i class="fa fa-edit"></i> </a>
-                      <a href="<?php echo base_url(); ?>Transaction/delete_application/<?php echo $list->application_id; ?>" onclick="return confirm('Delete this Application');" class="ml-4"> <i class="fa fa-trash"></i> </a>
+                      <a href="<?php echo base_url(); ?>Transaction/edit_application/<?php echo $list->appl_id; ?>"> <i class="fa fa-edit"></i> </a>
+                      <a href="<?php echo base_url(); ?>Transaction/delete_application/<?php echo $list->appl_id; ?>" onclick="return confirm('Delete this Application');" class="ml-4"> <i class="fa fa-trash"></i> </a>
                     </td>
                   </tr>
                   <?php } ?>

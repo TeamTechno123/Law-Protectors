@@ -61,5 +61,18 @@ class Report_Model extends CI_Model{
     $result = $query->result();
     return $result;
   }
+
+  public function manager_report_list($from_date,$to_date,$company_id,$branch_id,$manager_id){
+    $this->db->select('application.*,invoice.*,payment.*');
+    $this->db->from('law_invoice as invoice');
+    $this->db->where('invoice.company_id',$company_id);
+    $this->db->where("str_to_date(invoice.invoice_date,'%d-%m-%Y') BETWEEN str_to_date('$from_date','%d-%m-%Y') AND str_to_date('$to_date','%d-%m-%Y')");
+
+    $this->db->join('law_application as application','invoice.application_id = application.application_id','LEFT');
+    $this->db->join('law_payment as payment','invoice.application_id = payment.application_id','LEFT');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
 }
 ?>

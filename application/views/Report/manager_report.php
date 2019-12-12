@@ -39,41 +39,41 @@ $page = "party_list";
                     <label class="text-red"> <?php echo form_error('from_date'); ?> </label>
                   </div>
                   <div class="form-group col-md-4 offset-md-2">
-                    <select class="form-control select2 form-control-sm" title="Select Company" name="party_id" id="party_id" required>
+                    <select class="form-control select2 form-control-sm" title="Select Company" name="company_id" id="company_id" required>
                       <option selected="selected" value="" >Select Company Name </option>
+                      <?php foreach ($company_list as $list) { ?>
+                      <option value="<?php echo $list->company_id; ?>" <?php if(isset($company_id)){ if($list->company_id == $company_id){ echo "selected"; } }  ?>><?php echo $list->company_name; ?></option>
+                      <?php } ?>
                     </select>
                   </div>
                   <div class="form-group col-md-4 ">
-                    <select class="form-control select2 form-control-sm" title="Select Branch" name="item_info_id" id="item_info_id" required>
-                      <option selected="selected">Select Branch</option>
+                    <select class="form-control select2 form-control-sm" title="Select Branch" name="branch_id" id="branch_id">
+                      <option selected="selected"  value="">Select Branch</option>
                     </select>
                   </div>
-                  <div class="form-group col-md-4 offset-md-2">
-                    <select class="form-control select2 form-control-sm" title="Select Branch" name="item_info_id" id="item_info_id" required>
+                  <!-- <div class="form-group col-md-4 offset-md-2">
+                    <select class="form-control select2 form-control-sm" title="Select Branch" name="manager_id" id="manager_id" required>
                       <option selected="selected">Select Manager</option>
                     </select>
-                  </div>
+                  </div> -->
                   <div class="col-md-10 w-100 text-center mb-3">
                       <button type="submit" class="btn btn-success btn-sm">View</button>
                       <button type="submit" class="btn btn-default btn-sm ml-4">Cancel</button>
                   </div>
-
                 </form>
 
                 <br><br><br>
-
                     <section style="width:100%;" class="invoice" id="print_invoice">
                       <!-- title row -->
-
                   <div class="row">
-                    <div class="col-12 table-responsive">
-                      <table class="table table-botttom"  width="100%">
+                    <div class="col-12 table-responsive" id="result_tbl">
+                      <table class="table table-botttom" id="exp_tbl" width="100%">
                         <style media="print">
-                        table {
+                        #result_tbl table {
                           border-collapse: collapse!important;
                           Width:100%!important;
                         }
-                        table, tr, td, th{
+                        #result_tbl table, #result_tbl tr, #result_tbl td, #result_tbl th{
                           border: 1px solid #000;
                           margin-left: auto;
                           margin-right: auto;
@@ -81,15 +81,15 @@ $page = "party_list";
                         }
                       </style>
                       <style media="screen">
-                        table {
+                        #result_tbl table {
                           border-collapse: collapse!important;
                           Width:100%!important;
                           margin-bottom: 0px!important;
                         }
-                        .table thead th{
+                        #result_tbl .table thead th{
                             border: 1px solid #000;
                         }
-                        table, tr, td, th{
+                        #result_tbl table, #result_tbl tr, #result_tbl td, #result_tbl th{
                           border: 1px solid #000;
                           margin-left: auto;
                           margin-right: auto;
@@ -145,10 +145,21 @@ $page = "party_list";
   </div>
 
 
-
+  <script src="<?php echo base_url(); ?>assets/js/table2excel.js"></script>
   <script type="text/javascript">
     // Get Item Info on Select...
-
+    $('#company_id').on('change',function(){
+      var company_id = $(this).val();
+      $.ajax({
+        url:'<?php echo base_url(); ?>Transaction/get_branch_by_company',
+        type: 'POST',
+        data: {"company_id":company_id},
+        context: this,
+        success: function(result){
+          $('#branch_id').html(result);
+        }
+      });
+    });
 
     function printDiv()
     {

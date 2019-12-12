@@ -17,7 +17,7 @@ $page = "step_2";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1 text-center">
-            <h4><?php if(isset($title)){ echo $title; } ?> : Step Two</h4>
+            <h4>Payment Reciept</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -32,36 +32,55 @@ $page = "step_2";
             <div class="card">
             <!-- /.card-header -->
             <div class="card-body" >
-              <form role="form" action="<?php echo base_url(); ?>/Transaction/save_process_step_two" method="post">
-                <input type="hidden" name="application_id" value="<?php echo $application_id; ?>">
-                <input type="hidden" name="organization_id" value="<?php echo $organization_id; ?>">
-                <input type="hidden" name="payment_id" value="<?php echo $payment_id; ?>">
-
+              <form role="form" method="post" autocomplete="off">
                 <div class="card-body row">
+                  <div class="form-group col-md-12 drop-sm">
+                    <select class="form-control select2 form-control-sm" title="Select Application" name="application_id" id="application_id" required>
+                      <option selected="selected" value="" >Select Application </option>
+                      <?php foreach ($application_list as $list) {
+                        $service_id = $list->service_id;
+                      ?>
+                      <option value="<?php echo $list->appl_id; ?>" <?php if(isset($application_id)){ if($list->appl_id == $application_id){ echo "selected"; } }  ?>>
+                        <?php echo $list->application_no; ?>
+                        [Org :
+                        <?php if($service_id == 1){ ?>
+                          <td><?php echo $list->ORGANIZATION; ?></td>
+                        <?php } elseif ($service_id == 2) { ?>
+                          <td><?php echo $list->org_name; ?></td>
+                        <?php } else{ ?>
+                          <td><?php echo $list->appl_org_name; ?></td>
+                        <?php } ?>
+                        ] [Appl :
+                        <?php if($service_id == 1){ ?>
+                          <td><?php echo $list->NAME; ?></td>
+                        <?php } elseif ($service_id == 2) { ?>
+                          <td><?php echo $list->appl_name; ?></td>
+                        <?php } else{ ?>
+                          <td><?php echo $list->appl_org_name; ?></td>
+                        <?php } ?>
+                        ]
+                      </option>
+                      <?php } ?>
+                    </select>
+                  </div>
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control form-control-sm" name="CONTRACTAMOUNT" id="CONTRACTAMOUNT" value="<?php if(isset($CONTRACTAMOUNT)){ echo $CONTRACTAMOUNT;} ?>" title="Contract Final Amount" placeholder="Contract Final Amount" required>
+                    <label class="text-success">Contract Amount : <span class="contract_amount"><?php if(isset($contract_amount)){ echo $contract_amount;} ?></span> </label>
+                  </div>
+                  <div class="form-group col-md-6 ">
+                    <label class="text-danger">Outstanding Amount : <span class="outstanding_amount"><?php if(isset($outstanding_amount)){ echo $outstanding_amount;} ?></span> </label>
+                  </div>
+                  <div class="form-group col-md-6 ">
+                    <input type="number" class="form-control form-control-sm" name="RECEVIEDAMOUNT" id="RECEVIEDAMOUNT" value="<?php if(isset($RECEVIEDAMOUNT) && $RECEVIEDAMOUNT != 0){ echo $RECEVIEDAMOUNT;} ?>" title="Received Amount" placeholder="Received Amount" required>
                   </div>
                   <div class="form-group col-md-6 ">
                     <input type="text" class="form-control form-control-sm" name="GSTAMOUNT" id="GSTAMOUNT" value="<?php if(isset($GSTAMOUNT) && $GSTAMOUNT != 0){ echo $GSTAMOUNT;} ?>" title="GST Amount" placeholder="GST Amount">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="TOTALAMOUNT" id="TOTALAMOUNT" value="<?php if(isset($TOTALAMOUNT) && $TOTALAMOUNT != 0){ echo $TOTALAMOUNT;} ?>" title="Total Amount" placeholder="Total Amount">
-                  </div>
-                  <div class="form-group col-md-6 ">
-                    <input type="number" class="form-control form-control-sm" name="RECEVIEDAMOUNT" id="RECEVIEDAMOUNT" value="<?php if(isset($RECEVIEDAMOUNT) && $RECEVIEDAMOUNT != 0){ echo $RECEVIEDAMOUNT;} ?>" title="Received Amount" placeholder="Received Amount">
-                  </div>
-
-                  <div class="form-group col-md-6">
                     <input type="text" class="form-control form-control-sm" name="BALANCEAMOUNT" id="BALANCEAMOUNT" value="<?php if(isset($BALANCEAMOUNT) && $BALANCEAMOUNT != 0){ echo $BALANCEAMOUNT;} ?>" title="Balance Amount" placeholder="Balance Amount">
                   </div>
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control form-control-sm" name="GSTNUMBER" id="GSTNUMBER" value="<?php if(isset($GSTNUMBER)){ echo $GSTNUMBER;} ?>" title="GST Number" placeholder="GST Number">
-                  </div>
-
-                  <div class="form-group col-md-6 ">
                     <input type="text" class="form-control form-control-sm" name="LP_AMOUNT" id="LP_AMOUNT" value="<?php if(isset($LP_AMOUNT) && $LP_AMOUNT != 0){ echo $LP_AMOUNT;} ?>" title="LP Amount" placeholder="LP Amount" required>
                   </div>
-
                   <div class="form-group col-md-6 ">
                     <input type="text" class="form-control form-control-sm" name="GOVT_FEES" id="GOVT_FEES" value="<?php if(isset($GOVT_FEES) && $GOVT_FEES != 0){ echo $GOVT_FEES;} ?>" title="Govt Fees" placeholder="Govt Fees" required>
                   </div>
@@ -71,7 +90,6 @@ $page = "step_2";
                   <div class="form-group col-md-6 ">
                     <input type="text" class="form-control form-control-sm" name="B2B" id="B2B" value="<?php if(isset($B2B) && $B2B != 0){ echo $B2B;} ?>" title="B2B" placeholder="B2B">
                   </div>
-
                   <div class="col-md-12">
                     <div class="checkbox">
                       <label>Payment Mode :
@@ -97,14 +115,12 @@ $page = "step_2";
                   <div class="form-group col-md-3 ">
                     <input type="text" class="form-control form-control-sm" name="CHEQUEAMOUNT" id="CHEQUEAMOUNT" value="<?php if(isset($CHEQUEAMOUNT) && $CHEQUEAMOUNT != 0){ echo $CHEQUEAMOUNT;} ?>" title="Amount" placeholder="Amount">
                   </div>
-                  <div class="form-group col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="GROUNDOFCONTRACT" id="GROUNDOFCONTRACT" value="<?php if(isset($GROUNDOFCONTRACT)){ echo $GROUNDOFCONTRACT;} ?>" title="Enter Ground Of Contract" placeholder="Enter Ground Of Contract">
-                  </div>
-
                   <div class="form-group col-md-6"></div>
                   <br>
                   <div class="col-md-6 offset-md-4">
-                    <button type="submit" class="btn btn-primary  mr-3">Update & Next</button>
+                    <?php if(isset($update)){ ?> <button type="submit" class="btn btn-primary  mr-3">Update</button>
+                    <?php } else{ ?> <button type="submit" class="btn btn-success  mr-3">Save</button>
+                    <?php } ?>
                     <a href="#" class="btn btn-default ">Cancel</a>
                   </div>
                 </div>
@@ -119,8 +135,41 @@ $page = "step_2";
       </div><!-- /.container-fluid -->
     </section>
   </div>
+  <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/toastr/toastr.min.js"></script>
 <script type="text/javascript">
+  // Get Info on Select...
+  $('#application_id').on('change',function(){
+    var application_id = $(this).val();
+    $.ajax({
+      url:'<?php echo base_url(); ?>Transaction/get_appl_amounts',
+      type: 'POST',
+      data: {"application_id":application_id},
+      context: this,
+      success: function(result){
+        var data = JSON.parse(result);
+        $('.outstanding_amount').text(data['outstanding_amount']);
+        $('.contract_amount').text(data['contract_amount']);
+      }
+    });
+  });
 
+  $('#RECEVIEDAMOUNT').change(function(){
+    var received = $(this).val();
+    var outstanding_amount = $('.outstanding_amount').text();
+    if(received == ''){
+      received = 0;
+    }
+    if(outstanding_amount == ''){
+      outstanding_amount = 0;
+    }
+    var received = parseFloat(received);
+    var outstanding_amount = parseFloat(outstanding_amount);
+    if(received > outstanding_amount){
+      toastr.error('Invalide Amount');
+      $(this).val('');
+    }
+  });
 </script>
 </body>
 </html>

@@ -171,7 +171,7 @@ $page = "party_list";
     </section>
   </div>
 
-<script src="<?php echo base_url(); ?>assets/js/table2excel.js"></script>
+  <script src="<?php echo base_url(); ?>assets/js/table2excel.js"></script>
   <script type="text/javascript">
     // Get Branch Info on Select...
     $('#company_id').on('change',function(){
