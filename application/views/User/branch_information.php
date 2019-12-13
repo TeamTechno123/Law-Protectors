@@ -48,6 +48,19 @@
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="branch_name" id="branch_name" value="<?php if(isset($branch_name)){ echo $branch_name; } ?>" placeholder="Enter Branch Name" required>
                   </div>
+
+                  <div class="form-group col-md-6">
+                    <input type="text" class="form-control form-control-sm" name="branch_bank" id="branch_bank" value="<?php if(isset($branch_bank)){ echo $branch_bank; } ?>" placeholder="Enter Bank Name" required>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <input type="text" class="form-control form-control-sm" name="branch_b_branch" id="branch_b_branch" value="<?php if(isset($branch_b_branch)){ echo $branch_b_branch; } ?>" placeholder="Enter Bank Branch Name" required>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <input type="text" class="form-control form-control-sm" name="branch_acc_no" id="branch_acc_no" value="<?php if(isset($branch_acc_no)){ echo $branch_acc_no; } ?>" placeholder="Enter Account No." required>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <input type="text" class="form-control form-control-sm" name="branch_ifsc" id="branch_ifsc" value="<?php if(isset($branch_ifsc)){ echo $branch_ifsc; } ?>" placeholder="Enter IFSC Code" required>
+                  </div>
                 <!-- /.card-body -->
                 </div>
                 <div class="card-footer">

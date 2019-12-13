@@ -32,6 +32,10 @@ $page = "set_target";
               <form role="form" method="post">
                 <!-- <input type="hidden" name="target_id" value="<?php if(isset($target_id)){ echo $target_id; } ?>"> -->
                 <div class="card-body row">
+                  <!-- <div class="form-group col-md-12 drop-lg"> -->
+
+                  <input type="hidden" name="target_no" value="<?php if(isset($target_no)){ echo $target_no; } ?>">
+                  <!-- </div> -->
                   <div class="form-group col-md-12 drop-lg">
                     <select class="form-control select2 " name="target_id" id="target_id" title="Select Target" style="width: 100%;" <?php if(isset($update)){ echo 'disabled'; } else{ echo 'required'; } ?>>
                       <option selected="selected" value="" >Select Target </option>
@@ -71,21 +75,23 @@ $page = "set_target";
                     <div class="form-group col-md-4 text-bold">
                       Target Amount
                     </div>
+
                     <?php
                     $j = 0;
                     foreach ($target_details as $details) { ?>
                       <div class="form-group col-md-4">
                         <?php echo $details->roll_name; ?>
-                        <input type="hidden" name="input['<?php echo $j ?>'][target_details_id]" value="<?php echo $details->target_details_id; ?>">
+                        <input type="hidden" name="input[<?php echo $j ?>][target_details_id]" value="<?php echo $details->target_details_id; ?>">
                       </div>
                       <div class="form-group col-md-4">
                         <?php echo $details->user_name.' '.$details->user_lastname; ?>
-                        <input type="hidden" name="input['<?php echo $j ?>'][user_id]" value="<?php echo $details->user_id; ?>">
+                        <input type="hidden" name="input[<?php echo $j ?>][user_id]" value="<?php echo $details->user_id; ?>">
                       </div>
                       <div class="form-group col-md-4">
-                        <input type="text" class="form-control" name="input['<?php echo $j ?>'][target_amount]" value="<?php echo $details->target_amount; ?>" title="Target" placeholder="Target" required>
+                        <input type="text" class="form-control" name="input[<?php echo $j ?>][target_amount]" value="<?php echo $details->target_amount; ?>" title="Target" placeholder="Target" required>
                       </div>
                     <?php $j++; } ?>
+
                   </div>
                   <?php } ?>
                   <div class="form-group col-md-12 row" id="user_list">

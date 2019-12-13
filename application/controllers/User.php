@@ -194,6 +194,10 @@ class User extends CI_Controller{
       $data = array(
         'company_id' => $this->input->post('company_id'),
         'branch_name' => $this->input->post('branch_name'),
+        'branch_bank' => $this->input->post('branch_bank'),
+        'branch_b_branch' => $this->input->post('branch_b_branch'),
+        'branch_acc_no' => $this->input->post('branch_acc_no'),
+        'branch_ifsc' => $this->input->post('branch_ifsc'),
         'branch_addedby' => $user_id,
       );
       $this->User_Model->save_data('law_branch', $data);
@@ -216,6 +220,10 @@ class User extends CI_Controller{
           $data['branch_id'] = $info->branch_id;
           $data['company_id'] = $info->company_id;
           $data['branch_name'] = $info->branch_name;
+          $data['branch_bank'] = $info->branch_bank;
+          $data['branch_b_branch'] = $info->branch_b_branch;
+          $data['branch_acc_no'] = $info->branch_acc_no;
+          $data['branch_ifsc'] = $info->branch_ifsc;
           $data['branch_status'] = $info->branch_status;
         }
         $this->load->view('Include/head',$data);
@@ -237,6 +245,10 @@ class User extends CI_Controller{
       $data = array(
         'company_id' => $this->input->post('company_id'),
         'branch_name' => $this->input->post('branch_name'),
+        'branch_bank' => $this->input->post('branch_bank'),
+        'branch_b_branch' => $this->input->post('branch_b_branch'),
+        'branch_acc_no' => $this->input->post('branch_acc_no'),
+        'branch_ifsc' => $this->input->post('branch_ifsc'),
         'branch_addedby' => $user_id,
       );
       $this->User_Model->update_info('branch_id', $branch_id, 'law_branch', $data);
@@ -504,7 +516,6 @@ public function target_range(){
       'target_title' => $this->input->post('target_title'),
       'target_from' => $this->input->post('target_from'),
       'target_to' => $this->input->post('target_to'),
-      // 'branch_id' => $this->input->post('branch_id'),
       'target_addedby' => $user_id,
     );
     $target_id = $this->User_Model->save_data('law_target', $save_data);
@@ -513,7 +524,7 @@ public function target_range(){
       $this->db->insert('law_target_details', $user);
     }
     $this->session->flashdata('save_success','success');
-    header('location:'.base_url().'User/target_list');
+    header('location:'.base_url().'User/target_range_list');
   }
   $this->load->view('Include/head');
   $this->load->view('Include/navbar');
@@ -533,6 +544,48 @@ public function target_range_list(){
   $this->load->view('User/target_range_list',$data);
   $this->load->view('Include/footer',$data);
 }
+
+public function edit_target_range($target_id){
+  $user_id = $this->session->userdata('law_user_id');
+  $company_id = $this->session->userdata('law_company_id');
+  $roll_id = $this->session->userdata('roll_id');
+  if($user_id == null ){ header('location:'.base_url().'User'); }
+  $target_range = $this->User_Model->get_info('target_id', $target_id, 'law_target');
+  if($target_range == ''){ header('location:'.base_url().'User/edit_target_range'); }
+  foreach ($target_range as $details) {
+    $data['target_title'] = $details->target_title;
+    $data['target_from'] = $details->target_from;
+    $data['target_to'] = $details->target_to;
+  }
+  $this->form_validation->set_rules('target_from', 'From Date', 'trim|required');
+  $this->form_validation->set_rules('target_to', 'To Date', 'trim|required');
+  if($this->form_validation->run() != FALSE){
+    $update_data = array(
+      'target_title' => $this->input->post('target_title'),
+      'target_from' => $this->input->post('target_from'),
+      'target_to' => $this->input->post('target_to'),
+      'target_addedby' => $user_id,
+    );
+    $this->User_Model->update_info('target_id', $target_id, 'law_target', $update_data);
+    $this->session->flashdata('update_success','success');
+    header('location:'.base_url().'User/target_range_list');
+  }
+
+  $this->load->view('Include/head',$data);
+  $this->load->view('Include/navbar',$data);
+  $this->load->view('User/target_range',$data);
+  $this->load->view('Include/footer',$data);
+}
+public function delete_target_range($target_id){
+  $user_id = $this->session->userdata('law_user_id');
+  $company_id = $this->session->userdata('law_company_id');
+  $roll_id = $this->session->userdata('roll_id');
+  if($user_id == null ){ header('location:'.base_url().'User'); }
+  $this->User_Model->delete_info('target_id', $target_id, 'law_target');
+  header('location:'.base_url().'User/target_range_list');
+}
+
+
 // Target Add and Save.............
  public function set_target(){
    $user_id = $this->session->userdata('law_user_id');
@@ -543,9 +596,11 @@ public function target_range_list(){
      if($this->form_validation->run() != FALSE){
        $target_id = $this->input->post('target_id');
        $branch_id = $this->input->post('branch_id');
+       $target_no = $this->input->post('target_no');
        foreach($_POST['input'] as $user){
          $user['target_id'] = $target_id;
          $user['branch_id'] = $branch_id;
+         $user['target_no'] = $target_no;
          $this->db->insert('law_target_details', $user);
        }
        $this->session->flashdata('save_success','success');
@@ -553,6 +608,7 @@ public function target_range_list(){
      }
      $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
      $data['target_list'] = $this->User_Model->get_list2('target_id','ASC','law_target');
+     $data['target_no'] = $this->Transaction_Model->get_count_no('target_no', 'law_target_details');
      $this->load->view('Include/head',$data);
      $this->load->view('Include/navbar',$data);
      $this->load->view('User/set_target_information',$data);
@@ -575,21 +631,17 @@ public function target_range_list(){
    $this->load->view('Include/footer',$data);
  }
 
- public function edit_target($target_id){
+ public function edit_target($target_no){
    $user_id = $this->session->userdata('law_user_id');
    $company_id = $this->session->userdata('law_company_id');
    $roll_id = $this->session->userdata('roll_id');
    if($company_id){
-     $this->form_validation->set_rules('target_from', 'From Date', 'trim|required');
-     $this->form_validation->set_rules('target_to', 'To Date', 'trim|required');
+     $this->form_validation->set_rules('target_no', 'From Date', 'trim|required');
      if($this->form_validation->run() != FALSE){
-       $save_data = array(
-         'target_title' => $this->input->post('target_title'),
-         'target_from' => $this->input->post('target_from'),
-         'target_to' => $this->input->post('target_to'),
-         'target_addedby' => $user_id,
-       );
-       $this->User_Model->update_info('target_id', $target_id, 'law_target', $save_data);
+       $target_id = $this->input->post('target_id');
+       $branch_id = $this->input->post('branch_id');
+       $target_no = $this->input->post('target_no');
+
        foreach($_POST['input'] as $user){
          if(isset($user['target_details_id'])){
            $target_details_id = $user['target_details_id'];
@@ -601,23 +653,29 @@ public function target_range_list(){
          }
          else{
            $user['target_id'] = $target_id;
+           $user['branch_id'] = $branch_id;
+           $user['target_no'] = $target_no;
            $this->db->insert('law_target_details', $user);
          }
-       }
+       }       
        $this->session->flashdata('update_success','success');
        header('location:'.base_url().'User/target_list');
      }
 
      $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
-     $target_info = $this->User_Model->target_info($target_id);
+
+     $target_info = $this->User_Model->target_details($target_no);
      if($target_info == ''){ header('location:'.base_url().'User/target_list'); }
      $data['update'] = 'update';
      $data['target_id'] = $target_info[0]['target_id'];
+     $data['target_no'] = $target_info[0]['target_no'];
      $data['target_title'] = $target_info[0]['target_title'];
      $data['target_from'] = $target_info[0]['target_from'];
      $data['target_to'] = $target_info[0]['target_to'];
      $data['branch_id'] = $target_info[0]['branch_id'];
-     $data['target_details'] = $this->User_Model->target_details($target_id);
+     $target_id = $target_info[0]['target_id'];
+     $data['target_details'] = $this->User_Model->target_details2($target_no);
+     $data['target_list'] = $this->User_Model->get_list2('target_id','ASC','law_target');
 
      $this->load->view('Include/head',$data);
      $this->load->view('Include/navbar',$data);

@@ -17,7 +17,7 @@ $page = "invoice_list";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1">
-            <h4>Target List</h4>
+            <h4>Target Range List</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -32,10 +32,10 @@ $page = "invoice_list";
             <div class="card">
             <div class="card-header row">
               <div class="col-md-6">
-                <h3 class="card-title"><i class="fa fa-list"></i> Target List</h3>
+                <h3 class="card-title"><i class="fa fa-list"></i> Target Range List</h3>
               </div>
               <div class="col-md-6 text-right">
-                <a href="<?php echo base_url(); ?>User/target_range" class="btn btn-primary btn-sm">Add Target</a>
+                <a href="<?php echo base_url(); ?>User/target_range" class="btn btn-primary btn-sm">Add Target Range</a>
               </div>
             </div>
             <!-- /.card-header -->
@@ -62,8 +62,8 @@ $page = "invoice_list";
                   <td><?php echo $list->target_from; ?></td>
                   <td><?php echo $list->target_to; ?></td>
                   <td>
-                    <a href="<?php echo base_url(); ?>User/edit_target/<?php echo $list->target_id; ?>"> <i class="fa fa-edit"></i> </a>
-                    <a class="ml-2" href="<?php echo base_url(); ?>User/delete_target/<?php echo $list->target_id; ?>" onclick="return confirm('Delete this Target');"> <i class="fa fa-trash"></i> </a>
+                    <a href="<?php echo base_url(); ?>User/edit_target_range/<?php echo $list->target_id; ?>"> <i class="fa fa-edit"></i> </a>
+                    <a class="ml-2" href="<?php echo base_url(); ?>User/delete_target_range/<?php echo $list->target_id; ?>" onclick="return confirm('Delete this Target Title');"> <i class="fa fa-trash"></i> </a>
                   </td>
                 </tr>
                 <?php } ?>
