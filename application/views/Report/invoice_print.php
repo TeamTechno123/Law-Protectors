@@ -87,29 +87,40 @@
     <tr >
 
       <td   colspan="6" >
+        <img style="padding-top:12px;" src="<?php echo base_url() ?>assets/images/header.png" alt="" width="100%">
+      </td>
+
+      <!-- <td   colspan="6" >
 
     <div class="" style="text-align:center;">
     <h3 style="font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif; font-size:28px; font-weight:bold; text-transform:uppercase; margin-top:5px; margin-bottom:3px;" > <?php echo $company_name; ?></h3>
     <p style="margin-bottom:5px; line-height:20px; font-family: Calibri, Candara, Segoe, 'Segoe UI'; font-size: 16px; margin-top:5px;" > <b> <?php echo $company_address; ?></p>
     <p  style="margin-bottom:5px; font-family: Calibri, Candara, Segoe, 'Segoe UI'; font-size: 16px;">Mobile No: <?php echo $company_mob1; ?> &nbsp; | &nbsp; Email : <?php echo $company_email; ?></p>
     <p  style="margin-bottom:5px; font-family: Calibri, Candara, Segoe, 'Segoe UI'; font-size: 16px;"> GST No: <?php echo $company_gst_no; ?> &nbsp; | &nbsp; Website : <?php echo $company_website; ?> </p>
-        <!-- <p style="margin-bottom:5px; font-family: Calibri, Candara, Segoe, 'Segoe UI';" >   </p> -->
+
     </div>
-      </td>
+      </td> -->
     </tr>
     <tr>
       <td colspan="4" Width="60%" >
-        <p>To</p>
+        <p style="font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif; font-size:17px; font-weight:bold; text-transform:uppercase; margin-top:5px; margin-bottom:3px;" > <?php echo $company_name; ?></p>
+        <p style="margin-bottom:5px; line-height:20px; font-family: Calibri, Candara, Segoe, 'Segoe UI'; font-size: 16px; margin-top:5px;" ><b>Address </b>: <b> <?php echo $company_address; ?></p>
+        <!-- <p  style="margin-bottom:5px; font-family: Calibri, Candara, Segoe, 'Segoe UI'; font-size: 16px;">Mobile No: <?php echo $company_mob1; ?> &nbsp; | &nbsp; Email : <?php echo $company_email; ?></p> -->
+        <p  style="margin-bottom:5px; font-family: Calibri, Candara, Segoe, 'Segoe UI'; font-size: 16px;"> GST No: <?php echo $company_gst_no; ?> </p>
+          <hr style="margin-left:-10px;">
+        <p style="text-align:center;"> <b> Billing details</b></p>
+          <hr style="margin-left:-10px;">
         <p> <b><?php echo $party; ?></b>  </p>
         <p> <b>Address</b> : <?php echo $party_address; ?></p>
         <p> <b>GSTIN</b> : <?php echo $party_gst_no; ?> </p>
       </td>
       <td colspan="2" Width="40%" valign="top">
-        <p> <b>Invoice No</b> : <?php echo $invoice_no; ?></p>
-        <p> <b>Date </b> : <?php echo $invoice_date; ?></p>
-        <p> <b>PO No. </b> : <?php echo $po_no; ?></p>
-        <p> <b>PO Date </b> : <?php echo $po_date; ?></p>
-        <p><b>State Code</b> : <?php echo $company_statecode; ?> </p>
+        <p style="padding-top:8px;"> <b>Invoice No</b> : <?php echo $invoice_no; ?></p>
+        <p style="padding-top:8px;"> <b>Date </b> : <?php echo $invoice_date; ?></p>
+        <p style="padding-top:8px;"> <b>PO No. </b> : <?php echo $po_no; ?></p>
+        <p style="padding-top:8px;"> <b>PO Date </b> : <?php echo $po_date; ?></p>
+
+        <p style="padding-top:8px;"><b>State Code</b> : <?php echo $company_statecode; ?> </p>
       </td>
     </tr>
 
@@ -174,6 +185,7 @@
       <th style="width: 10px; text-align:center;">Sr.No.</th>
       <th style="text-align:center;"> DESCRIPTION</th>
       <th style="text-align:center;">HSN/SAC</th>
+      <th style="text-align:center;" width="12%">GST %</th>
       <th style="text-align:center;" Width="9%" >QTY </th>
       <th style="text-align:center;" >RATE</th>
       <th style="text-align:center;" >AMOUNT</th>
@@ -187,17 +199,19 @@
       <td style="text-align:center;"><?php echo $i; ?></td>
       <td style="text-align:center;"><?php echo $list->descr; ?></td>
       <td style="text-align:center;" > <?php echo $list->hsn; ?></td>
+      <td style="text-align:center;" > <?php echo $list->gst_per; ?></td>
       <td style="text-align:center;"><?php echo $list->qty; ?></td>
       <td style="text-align:center;"><?php echo $list->rate; ?></td>
       <td style="text-align:center;"><?php echo $list->total; ?></td>
     </tr>
   <?php } ?>
   <?php
-  $k=13-$i;
+  $k=8-$i;
   for ($j=0; $j < $k ; $j++) { ?>
     <tr>
       <td style="text-align:center; height:15px;"></td>
       <td style="text-align:center;"></td>
+      <td style="text-align:center;" ></td>
       <td style="text-align:center;" ></td>
       <td style="text-align:center;"></td>
       <td style="text-align:center;"></td>
@@ -210,35 +224,75 @@
         <p><b>Net Amount : <?php echo $this->numbertowords->convert_number($net_amt); ?> Only</b> </p>
 
       </td>
-      <td colspan="2" Width="40%" valign="top">
-        <p><b>Basic Amount</b> : <?php echo number_format($basic_amt,2); ?></p> <hr style="margin-left:-10px;">
-        <p><b>TDS Amount</b> : <?php echo number_format($tds_amt,2); ?></p> <hr style="margin-left:-10px;">
+      <td colspan="2" Width="25%" valign="top">
+        <p><b>Basic Amount</b> : </p> <hr style="margin-left:-10px;">
+        <p><b>TDS Amount</b> : </p> <hr style="margin-left:-10px;">
         <?php
         $roundup = ($basic_amt + $gst_amt) - $net_amt;
         if($company_statecode == $party_statecode){
           $cgst = $gst_amt/2;
         ?>
-        <p><b>CGST </b> : <?php echo $cgst; ?></p>  <hr style="margin-left:-10px;">
-        <p><b>SGST </b> : <?php echo $cgst; ?></p>  <hr style="margin-left:-10px;">
+        <p><b>CGST </b> : </p>  <hr style="margin-left:-10px;">
+        <p><b>SGST </b> : </p>  <hr style="margin-left:-10px;">
       <?php } else{?>
-        <p><b>IGST </b> : <?php echo $gst_amt; ?></p> <hr style="margin-left:-10px;">
+        <p><b>IGST </b> : </p> <hr style="margin-left:-10px;">
       <?php } ?>
 
-        <p><b>Rounding</b> : <?php echo number_format($roundup,2); ?> </p>  <hr style="margin-left:-10px;">
-        <p><b>Grand Total</b> : <?php echo number_format($net_amt,2); ?> </p>
+        <p><b>Rounding</b> :  </p>  <hr style="margin-left:-10px;">
+        <p><b>Grand Total</b> :  </p>
       </td>
+      <td colspan="1" Width="15%" valign="top">
+        <p style="text-align:right; padding-right:15px;"><?php echo number_format($basic_amt,2); ?> </p> <hr style="margin-left:-10px;">
+        <p style="text-align:right; padding-right:15px;"> <?php echo number_format($tds_amt,2); ?></p> <hr style="margin-left:-10px;">
+        <?php
+        $roundup = ($basic_amt + $gst_amt) - $net_amt;
+        if($company_statecode == $party_statecode){
+          $cgst = $gst_amt/2;
+        ?>
+        <p style="text-align:right; padding-right:15px;"> <?php echo $cgst; ?></p>  <hr style="margin-left:-10px;">
+        <p style="text-align:right; padding-right:15px;"> <?php echo $cgst; ?></p>  <hr style="margin-left:-10px;">
+      <?php } else{?>
+        <p style="text-align:right; padding-right:15px;"> <?php echo $gst_amt; ?></p> <hr style="margin-left:-10px;">
+      <?php } ?>
+
+        <p style="text-align:right; padding-right:15px;"><?php echo number_format($roundup,2); ?> </p>  <hr style="margin-left:-10px;">
+        <p style="text-align:right; padding-right:15px;"> <?php echo number_format($net_amt,2); ?> </p>
+      </td>
+
     </tr>
     <tr>
       <td colspan="5">
-          <p> <b>Bank Name</b> : &nbsp;ICICI Bank</p>
-          <p> <b>Account No</b> : 645005002303 </p>
-          <p> <b>IFSC Code </b>&nbsp; : ICIC0006450 </p>
+          <p> <b>Bank Name</b> : &nbsp; <?php echo $branch_bank; ?></p>
+          <p> <b>Account No</b> :  &nbsp; <?php echo $branch_acc_no; ?> </p>
+          <p> <b>IFSC Code </b>&nbsp; : &nbsp; <?php echo $branch_ifsc; ?> </p>
           <p> <b>Declaration </b> : We declare that the invoice shows the actual price of the goods described and that all particulars are true and correct. </p>
       </td>
-      <td colspan="1">
+      <td colspan="2">
         <img src="<?php echo base_url() ?>assets/images/<?php echo $company_seal; ?>" alt="">
       </td>
     </tr>
+    <!-- <tr>
+      <td colspan="2">
+          <p> <b>Bank Name</b> : &nbsp;AXIS Bank</p>
+          <p> <b>Account No</b> : 917020070150451 </p>
+          <p> <b>IFSC Code </b>&nbsp; : UTIB0001168 </p>
+
+      </td>
+      <td colspan="3">
+          <p> <b>Bank Name</b> : &nbsp;ICICI Bank</p>
+          <p> <b>Account No</b> : 645005002303 </p>
+          <p> <b>IFSC Code </b>&nbsp; : ICIC0006450 </p>
+
+      </td>
+      <td colspan="2" rowspan="2">
+        <img src="<?php echo base_url() ?>assets/images/<?php echo $company_seal; ?>" alt="">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="5" >
+         <p> <b>Declaration </b> : We declare that the invoice shows the actual price of the goods described and that all particulars are true and correct. </p>
+        </td>
+    </tr>-->
   </table>
   <!-- /.content -->
 </div>
