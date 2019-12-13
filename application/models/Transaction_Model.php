@@ -229,7 +229,7 @@ class Transaction_Model extends CI_Model{
   }
 
   public function invice_details($invoice_id){
-    $this->db->select('invoice.*,law_company.company_name,law_branch.branch_name');
+    $this->db->select('invoice.*,law_company.company_name,law_branch.*');
     $this->db->from('law_invoice as invoice');
     $this->db->where('invoice.invoice_id',$invoice_id);
     $this->db->join('law_company','invoice.company_id = law_company.company_id','LEFT');

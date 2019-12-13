@@ -251,6 +251,10 @@ class Report extends CI_Controller{
       $data['invoice_id'] = $invoice_id;
       $data['application_id'] = $details->application_id;
       $data['branch_id'] = $details->branch_id;
+      $data['branch_bank'] = $details->branch_bank;
+      $data['branch_b_branch'] = $details->branch_b_branch;
+      $data['branch_acc_no'] = $details->branch_acc_no;
+      $data['branch_ifsc'] = $details->branch_ifsc;
       $data['branch_name'] = $details->branch_name;
       $data['invoice_no'] = $details->invoice_no;
       $data['invoice_date'] = $details->invoice_date;
