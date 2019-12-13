@@ -59,6 +59,7 @@ class Report extends CI_Controller{
           $data['TRADE_2'] = $info->TRADE_2;
           $data['TRADE_3'] = $info->TRADE_3;
           $data['ASSOCIATE_MARK'] = $info->ASSOCIATE_MARK;
+          $data['LOGO'] = $info->LOGO;
         }
       }
       $this->load->view('Report/form_tm', $data);

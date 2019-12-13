@@ -39,6 +39,10 @@ $page = "application_information";
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control form-control-sm" name="application_date" id="date1" data-target="#date1" data-toggle="datetimepicker" value="<?php if(isset($application_date)){ echo $application_date; } ?>" title="Application Date" placeholder="Application Date">
                   </div>
+
+
+
+
                   <div class="form-group col-md-12">
                     <select class="form-control select2 form-control-sm" name="company_id" title="Select Company" id="company_id" required>
                       <option selected="selected" value="" >Select Company Name </option>

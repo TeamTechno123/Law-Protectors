@@ -32,7 +32,7 @@ $page = "step_1";
             <div class="card">
             <!-- /.card-header -->
             <div class="card-body" >
-              <form role="form" action="<?php echo base_url(); ?>/Transaction/save_trademark" method="post" autocomplete="off">
+              <form role="form" action="<?php echo base_url(); ?>/Transaction/save_trademark" method="post" autocomplete="off" enctype="multipart/form-data">
                 <input type="hidden" name="application_id" value="<?php echo $application_id; ?>">
                 <input type="hidden" name="organization_id" value="<?php echo $organization_id; ?>">
                 <div class="card-body row">
@@ -73,18 +73,7 @@ $page = "step_1";
                   <div class="form-group col-md-6">
                     <input type="number" min="5" class="form-control form-control-sm" name="AGE" id="AGE" value="<?php if(isset($AGE)){ echo $AGE; } ?>" title="Age" placeholder="Age">
                   </div>
-                  <div class="col-md-12">
-                    <div class="checkbox">
-                    <label> Category of Mark :
-                      <?php //echo $MARK_0; ?>
-                      <input type="checkbox" name="MARK_0" value="Word Mark" <?php if(isset($MARK_0) && $MARK_0 != ''){ echo 'checked'; } ?>> Wordmark
-                      <input type="checkbox" name="MARK_1" value="Device" <?php if(isset($MARK_1) && $MARK_1 != ''){ echo 'checked'; } ?>> Device
-                      <input type="checkbox" name="MARK_2" value="Color" <?php if(isset($MARK_2) && $MARK_2 != ''){ echo 'checked'; } ?>> Color
-                      <input type="checkbox" name="MARK_3" value="Sound" <?php if(isset($MARK_3) && $MARK_3 != ''){ echo 'checked'; } ?>> Sound
-                      <input type="checkbox" name="MARK_4" value="Three Dimentional Mark" <?php if(isset($MARK_4)  && $MARK_4 != ''){ echo 'checked'; } ?>> Three Dimentional Mark
-                    </label>
-                  </div>
-                  </div>
+
 
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="BRAND" id="BRAND" value="<?php if(isset($BRAND)){ echo $BRAND; } ?>" title="Mark Brand Name To Be Registered" placeholder="Mark Brand Name To Be Registered">
@@ -93,21 +82,35 @@ $page = "step_1";
                     <input type="text" class="form-control form-control-sm" name="SIGNIFICANCE" id="SIGNIFICANCE" value="<?php if(isset($SIGNIFICANCE)){ echo $SIGNIFICANCE; } ?>"  title="Significance of Mark" placeholder="Significance of Mark">
                   </div>
                   <div class="form-group col-md-12">
-                    <input type="number" min="1" class="form-control form-control-sm" name="TM" id="TM" value="<?php if(isset($TM)){ echo $TM; } ?>" title="TM Class" placeholder="TM Class">
+                    <input type="number" min="1" max="45" class="form-control form-control-sm" name="TM" id="TM" value="<?php if(isset($TM)){ echo $TM; } ?>" title="TM Class" placeholder="TM Class">
                   </div>
+
+                  <div class="form-group col-md-12">
+                    <div class="checkbox">
+                      <label> Category of Mark :
+                        <input type="checkbox" name="MARK_0" value="Word Mark" <?php if(isset($MARK_0) && $MARK_0 != ''){ echo 'checked'; } ?>> Wordmark
+                        <input type="checkbox" name="MARK_1" value="Device" <?php if(isset($MARK_1) && $MARK_1 != ''){ echo 'checked'; } ?>> Device
+                        <input type="checkbox" name="MARK_2" value="Color" <?php if(isset($MARK_2) && $MARK_2 != ''){ echo 'checked'; } ?>> Color
+                        <input type="checkbox" name="MARK_3" value="Sound" <?php if(isset($MARK_3) && $MARK_3 != ''){ echo 'checked'; } ?>> Sound
+                        <input type="checkbox" name="MARK_4" value="Three Dimentional Mark" <?php if(isset($MARK_4)  && $MARK_4 != ''){ echo 'checked'; } ?>> Three Dimentional Mark
+                      </label>
+                    </div>
+                  </div>
+
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="SERVICES" id="SERVICES" value="<?php if(isset($SERVICES)){ echo $SERVICES; } ?>" title="Goods Services Details" placeholder="Goods Services Details">
                   </div>
 
-                  <div class="col-md-12">
-                    <div class="checkbox">
+                  <div class="form-group col-md-12">
+                    <input type="text" class="form-control form-control-sm" name="TRADE" id="TRADE" value="<?php if(isset($TRADE)){ echo $TRADE; } ?>" title="Trade Discriptions" placeholder="Trade Discriptions" readonly>
+                    <!-- <div class="checkbox">
                       <label> Trade Discriptions :
                         <input type="checkbox" name="TRADE_0" value="Manufacturers" <?php if(isset($TRADE_0) && $TRADE_0 != ''){ echo 'checked'; } ?>> Manufacturers
                         <input type="checkbox" name="TRADE_1" value="Dealers" <?php if(isset($TRADE_1) && $TRADE_1 != ''){ echo 'checked'; } ?>> Dealers
                         <input type="checkbox" name="TRADE_2" value="Traders" <?php if(isset($TRADE_2) && $TRADE_2 != ''){ echo 'checked'; } ?>> Traders
                         <input type="checkbox" name="TRADE_3" value="Service Providers" <?php if(isset($TRADE_3) && $TRADE_3 != ''){ echo 'checked'; } ?>> Service Providers
                       </label>
-                    </div>
+                    </div> -->
                   </div>
                   <div class="form-group col-md-4">
                     <input type="checkbox" name="PROPOSED_TO_BE" id="PROPOSED_TO_BE" value="Proposed To Be Used" <?php if(isset($PROPOSED_TO_BE) && $PROPOSED_TO_BE != ''){ echo 'checked'; } ?>> Proposed To Be Used
@@ -142,7 +145,18 @@ $page = "step_1";
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="ASSOCIATE_MARK" id="ASSOCIATE_MARK" value="<?php if(isset($ASSOCIATE_MARK)){ echo $ASSOCIATE_MARK; } ?>" title="Associate of Mark" placeholder="Associate of Mark">
                   </div>
-                  <div class="col-md-6 offset-md-4">
+
+                  <div class="form-group col-md-6">
+                    <input type="file" class="form-control form-control-sm" name="LOGO" id="LOGO" title="Trademark Logo" placeholder="Trademark Logo">
+                    <input type="hidden" name="old_logo" value="<?php if(isset($LOGO)){ echo $LOGO; } ?>">
+                  </div>
+                  <?php if(isset($LOGO) && $LOGO != ''){ ?>
+                  <div class="form-group col-md-6">
+                    <img style="width:150px; height:80px;" src="<?php echo base_url(); ?>assets/images/trade_logo/<?php echo $LOGO; ?>" alt="">
+                  </div>
+                  <?php } ?>
+
+                  <div class="form-group col-md-8 offset-md-4">
                     <button type="submit" class="btn btn-primary  mr-3">Update & Next</button>
                     <button type="submit" class="btn btn-default ">Cancel</button>
                   </div>
@@ -176,6 +190,15 @@ $page = "step_1";
       $('#date2').attr('readonly', false);
     }
   });
+  $('#TM').on('change',function() {
+    var tm = parseInt($('#TM').val());
+    if(tm > 0 && tm <= 34){
+      $('#TRADE').val('Manufacturers and Traders');
+    } else if (tm > 34 && tm < 45) {
+      $('#TRADE').val('Service Providers');
+    }
+  });
+
 </script>
 </body>
 </html>

@@ -114,7 +114,7 @@ class Transaction_Model extends CI_Model{
   }
   // Application Details...
   public function application_details($application_id){
-    $query = $this->db->select('application.*,company.company_name,branch.*,service.*,organization.*,user_man.user_name as man_name,user_man.user_lastname as man_lname,user_tc.user_name as tc_name,user_tc.user_lastname as tc_lname,user_rc.user_name as rc_name,user_rc.user_lastname as rc_lname,')
+    $query = $this->db->select('application.*,company.company_name,company.company_id as com_id,branch.*,service.*,organization.*,user_man.user_name as man_name,user_man.user_lastname as man_lname,user_tc.user_name as tc_name,user_tc.user_lastname as tc_lname,user_rc.user_name as rc_name,user_rc.user_lastname as rc_lname,')
     ->from('law_application as application')
     ->where('application.application_id',$application_id)
     ->join('law_branch as branch','application.branch_id = branch.branch_id','LEFT')
@@ -168,6 +168,17 @@ class Transaction_Model extends CI_Model{
     $result = $query->result();
     return $result;
   }
+
+  public function get_payment_info_list($application_id){
+    $this->db->select('*');
+    $this->db->from('law_payment');
+    $this->db->where('application_id',$application_id);
+    $this->db->order_by('payment_id','ASC');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
   public function get_received_amount($application_id){
     $this->db->select('SUM(RECEVIEDAMOUNT) as received_amount');
     $this->db->from('law_payment');
@@ -181,6 +192,7 @@ class Transaction_Model extends CI_Model{
     $this->db->select('law_payment.*,application.*,application.application_id as appl_id,trade.*,copy.*,other.*');
     $this->db->from('law_payment');
     $this->db->order_by('law_payment.payment_id','DESC');
+    $this->db->where('law_payment.is_master',0);
     $this->db->join('law_application as application','law_payment.application_id = application.application_id','LEFT');
     $this->db->join('law_trademark as trade','application.application_id = trade.application_id','LEFT');
     $this->db->join('law_copyright as copy','application.application_id = copy.application_id','LEFT');
@@ -219,10 +231,11 @@ class Transaction_Model extends CI_Model{
   /************************************** Sale Invoice ****************************/
   // Sale Invoice List...
   public function sale_invoice_list(){
-    $this->db->select('invoice.*,law_company.company_name');
+    $this->db->select('invoice.*,law_company.company_name,law_branch.branch_name');
     $this->db->from('law_invoice as invoice');
     // $this->db->where('work.work_id',$work_id);
     $this->db->join('law_company','invoice.company_id = law_company.company_id','LEFT');
+    $this->db->join('law_branch','invoice.branch_id = law_branch.branch_id','LEFT');
     $query = $this->db->get();
     $result = $query->result();
     return $result;

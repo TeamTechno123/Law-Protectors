@@ -45,9 +45,10 @@ $page = "add_user";
                     <div class="form-group">
                       <select class="form-control select2" name="branch_id" id="branch_id" data-placeholder="Select Branch" required>
                         <option selected="selected" value="" >Select Branch </option>
-                        <?php foreach ($branch_list as $list) { ?>
+                        <?php if(isset($branch_id)){ ?>  <option selected="selected" value="<?php echo $branch_id ?>" ><?php echo $branch_name ?> </option> <?php } ?>
+                        <!-- <?php foreach ($branch_list as $list) { ?>
                         <option value="<?php echo $list->branch_id; ?>" <?php if(isset($branch_id)){ if($list->branch_id == $branch_id){ echo "selected"; } }  ?>><?php echo $list->branch_name; ?></option>
-                        <?php } ?>
+                        <?php } ?> -->
                       </select>
                     </div>
                   </div>
@@ -108,6 +109,19 @@ $page = "add_user";
       toastr.error('Email Id Exist.');
     });
     <?php } ?>
+
+    $('#company_id').on('change',function(){
+      var company_id = $(this).val();
+      $.ajax({
+        url:'<?php echo base_url(); ?>Transaction/get_branch_by_company',
+        type: 'POST',
+        data: {"company_id":company_id},
+        context: this,
+        success: function(result){
+          $('#branch_id').html(result);
+        }
+      });
+    })
   </script>
 </body>
 </html>

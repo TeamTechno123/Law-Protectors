@@ -59,11 +59,13 @@ class User_Model extends CI_Model{
   }
 
   public function get_user_list($company_id){
-    $query = $this->db->select('*')
-            // ->where('company_id', $company_id)
-            ->where('is_admin', 0)
-            ->from('law_user')
-            ->get();
+    $this->db->select('law_user.*,law_branch.*,law_company.*,law_roll.*');
+    $this->db->from('law_user');
+    $this->db->where('law_user.is_admin', 0);
+    $this->db->join('law_branch','law_user.branch_id = law_branch.branch_id','LEFT');
+    $this->db->join('law_company','law_user.company_id = law_company.company_id','LEFT');
+    $this->db->join('law_roll','law_user.roll_id = law_roll.roll_id','LEFT');
+    $query = $this->db->get();
     $result = $query->result();
     return $result;
   }
@@ -89,7 +91,7 @@ class User_Model extends CI_Model{
 
   public function check_duplication($company_id,$value,$field_name,$table_name){
     $query = $this->db->select($field_name)
-      ->where('company_id', $company_id)
+      // ->where('company_id', $company_id)
       ->where($field_name,$value)
       ->from($table_name)
       ->get();

@@ -104,7 +104,7 @@ $page = "party_list";
                           <th> <p style="text-align:center">Org<sup>n</sup> Type</p> </th>
                           <th> <p style="text-align:center">Org<sup>n</sup> Name</p> </th>
                           <th> <p style="text-align:center">Appl<sup>nt</sup> Name</p> </th>
-                          <th> <p style="text-align:center">Contract Amt</p> </th>
+                          <th> <p style="text-align:center">Total Contract Amt</p> </th>
                           <th> <p style="text-align:center">Recieved Amt</p> </th>
                           <th> <p style="text-align:center">Balance Amt</p> </th>
                           </thead>
@@ -130,7 +130,7 @@ $page = "party_list";
                               <td> <p style="text-align:center"><?php echo $details->appl_org_name; ?></p></td>
                               <td> <p style="text-align:center"><?php echo $details->appl_org_name; ?></p></td>
                             <?php } ?>
-                            <td> <p style="text-align:center"><?php echo $details->CONTRACTAMOUNT; ?></p></td>
+                            <td> <p style="text-align:center"><?php echo $details->TOTALAMOUNT; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $details->RECEVIEDAMOUNT; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $details->BALANCEAMOUNT; ?></p></td>
                           </tr>

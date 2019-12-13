@@ -37,13 +37,12 @@ class Transaction extends CI_Controller{
   		echo "<option class='cls_".$data->branch_id."' value=".$data->branch_id."> ".$data->branch_name." </option>";
   	}
   }
+
   public function get_users_by_branch(){
     $branch_id = $this->input->post('branch_id');
-
     $manager_list = $this->Transaction_Model->get_users_by_branch('2',$branch_id);
     $rc_list = $this->Transaction_Model->get_users_by_branch('3',$branch_id);
     $tc_list = $this->Transaction_Model->get_users_by_branch('4',$branch_id);
-
     $manager = "<option value='' selected >Select Manager</option>";
     foreach ($manager_list as $manager1) {
       $manager = $manager."<option value=".$manager1->user_id."> ".$manager1->user_name." ".$manager1->user_lastname."</option>";
@@ -84,15 +83,17 @@ class Transaction extends CI_Controller{
       $application_id = $this->User_Model->save_data('law_application', $application_data);
       $service_id = $this->input->post('service_id');
       $row['application_id'] = $application_id;
+      $row2['is_master'] = 1;
+      $row2['application_id'] = $application_id;
       if($service_id == 1){
         $this->User_Model->save_data('law_trademark', $row);
-        $this->User_Model->save_data('law_payment', $row);
+        $this->User_Model->save_data('law_payment', $row2);
       } elseif ($service_id == 2) {
         $this->User_Model->save_data('law_copyright', $row);
-        $this->User_Model->save_data('law_payment', $row);
+        $this->User_Model->save_data('law_payment', $row2);
       } else{
         $this->User_Model->save_data('law_otherservice', $row);
-        $this->User_Model->save_data('law_payment', $row);
+        $this->User_Model->save_data('law_payment', $row2);
       }
       header('location:'.base_url().'Transaction/application_list');
     } else{
@@ -116,6 +117,31 @@ class Transaction extends CI_Controller{
     } else{
       header('location:'.base_url().'User');
     }
+  }
+
+  public function delete_application($application_id){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id == null ){ header('location:'.base_url().'User'); }
+    $appl_details = $this->User_Model->get_info('application_id', $application_id, 'law_application');
+    foreach ($appl_details as $details) {
+      $service_id = $details->service_id;
+    }
+
+    if($service_id == 1){
+      $this->User_Model->delete_info('application_id', $application_id, 'law_trademark');
+    }
+    elseif ($service_id == 2) {
+      $this->User_Model->delete_info('application_id', $application_id, 'law_copyright');
+    } else{
+      $this->User_Model->delete_info('application_id', $application_id, 'law_otherservice');
+    }
+
+    $this->User_Model->delete_info('application_id', $application_id, 'law_application');
+    $this->User_Model->delete_info('application_id', $application_id, 'law_payment');
+    $this->User_Model->delete_info('application_id', $application_id, 'law_doc_upload');
+    header('location:'.base_url().'Transaction/application_list');
   }
 
   // Application List....
@@ -144,9 +170,9 @@ class Transaction extends CI_Controller{
   // Edit Application....
   public function edit_application($application_id){
     $user_id = $this->session->userdata('law_user_id');
-    $company_id = $this->session->userdata('law_company_id');
+    $company_id2 = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
-    if($company_id){
+    if($user_id){
       $application_details = $this->Transaction_Model->application_details($application_id);
       if($application_details){
         foreach ($application_details as $info) {
@@ -154,7 +180,9 @@ class Transaction extends CI_Controller{
           $data['application_id'] = $application_id;
           $data['application_no'] = $info->application_no;
           $data['application_date'] = $info->application_date;
-          $data['company_id'] = $info->company_id;
+
+          $data['company_id'] = $info->com_id;
+
           $data['branch_id'] = $info->branch_id;
           $data['branch_name'] = $info->branch_name;
           $data['manager_id'] = $info->manager_id;
@@ -170,9 +198,9 @@ class Transaction extends CI_Controller{
           $data['organization_name'] = $info->organization_name;
         }
       }
-      $data['branch_list'] = $this->User_Model->get_list($company_id,'branch_id','ASC','law_branch');
-      $data['service_list'] = $this->User_Model->get_list($company_id,'service_id','ASC','law_service');
-      $data['organization_list'] = $this->User_Model->get_list($company_id,'organization_id','ASC','law_organization');
+      $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
+      $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
+      $data['organization_list'] = $this->User_Model->get_list2('organization_id','ASC','law_organization');
       $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
 
       $this->load->view('Include/head', $data);
@@ -256,12 +284,14 @@ class Transaction extends CI_Controller{
           $data['INFORMATION'] = $info->INFORMATION;
           $data['PLACE'] = $info->PLACE;
           $data['DATE'] = $info->DATE;
-          $data['TRADE_0'] = $info->TRADE_0;
-          $data['TRADE_1'] = $info->TRADE_1;
-          $data['TRADE_2'] = $info->TRADE_2;
-          $data['TRADE_3'] = $info->TRADE_3;
+          $data['TRADE'] = $info->TRADE;
+          // $data['TRADE_0'] = $info->TRADE_0;
+          // $data['TRADE_1'] = $info->TRADE_1;
+          // $data['TRADE_2'] = $info->TRADE_2;
+          // $data['TRADE_3'] = $info->TRADE_3;
           $data['IS_MSME_REQ'] = $info->IS_MSME_REQ;
           $data['ASSOCIATE_MARK'] = $info->ASSOCIATE_MARK;
+          $data['LOGO'] = $info->LOGO;
           $data['title'] = 'Trade Mark';
         }
 
@@ -349,6 +379,7 @@ class Transaction extends CI_Controller{
     }
   }
 
+  // Save Trademark...
   public function save_trademark(){
     $user_id = $this->session->userdata('law_user_id');
     $company_id = $this->session->userdata('law_company_id');
@@ -361,20 +392,20 @@ class Transaction extends CI_Controller{
       $MARK_2 = $this->input->post('MARK_2');
       $MARK_3 = $this->input->post('MARK_3');
       $MARK_4 = $this->input->post('MARK_4');
-      $TRADE_0 = $this->input->post('TRADE_0');
-      $TRADE_1 = $this->input->post('TRADE_1');
-      $TRADE_2 = $this->input->post('TRADE_2');
-      $TRADE_3 = $this->input->post('TRADE_3');
+      // $TRADE_0 = $this->input->post('TRADE_0');
+      // $TRADE_1 = $this->input->post('TRADE_1');
+      // $TRADE_2 = $this->input->post('TRADE_2');
+      // $TRADE_3 = $this->input->post('TRADE_3');
 
       if(!isset($MARK_0)){ $MARK_0 = '';}
       if(!isset($MARK_1)){ $MARK_1 = '';}
       if(!isset($MARK_2)){ $MARK_2 = '';}
       if(!isset($MARK_3)){ $MARK_3 = '';}
       if(!isset($MARK_4)){ $MARK_4 = '';}
-      if(!isset($TRADE_0)){ $TRADE_0 = '';}
-      if(!isset($TRADE_1)){ $TRADE_1 = '';}
-      if(!isset($TRADE_2)){ $TRADE_2 = '';}
-      if(!isset($TRADE_3)){ $TRADE_3 = '';}
+      // if(!isset($TRADE_0)){ $TRADE_0 = '';}
+      // if(!isset($TRADE_1)){ $TRADE_1 = '';}
+      // if(!isset($TRADE_2)){ $TRADE_2 = '';}
+      // if(!isset($TRADE_3)){ $TRADE_3 = '';}
 
       $PROPOSED_TO_BE = $this->input->post('PROPOSED_TO_BE');
       if(!isset($PROPOSED_TO_BE)){ $PROPOSED_TO_BE = '';}
@@ -402,10 +433,11 @@ class Transaction extends CI_Controller{
       $uodate_data['MARK_2'] = $MARK_2;
       $uodate_data['MARK_3'] = $MARK_3;
       $uodate_data['MARK_4'] = $MARK_4;
-      $uodate_data['TRADE_0'] = $TRADE_0;
-      $uodate_data['TRADE_1'] = $TRADE_1;
-      $uodate_data['TRADE_2'] = $TRADE_2;
-      $uodate_data['TRADE_3'] = $TRADE_3;
+      $uodate_data['TRADE'] = $this->input->post('TRADE');
+      // $uodate_data['TRADE_0'] = $TRADE_0;
+      // $uodate_data['TRADE_1'] = $TRADE_1;
+      // $uodate_data['TRADE_2'] = $TRADE_2;
+      // $uodate_data['TRADE_3'] = $TRADE_3;
       $uodate_data['BRAND'] = $this->input->post('BRAND');
       $uodate_data['SIGNIFICANCE'] = $this->input->post('SIGNIFICANCE');
       $uodate_data['TM'] = $this->input->post('TM');
@@ -417,6 +449,34 @@ class Transaction extends CI_Controller{
       $uodate_data['PLACE'] = $this->input->post('PLACE');
       $uodate_data['IS_MSME_REQ'] = $this->input->post('IS_MSME_REQ');
       $uodate_data['ASSOCIATE_MARK'] = $this->input->post('ASSOCIATE_MARK');
+      $LOGO_old = $this->input->post('old_logo');
+
+      if($_FILES['LOGO']['name']){
+        $time = time();
+        $image_name = 'trade_'.$application_id.'_'.$time;
+        $config['upload_path'] = 'assets/images/trade_logo/';
+        $config['allowed_types'] = 'jpg|png|gif';
+        $config['file_name'] = $image_name;
+        $filename = $_FILES['LOGO']['name'];
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        // $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+        if ($this->upload->do_upload('LOGO')){
+          $uodate_data['LOGO'] = $image_name.'.'.$ext;
+          // $tour_up_image = array(
+          //   'LOGO' => $image_name.'.'.$ext,
+          // );
+          // $this->Admin_Model->update_tour_image($tour_id,$tour_up_image);
+          if($LOGO_old != ''){
+            unlink("assets/images/trade_logo/".$LOGO_old);
+          }
+          $this->session->set_flashdata('status','tour_image_update_success');
+        }
+        else{
+          echo $error = $this->upload->display_errors();
+          $this->session->set_flashdata('status',$this->upload->display_errors());
+        }
+      }
 
       $this->User_Model->update_info('application_id', $application_id, 'law_trademark', $uodate_data);
       // header('location:'.base_url().'Transaction/process_step_two');
@@ -1209,6 +1269,17 @@ class Transaction extends CI_Controller{
     header('location:'.base_url().'Transaction/sale_invoice_list');
   }
 
+  // Delete Invoice...
+  public function delete_invoice($invoice_id){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id == null ){ header('location:'.base_url().'User'); }
+      $this->User_Model->delete_info('invoice_id', $invoice_id, 'law_invoice');
+        $this->User_Model->delete_info('invoice_id', $invoice_id, 'law_invoice_details');
+      header('location:'.base_url().'Transaction/sale_invoice_list');
+  }
+
   /************************ Receipt Payment **********************/
   public function add_receipt(){
     $user_id = $this->session->userdata('law_user_id');
@@ -1251,12 +1322,17 @@ class Transaction extends CI_Controller{
   public function get_appl_amounts(){
     $application_id = $this->input->post('application_id');
     $payment_details = $this->Transaction_Model->get_payment_info($application_id);
-    //if($payment_details == ''){ header('location:'.base_url().'Transaction/application_list'); }
     foreach ($payment_details as $p_details) {
-      $contract_amount = $p_details->CONTRACTAMOUNT;
+      $contract_amount = $p_details->TOTALAMOUNT;
     }
-    $received_amount = $this->Transaction_Model->get_received_amount($application_id);
-    $outstanding_amount = $contract_amount - $received_amount;
+    $pay_info = $this->Transaction_Model->get_payment_info_list($application_id);
+    foreach ($pay_info as $pay_info) {
+    }
+    $outstanding_amount = $pay_info->BALANCEAMOUNT;
+    // $received_amount = $this->Transaction_Model->get_received_amount($application_id);
+    // $outstanding_amount = $contract_amount - $received_amount;
+
+
     $data['contract_amount'] = $contract_amount;
     $data['outstanding_amount'] = $outstanding_amount;
     echo json_encode($data);
@@ -1303,12 +1379,13 @@ class Transaction extends CI_Controller{
     }
     $application_id = $info->application_id;
     $payment_details = $this->Transaction_Model->get_payment_info($application_id);
-    //if($payment_details == ''){ header('location:'.base_url().'Transaction/application_list'); }
     foreach ($payment_details as $p_details) {
-      $contract_amount = $p_details->CONTRACTAMOUNT;
+      $contract_amount = $p_details->TOTALAMOUNT;
     }
-    $received_amount = $this->Transaction_Model->get_received_amount($application_id);
-    $outstanding_amount = $contract_amount - $received_amount;
+    $pay_info = $this->Transaction_Model->get_payment_info_list($application_id);
+    foreach ($pay_info as $pay_info) {
+    }
+    $outstanding_amount = $pay_info->BALANCEAMOUNT;
 
 
     $this->form_validation->set_rules('RECEVIEDAMOUNT', 'Received Amount', 'trim|required');
@@ -1338,13 +1415,23 @@ class Transaction extends CI_Controller{
       header('location:'.base_url().'Transaction/receipt_list');
     }
     $data['contract_amount'] = $contract_amount;
-    $data['outstanding_amount'] = $outstanding_amount + $data['RECEVIEDAMOUNT'];
+    $data['outstanding_amount'] = $outstanding_amount;
     $status = '';
     $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'DESC');
     $this->load->view('Include/head', $data);
     $this->load->view('Include/navbar', $data);
     $this->load->view('Transaction/add_receipt', $data);
     $this->load->view('Include/footer', $data);
+  }
+
+  // Delete Service...
+  public function delete_receipt($payment_id){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id == null ){ header('location:'.base_url().'User'); }
+    $this->User_Model->delete_info('payment_id', $payment_id, 'law_payment');
+    header('location:'.base_url().'Transaction/receipt_list');
   }
 
 

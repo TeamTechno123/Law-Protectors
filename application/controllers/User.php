@@ -373,7 +373,7 @@ class User extends CI_Controller{
       header('location:'.base_url().'User');
     }
   }
-  // Update Branch...
+  // Delete Service...
   public function delete_service($service_id){
     $user_id = $this->session->userdata('law_user_id');
     $company_id = $this->session->userdata('law_company_id');
@@ -411,17 +411,33 @@ class User extends CI_Controller{
        );
         $user_email = $this->input->post('user_email');
         $company_id2 = $this->input->post('company_id');
-        $this->User_Model->save_data('law_user', $save_data);
-        header('location:'.base_url().'User/user_information_list');
-      //  $check = $this->User_Model->check_duplication($company_id2,$user_email,'user_email','law_user');
-      // if($check > 0){
-      //   $this->session->set_flashdata('check_email','exist');
-      //   header('location:'.base_url().'User/user_information');
-      // }
-      // else{
-      //   $this->User_Model->save_data('law_user', $save_data);
-      //   header('location:'.base_url().'User/user_information_list');
-      // }
+        // $this->User_Model->save_data('law_user', $save_data);
+        // header('location:'.base_url().'User/user_information_list');
+       $check = $this->User_Model->check_duplication($company_id2,$user_email,'user_email','law_user');
+        if($check > 0){
+          $this->session->set_flashdata('check_email','exist');
+          $data = array(
+            'company_id' => $this->input->post('company_id'),
+            'branch_id' => $this->input->post('branch_id'),
+            'roll_id' => $this->input->post('roll_id'),
+            'user_name' => $this->input->post('user_name'),
+            'user_lastname' => $this->input->post('user_lastname'),
+            'user_mobile' => $this->input->post('user_mobile'),
+            'user_email' => $this->input->post('user_email'),
+            'user_password' => $this->input->post('user_password'),
+            'user_status' => $user_status,
+          );
+          $branch_id = $this->input->post('branch_id');
+          $branch_details = $this->User_Model->get_info('branch_id', $branch_id, 'law_branch');
+          foreach ($branch_details as $branch_details) {
+            $data['branch_name'] = $branch_details->branch_name;
+          }
+          // header('location:'.base_url().'User/user_information');
+        }
+        else{
+          $this->User_Model->save_data('law_user', $save_data);
+          header('location:'.base_url().'User/user_information_list');
+        }
      }
      $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
      $data['roll_list'] = $this->User_Model->get_list2('roll_id','ASC','law_roll');
@@ -485,7 +501,11 @@ class User extends CI_Controller{
      $data['user_password'] = $details->user_password;
      $data['user_status'] = $details->user_status;
    }
-
+   $branch_id = $details->branch_id;
+   $branch_details = $this->User_Model->get_info('branch_id', $branch_id, 'law_branch');
+   foreach ($branch_details as $branch_details) {
+     $data['branch_name'] = $branch_details->branch_name;
+   }
    // echo print_r($user_details);
    $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
    $data['roll_list'] = $this->User_Model->get_list2('roll_id','ASC','law_roll');
@@ -494,13 +514,16 @@ class User extends CI_Controller{
    $this->load->view('Include/navbar',$data);
    $this->load->view('User/add_user',$data);
    $this->load->view('Include/footer',$data);
-
-
  }
 
-
-
-
+ public function delete_user($user_id2){
+   $user_id = $this->session->userdata('law_user_id');
+   $company_id = $this->session->userdata('law_company_id');
+   $roll_id = $this->session->userdata('roll_id');
+   if(!$user_id){ header('location:'.base_url().'User'); }
+   $this->User_Model->delete_info('user_id', $user_id2, 'law_user');
+   header('location:'.base_url().'User/user_information_list');
+ }
 
 /******************************* Target **********************************/
 
@@ -606,6 +629,7 @@ public function delete_target_range($target_id){
        $this->session->flashdata('save_success','success');
        header('location:'.base_url().'User/target_list');
      }
+
      $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
      $data['target_list'] = $this->User_Model->get_list2('target_id','ASC','law_target');
      $data['target_no'] = $this->Transaction_Model->get_count_no('target_no', 'law_target_details');
@@ -613,6 +637,7 @@ public function delete_target_range($target_id){
      $this->load->view('Include/navbar',$data);
      $this->load->view('User/set_target_information',$data);
      $this->load->view('Include/footer',$data);
+
    } else{
      header('location:'.base_url().'User');
    }
@@ -657,7 +682,7 @@ public function delete_target_range($target_id){
            $user['target_no'] = $target_no;
            $this->db->insert('law_target_details', $user);
          }
-       }       
+       }
        $this->session->flashdata('update_success','success');
        header('location:'.base_url().'User/target_list');
      }
@@ -684,6 +709,15 @@ public function delete_target_range($target_id){
    } else{
      header('location:'.base_url().'User');
    }
+ }
+
+ public function delete_target($target_no){
+   $user_id = $this->session->userdata('law_user_id');
+   $company_id = $this->session->userdata('law_company_id');
+   $roll_id = $this->session->userdata('roll_id');
+   if(!$user_id){ header('location:'.base_url().'User'); }
+   $this->User_Model->delete_info('target_no', $target_no, 'law_target_details');
+   header('location:'.base_url().'User/target_list');
  }
 
  public function get_user_list_by_branch(){

@@ -42,6 +42,8 @@ $page = "invoice_list";
                   <th>Sr. No.</th>
                   <th>Invoice No.</th>
                   <th>Company Name</th>
+                  <th>Branch Name</th>
+                  <th>Party</th>
                   <th>Date</th>
                   <th>Action</th>
                 </tr>
@@ -56,6 +58,8 @@ $page = "invoice_list";
                   <td><?php echo $i; ?></td>
                   <td><?php echo $list->invoice_no; ?></td>
                   <td><?php echo $list->company_name; ?></td>
+                  <td><?php echo $list->branch_name; ?></td>
+                  <td><?php echo $list->party; ?></td>
                   <td><?php echo $list->invoice_date; ?></td>
                   <td>
                     <a href="<?php echo base_url(); ?>Transaction/edit_invoice/<?php echo $list->invoice_id; ?>"> <i class="fa fa-edit"></i> </a>

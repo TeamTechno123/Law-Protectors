@@ -154,22 +154,22 @@ $page = "step_2";
     });
   });
 
-  $('#RECEVIEDAMOUNT').change(function(){
-    var received = $(this).val();
-    var outstanding_amount = $('.outstanding_amount').text();
-    if(received == ''){
-      received = 0;
-    }
-    if(outstanding_amount == ''){
-      outstanding_amount = 0;
-    }
-    var received = parseFloat(received);
-    var outstanding_amount = parseFloat(outstanding_amount);
-    if(received > outstanding_amount){
-      toastr.error('Invalide Amount');
-      $(this).val('');
-    }
-  });
+  // $('#RECEVIEDAMOUNT').change(function(){
+  //   var received = $(this).val();
+  //   var outstanding_amount = $('.outstanding_amount').text();
+  //   if(received == ''){
+  //     received = 0;
+  //   }
+  //   if(outstanding_amount == ''){
+  //     outstanding_amount = 0;
+  //   }
+  //   var received = parseFloat(received);
+  //   var outstanding_amount = parseFloat(outstanding_amount);
+  //   if(received > outstanding_amount){
+  //     toastr.error('Invalide Amount');
+  //     $(this).val('');
+  //   }
+  // });
 </script>
 </body>
 </html>

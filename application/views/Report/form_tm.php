@@ -54,6 +54,10 @@
           margin-left: auto;
           margin-right: auto;
         }
+        p{
+          margin-top: 3px;
+          margin-bottom: 3px;
+        }
       </style>
 
       <tr>
@@ -88,7 +92,7 @@
             if(isset($organization_id) && ($organization_id == 1)){ echo $single_name[0]; }
             else{ echo $ORGANIZATION; }
           ?>
-          <br> <br> </td>
+          <br></td>
       </tr>
 
       <tr>
@@ -105,24 +109,29 @@
           <?php foreach ($single_name as $item) {
               echo '<b>'.$item.'</b><br>';
           } ?>
-        <br><br> </td>
+        <br> </td>
       </tr>
 
       <tr>
         <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Address:* </p></td>
-        <td style="background-color: #fff;"><?php if(isset($ADDRESS)){ echo $ADDRESS; } ?><br><br></td>
+        <td style="background-color: #fff;"><?php if(isset($ADDRESS)){ echo $ADDRESS; } ?><br></td>
       </tr>
 
       <tr>
         <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > State :* </p></td>
-        <td style="background-color: #fff;"><?php if(isset($STATE)){ echo $STATE; } ?><br> <br>
+        <td style="background-color: #fff;"><?php if(isset($STATE)){ echo $STATE; } ?><br>
         </td>
       </tr>
 
       <tr>
         <td  rowspan="4" valign="top" style="padding-top:5px;">4</td>
         <td> <p style="font-size:12px; text-align:center;  font-weight:bold;" > MARK TO BE REGISTERED: </p></td>
-        <td style="padding-top:5px;">Logo + <?php if(isset($BRAND)){ echo $BRAND; } ?><br><br> </td>
+        <td style="padding-top:5px;">
+          <?php if(isset($LOGO) && $LOGO != ''){ ?>
+            <img style="width:100px; height:60px;" src="<?php echo base_url(); ?>assets/images/trade_logo/<?php echo $LOGO; ?>" alt=""><br>
+          <?php } ?>
+          <?php if(isset($BRAND)){ echo $BRAND; } ?><br>
+        </td>
       </tr>
 
       <tr>
@@ -132,7 +141,7 @@
           <?php if(isset($MARK_1) && $MARK_1 != ''){ echo $MARK_1.', '; } ?>
           <?php if(isset($MARK_2) && $MARK_2 != ''){ echo $MARK_2.', '; } ?>
           <?php if(isset($MARK_3) && $MARK_3 != ''){ echo $MARK_3.', '; } ?>
-          <?php if(isset($MARK_4) && $MARK_4 != ''){ echo $MARK_4.', '; } ?><br><br> </td>
+          <?php if(isset($MARK_4) && $MARK_4 != ''){ echo $MARK_4.', '; } ?><br> </td>
       </tr>
 
       <tr>
@@ -146,7 +155,7 @@
 
       <tr>
         <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Description  of the mark:* </p></td>
-        <td style="background-color: #fff;padding-top:5px;">As Annexed<br><br>
+        <td style="background-color: #fff;padding-top:5px;">As Annexed<br>
         </td>
       </tr>
 
@@ -194,7 +203,7 @@
 
       <tr>
         <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Name: </p></td>
-        <td style="background-color: #fff; padding-top:5px;"><?php if(isset($NAME)){ echo $single_name[0] ; } ?><br><br> </td>
+        <td style="background-color: #fff; padding-top:5px;"><?php if(isset($NAME)){ echo $single_name[0] ; } ?><br> </td>
       </tr>
 
       <tr>
@@ -208,7 +217,7 @@
             elseif (isset($organization_id) && ($organization_id == 3 )){ echo 'Karta'; }
             else{ echo ''; }
           ?>
-        <br><br> </td>
+        <br></td>
       </tr>
       <tr>
         <td> <p >11.</p> </td>

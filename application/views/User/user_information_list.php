@@ -42,6 +42,9 @@ $page = "make_information_list";
                 <thead>
                 <tr>
                   <th>Sr. No.</th>
+                  <th>Company</th>
+                  <th>Branch</th>
+                  <th>Roll</th>
                   <th>User Name</th>
                   <th>Action</th>
                 </tr>
@@ -54,6 +57,9 @@ $page = "make_information_list";
                   ?>
                   <tr>
                     <td><?php echo $i; ?></td>
+                    <td><?php echo $list->company_name; ?></td>
+                    <td><?php echo $list->branch_name; ?></td>
+                    <td><?php echo $list->roll_name; ?></td>
                     <td><?php echo $list->user_name.' '.$list->user_lastname; ?></td>
                     <td>
                       <a href="<?php echo base_url(); ?>User/edit_user/<?php echo $list->user_id; ?>"> <i class="fa fa-edit"></i> </a>
