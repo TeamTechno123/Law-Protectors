@@ -54,6 +54,7 @@ class Report extends CI_Controller{
           $data['INFORMATION'] = $info->INFORMATION;
           $data['PLACE'] = $info->PLACE;
           $data['DATE'] = $info->DATE;
+          $data['TRADE'] = $info->TRADE;
           $data['TRADE_0'] = $info->TRADE_0;
           $data['TRADE_1'] = $info->TRADE_1;
           $data['TRADE_2'] = $info->TRADE_2;
@@ -191,6 +192,7 @@ class Report extends CI_Controller{
           $data['application_id'] = $info->application_id;
           $data['application_no'] = $info->application_no;
           $data['application_date'] = $info->application_date;
+          $data['company_name'] = $info->company_name;
           $data['branch_name'] = $info->branch_name;
           $data['service_name'] = $info->service_name;
           $data['organization_id'] = $info->organization_id;

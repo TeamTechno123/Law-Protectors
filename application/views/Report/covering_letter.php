@@ -50,7 +50,7 @@
       <p style="font-size:12px; text-align:justify;">Let’s have long mutual beneficial relationship. </p> <br>
       <p style="font-size:12px; text-align:left;">Thanking You, </p>
       <p style="font-size:12px; text-align:left; padding-bottom:8px;">Yours faithfully, </p>
-      <p style="font-size:12px; text-align:left;">For Law Protectors. </p> <br>
+      <p style="font-size:12px; text-align:left;">For <?php echo $company_name; ?>. </p> <br>
       <p style="font-size:12px; text-align:left;">Authorised Signatory </p>
       <p style="font-size:12px; text-align:left;  padding-bottom:8px;">(020) 26051325/ 3325/ 9575/ 9576.     </p>
       <p style="font-size:12px; text-align:left;">NOTE : For TM A Filing the documents required are as follows:</p>

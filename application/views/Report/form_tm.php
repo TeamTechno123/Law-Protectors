@@ -130,9 +130,23 @@
           <?php if(isset($LOGO) && $LOGO != ''){ ?>
             <img style="width:100px; height:60px;" src="<?php echo base_url(); ?>assets/images/trade_logo/<?php echo $LOGO; ?>" alt=""><br>
           <?php } ?>
-          <?php if(isset($BRAND)){ echo $BRAND; } ?><br>
+          <br>
         </td>
       </tr>
+      <!-- <tr>
+        <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Trade Mark: </p></td>
+        <td style="background-color: #fff;">
+        <?php if(isset($BRAND)){ echo $BRAND; } ?><br></td>
+      </tr> -->
+      <!-- <tr>
+        <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Category of mark:* </p></td>
+        <td style="background-color: #fff;">
+          <?php if(isset($MARK_0) && $MARK_0 != ''){ echo $MARK_0.', '; } ?>
+          <?php if(isset($MARK_1) && $MARK_1 != ''){ echo $MARK_1.', '; } ?>
+          <?php if(isset($MARK_2) && $MARK_2 != ''){ echo $MARK_2.', '; } ?>
+          <?php if(isset($MARK_3) && $MARK_3 != ''){ echo $MARK_3.', '; } ?>
+          <?php if(isset($MARK_4) && $MARK_4 != ''){ echo $MARK_4.', '; } ?><br> </td>
+      </tr> -->
 
       <tr>
         <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Category of mark:* </p></td>
@@ -174,11 +188,13 @@
       <tr>
         <td> <p >7.</p> </td>
         <td> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Trade Description : * </p></td>
-        <td><?php if(isset($TRADE_0) && $TRADE_0 != ''){ echo $TRADE_0.', '; } ?>
-        <?php if(isset($TRADE_1) && $TRADE_1 != ''){ echo $TRADE_1.', '; } ?>
+        <td>
+        <?php if(isset($TRADE)){ echo $TRADE; } ?>
+        <!-- <?php if(isset($TRADE_1) && $TRADE_1 != ''){ echo $TRADE_1.', '; } ?>
         <?php if(isset($TRADE_2) && $TRADE_2 != ''){ echo $TRADE_2.', '; } ?>
         <?php if(isset($TRADE_3) && $TRADE_3 != ''){ echo $TRADE_3.', '; } ?>
-        <?php if(isset($TRADE_4) && $TRADE_4 != ''){ echo $TRADE_4.', '; } ?></td>
+        <?php if(isset($TRADE_4) && $TRADE_4 != ''){ echo $TRADE_4.', '; } ?> -->
+      </td>
       </tr>
 
       <tr>

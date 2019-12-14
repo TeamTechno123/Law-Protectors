@@ -88,19 +88,21 @@ class Transaction_Model extends CI_Model{
       $this->db->where('application.application_status',$status);
     }
     $this->db->where('application.service_id',1);
-    $this->db->order_by('application.application_id',$order);
+    $this->db->order_by('application.application_id','DESC');
     $this->db->join('law_branch as branch','application.branch_id = branch.branch_id','LEFT');
     $this->db->join('law_service as service','application.service_id = service.service_id','LEFT');
     $this->db->join('law_trademark as trade','application.application_id = trade.application_id','LEFT');
     $query = $this->db->get();
+    // $q = $this->db->last_query();
     $result = $query->result();
     return $result;
   }
   //Trdemark Details...
   public function trademark_details($application_id){
-    $query = $this->db->select('application.*,branch.*,service.*,organization.*,trade.*,user_man.user_name as man_name,user_man.user_lastname as man_lname,user_tc.user_name as tc_name,user_tc.user_lastname as tc_lname,user_rc.user_name as rc_name,user_rc.user_lastname as rc_lname,')
+    $query = $this->db->select('application.*,company.company_name,branch.*,service.*,organization.*,trade.*,user_man.user_name as man_name,user_man.user_lastname as man_lname,user_tc.user_name as tc_name,user_tc.user_lastname as tc_lname,user_rc.user_name as rc_name,user_rc.user_lastname as rc_lname,')
     ->from('law_application as application')
     ->where('application.application_id',$application_id)
+    ->join('law_company as company','application.company_id = company.company_id','LEFT')
     ->join('law_branch as branch','application.branch_id = branch.branch_id','LEFT')
     ->join('law_service as service','application.service_id = service.service_id','LEFT')
     ->join('law_organization as organization','application.organization_id = organization.organization_id','LEFT')
