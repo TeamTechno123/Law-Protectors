@@ -30,32 +30,31 @@ $page = "party_list";
             <div class="card-body" >
               <form role="form" method="post" autocomplete="off">
                 <div class="card-body row">
-                  <div class="form-group col-md-4 offset-md-2">
-                    <input type="text" class="form-control form-control-sm" name="from_date" id="date1" data-target="#date1" data-toggle="datetimepicker" title="From Date" placeholder="From Date" required>
-                    <label class="text-red"> <?php echo form_error('from_date'); ?> </label>
+                  <div class="form-group col-md-8  offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select Target Range" title="Select Target Range" name="" id="">
+                      <option selected="selected"  value="">Select Target Range</option>
+                    </select>
                   </div>
-                  <div class="form-group col-md-4">
-                    <input type="text" class="form-control form-control-sm" name="to_date" id="date2" data-target="#date2" data-toggle="datetimepicker" title="To Date"  placeholder="To Date" required>
-                    <label class="text-red"> <?php echo form_error('from_date'); ?> </label>
-                  </div>
-                  <div class="form-group col-md-4 offset-md-2">
-                    <select class="form-control select2 form-control-sm" title="Select Company" name="company_id" id="company_id" required>
+                  <div class="form-group col-md-8 offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select Company Name" title="Select Company" name="company_id" id="company_id" required>
                       <option selected="selected" value="" >Select Company Name </option>
                       <?php foreach ($company_list as $list) { ?>
                       <option value="<?php echo $list->company_id; ?>" <?php if(isset($company_id)){ if($list->company_id == $company_id){ echo "selected"; } }  ?>><?php echo $list->company_name; ?></option>
                       <?php } ?>
                     </select>
                   </div>
-                  <div class="form-group col-md-4 ">
-                    <select class="form-control select2 form-control-sm" title="Select Branch" name="branch_id" id="branch_id">
+                  <div class="form-group col-md-8 offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select Branch" title="Select Branch" name="branch_id" id="branch_id">
                       <option selected="selected"  value="">Select Branch</option>
                     </select>
                   </div>
-                  <!-- <div class="form-group col-md-4 offset-md-2">
-                    <select class="form-control select2 form-control-sm" title="Select Branch" name="manager_id" id="manager_id" required>
-                      <option selected="selected">Select Manager</option>
+
+                  <div class="form-group col-md-8 offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select Manager" title="Select Manager" name="" id="">
+                      <option selected="selected"  value="">Select Manager</option>
                     </select>
-                  </div> -->
+                  </div>
+
                   <div class="col-md-10 w-100 text-center mb-3">
                       <button type="submit" class="btn btn-success btn-sm">View</button>
                       <button type="submit" class="btn btn-default btn-sm ml-4">Cancel</button>
@@ -66,14 +65,17 @@ $page = "party_list";
                     <section style="width:100%;" class="invoice" id="print_invoice">
                       <!-- title row -->
                   <div class="row">
+                    <div class="col-md-12">
+                        <p style="text-align:center; font-size:18px;"> Manager Report </p>
+                    </div>
                     <div class="col-12 table-responsive" id="result_tbl">
                       <table class="table table-botttom" id="exp_tbl" width="100%">
                         <style media="print">
-                        #result_tbl table {
+                      .table-responsive table {
                           border-collapse: collapse!important;
                           Width:100%!important;
                         }
-                        #result_tbl table, #result_tbl tr, #result_tbl td, #result_tbl th{
+                      .table-responsive table, #result_tbl tr, #result_tbl td, #result_tbl th{
                           border: 1px solid #000;
                           margin-left: auto;
                           margin-right: auto;
@@ -81,15 +83,15 @@ $page = "party_list";
                         }
                       </style>
                       <style media="screen">
-                        #result_tbl table {
+                      .table-responsive table {
                           border-collapse: collapse!important;
                           Width:100%!important;
                           margin-bottom: 0px!important;
                         }
-                        #result_tbl .table thead th{
+                      .table-responsive .table thead th{
                             border: 1px solid #000;
                         }
-                        #result_tbl table, #result_tbl tr, #result_tbl td, #result_tbl th{
+                      .table-responsive table, #result_tbl tr, #result_tbl td, #result_tbl th{
                           border: 1px solid #000;
                           margin-left: auto;
                           margin-right: auto;
@@ -97,27 +99,98 @@ $page = "party_list";
                         }
                       </style>
                         <thead>
-                          <th> <p style="text-align:center">Sr. No.</p> </th>
-                          <th> <p style="text-align:center">Branch Name </p> </th>
-                            <th> <p style="text-align:center">Total Target Given</p> </th>
-                          <th> <p style="text-align:center">Total Collection</p> </th>
-                          <th> <p style="text-align:center">Total LP</p> </th>
-                          <th> <p style="text-align:center">Total Govt.</p> </th>
-                          <th> <p style="text-align:center">Total B2B</p> </th>
-                          <th> <p style="text-align:center">Total TDS</p> </th>
-                          </thead>
+                          <tr>
+                            <th colspan="10"><p style="text-align:center">Targer Range  : 01/12/2019 - 31/12/2019</p> </th>
+                          </tr>
+                          <tr>
+                            <th colspan="10"><p style="text-align:center"> Company Name : Lawprotectors </p> </th>
+                          </tr>
+                        
+                          <tr>
+                            <th> <p style="text-align:center">Sr. No.</p> </th>
+                            <th> <p style="text-align:center">Branch Name </p> </th>
+                            <th> <p style="text-align:center">Target</p> </th>
+                            <th> <p style="text-align:center">Contract Total</p> </th>
+                            <th> <p style="text-align:center">Total Collection</p> </th>
+                            <th> <p style="text-align:center">Total LP</p> </th>
+                            <th> <p style="text-align:center">Total Govt.</p> </th>
+                            <th> <p style="text-align:center">Total GST</p> </th>
+                            <th> <p style="text-align:center">Total B2B</p> </th>
+                            <th> <p style="text-align:center">Total TDS</p> </th>
+                          </tr>
+
+                        </thead>
                         <tbody>
                           <tr>
+                            <td> <p style="text-align:center">1</p></td>
                             <td> <p style="text-align:center">1</p></td>
                             <td> <p style="text-align:center">Pune</p></td>
                             <td> <p style="text-align:center">250000</p></td>
                             <td> <p style="text-align:center">500000</p></td>
+                            <td> <p style="text-align:center">1500</p></td>
                             <td> <p style="text-align:center">1500</p></td>
                             <td> <p style="text-align:center">35000</p></td>
                             <td> <p style="text-align:center">50000</p></td>
                             <td> <p style="text-align:center">5000</p></td>
                           </tr>
 
+                          <tr>
+                            <td colspan="2"> <p style="text-align:center"> <b>Total</b> </p></td>
+                            <td> <p style="text-align:center">Pune</p></td>
+                            <td> <p style="text-align:center">250000</p></td>
+                            <td> <p style="text-align:center">500000</p></td>
+                            <td> <p style="text-align:center">1500</p></td>
+                            <td> <p style="text-align:center">1500</p></td>
+                            <td> <p style="text-align:center">35000</p></td>
+                            <td> <p style="text-align:center">50000</p></td>
+                            <td> <p style="text-align:center">5000</p></td>
+                          </tr>
+                          <tr>
+                            <th colspan="11"><p style="text-align:center">Targer Range  : 01/12/2019 - 31/12/2019</p> </th>
+                          </tr>
+                          <tr>
+                            <th colspan="11"><p style="text-align:center"> Company Name : Lawprotectors </p> </th>
+                          </tr>
+                          <tr>
+                            <th colspan="11"><p style="text-align:center"> Branch Name : Kolhapur </p> </th>
+                          </tr>
+                          <tr>
+                            <th> <p style="text-align:center">Sr. No.</p> </th>
+                            <th> <p style="text-align:center">Role Name </p> </th>
+                            <th> <p style="text-align:center">Name Of Employee </p> </th>
+                            <th> <p style="text-align:center">Target</p> </th>
+                            <th> <p style="text-align:center">Contract Total</p> </th>
+                            <th> <p style="text-align:center">Total Collection</p> </th>
+                            <th> <p style="text-align:center">Total LP</p> </th>
+                            <th> <p style="text-align:center">Total Govt.</p> </th>
+                            <th> <p style="text-align:center">Total GST</p> </th>
+                            <th> <p style="text-align:center">Total B2B</p> </th>
+                            <th> <p style="text-align:center">Total TDS</p> </th>
+                          </tr>
+                          <tr>
+                            <td> <p style="text-align:center">1</p></td>
+                            <td> <p style="text-align:center">1</p></td>
+                            <td> <p style="text-align:center">1</p></td>
+                            <td> <p style="text-align:center">Pune</p></td>
+                            <td> <p style="text-align:center">250000</p></td>
+                            <td> <p style="text-align:center">500000</p></td>
+                            <td> <p style="text-align:center">1500</p></td>
+                            <td> <p style="text-align:center">1500</p></td>
+                            <td> <p style="text-align:center">35000</p></td>
+                            <td> <p style="text-align:center">50000</p></td>
+                            <td> <p style="text-align:center">5000</p></td>
+                          </tr>
+                          <tr>
+                            <td colspan="3"> <p style="text-align:center"> <b>Total</b> </p></td>
+                            <td> <p style="text-align:center">Pune</p></td>
+                            <td> <p style="text-align:center">250000</p></td>
+                            <td> <p style="text-align:center">500000</p></td>
+                            <td> <p style="text-align:center">1500</p></td>
+                            <td> <p style="text-align:center">1500</p></td>
+                            <td> <p style="text-align:center">35000</p></td>
+                            <td> <p style="text-align:center">50000</p></td>
+                            <td> <p style="text-align:center">5000</p></td>
+                          </tr>
                       </tbody>
                     </table>
                       <!-- /.row -->
