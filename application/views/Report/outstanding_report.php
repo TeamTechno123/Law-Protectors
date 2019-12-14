@@ -37,24 +37,33 @@ $page = "party_list";
                     <label class="text-red"> <?php echo form_error('from_date'); ?> </label>
                   </div>
                   <div class="form-group col-md-8 offset-md-2">
-                    <select class="form-control select2 form-control-sm" title="Select Company" name="company_id" id="company_id" required>
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select Company Name"  title="Select Company" name="company_id" id="company_id" required>
                       <option selected="selected" value="" >Select Company Name </option>
                       <?php foreach ($company_list as $list) { ?>
                       <option value="<?php echo $list->company_id; ?>" <?php if(isset($company_id)){ if($list->company_id == $company_id){ echo "selected"; } }  ?>><?php echo $list->company_name; ?></option>
                       <?php } ?>
                     </select>
                   </div>
-                  <div class="form-group col-md-4 offset-md-2">
-                    <select class="form-control select2 form-control-sm" title="Select Branch" name="branch_id" id="branch_id">
+                  <div class="form-group col-md-8 offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select Branch" title="Select Branch" name="branch_id" id="branch_id">
                       <option selected="selected"  value="">Select Branch</option>
+                        <option  > Branch</option>
                     </select>
                   </div>
-                  <div class="form-group col-md-4">
-                    <select class="form-control select2 form-control-sm" title="Select Service / Product" name="service_id" id="service_id">
+
+
+                  <div class="form-group col-md-8 offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder ="Select Service / Product" title="Select Service / Product" name="service_id" id="service_id">
                       <option selected="selected"  value="">Select Service / Product</option>
                       <?php foreach ($service_list as $list) { ?>
                       <option value="<?php echo $list->service_id; ?>" <?php if(isset($service_id)){ if($list->service_id == $service_id){ echo "selected"; } }  ?>><?php echo $list->service_name; ?></option>
                       <?php } ?>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-md-8 offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select Manager" title="Select Manager" name="" id="">
+                      <option selected="selected"  value="">Select Manager</option>
                     </select>
                   </div>
                   <div class="col-md-12 w-100 text-center">
@@ -67,14 +76,18 @@ $page = "party_list";
                 <section style="width:100%;" class="invoice" id="print_invoice">
                       <!-- title row -->
                   <div class="row">
+                    <div class="col-md-12">
+                        <p style="text-align:center; font-size:18px;"> Outstanding Report </p>
+                    </div>
+
                     <div class="col-12 table-responsive" id="result_tbl">
                       <table class="table table-botttom" id="exp_tbl" width="100%">
                         <style media="print">
-                        #result_tbl table {
+                        .table-responsive table {
                           border-collapse: collapse!important;
                           Width:100%!important;
                         }
-                        #result_tbl table, #result_tbl tr, #result_tbl td, #result_tbl th{
+                        .table-responsive table, .table-responsive tr, .table-responsive td, .table-responsive th{
                           border: 1px solid #000;
                           margin-left: auto;
                           margin-right: auto;
@@ -82,31 +95,50 @@ $page = "party_list";
                         }
                       </style>
                       <style media="screen">
-                        #result_tbl table {
+                        .table-responsive table {
                           border-collapse: collapse!important;
                           Width:100%!important;
                           margin-bottom: 0px!important;
                         }
-                        #result_tbl .table thead th{
+                        .table-responsive .table thead th{
                             border: 1px solid #000;
                         }
-                        #result_tbl table, #result_tbl tr, #result_tbl td, #result_tbl th{
+                        .table-responsive table, .table-responsive tr, .table-responsive td, .table-responsive th{
                           border: 1px solid #000;
                           margin-left: auto;
                           margin-right: auto;
                           padding: 5px;
                         }
                       </style>
+
                         <thead>
-                          <th> <p style="text-align:center">Sr. No.</p> </th>
-                          <th> <p style="text-align:center">Branch Name </p> </th>
-                          <th> <p style="text-align:center">Service </th>
-                          <th> <p style="text-align:center">Org<sup>n</sup> Type</p> </th>
-                          <th> <p style="text-align:center">Org<sup>n</sup> Name</p> </th>
-                          <th> <p style="text-align:center">Appl<sup>nt</sup> Name</p> </th>
-                          <th> <p style="text-align:center">Total Contract Amt</p> </th>
-                          <th> <p style="text-align:center">Recieved Amt</p> </th>
-                          <th> <p style="text-align:center">Balance Amt</p> </th>
+                          <tr>
+                            <th colspan="5"><p style="text-align:center">From Date : 12/12/2019 </p> </th>
+                            <th colspan="5"><p style="text-align:center">To Date : 14/12/2019 </p> </th>
+                          </tr>
+                          <tr>
+                            <th colspan="10"><p style="text-align:center"> Company Name : Lawprotectors </p> </th>
+                          </tr>
+                          <tr>
+                            <th colspan="10"><p style="text-align:center"> Branch Name : Kolhapur </p> </th>
+                          </tr>
+                          <tr>
+                            <th colspan="5"><p style="text-align:center"> Branch Name : Kolhapur </p> </th>
+                            <th colspan="5"><p style="text-align:center"> Manager Name : Vaibhav </p> </th>
+                          </tr>
+                          <tr>
+                            <th> <p style="text-align:center">Sr. No.</p> </th>
+                            <th> <p style="text-align:center">Service Name</th>
+                            <th> <p style="text-align:center">Contract Total</th>
+                            <th> <p style="text-align:center">Recieved Total</p> </th>
+                            <th> <p style="text-align:center">Balance Total</p> </th>
+                            <th> <p style="text-align:center">Total LP</p> </th>
+                            <th> <p style="text-align:center">GOVT Fee</p> </th>
+                            <th> <p style="text-align:center">GST</p> </th>
+                            <th> <p style="text-align:center">B2B</p> </th>
+                            <th> <p style="text-align:center">TDS</p> </th>
+                          </tr>
+
                           </thead>
                         <tbody>
                           <?php $i = 0;
@@ -117,6 +149,7 @@ $page = "party_list";
                           <tr>
                             <?php //echo print_r($details).'<br><br>'; ?>
                             <td> <p style="text-align:center"><?php echo $i; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $i; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $details->branch_name; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $details->service_name; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $details->organization_name; ?></p></td>
@@ -134,8 +167,20 @@ $page = "party_list";
                             <td> <p style="text-align:center"><?php echo $details->RECEVIEDAMOUNT; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $details->BALANCEAMOUNT; ?></p></td>
                           </tr>
-                        <?php } ?>
+                          <tr>
 
+                          </tr>
+                        <?php } ?>
+                        <tr>
+                          <td colspan="3"><p style="text-align:center"> <b>Total : </b> </p></td>
+                          <td><p style="text-align:center">10000</p></td>
+                          <td><p style="text-align:center">10000</p></td>
+                          <td><p style="text-align:center">10000</p></td>
+                          <td><p style="text-align:center">10000</p></td>
+                          <td><p style="text-align:center">10000</p></td>
+                          <td><p style="text-align:center">10000</p></td>
+                          <td><p style="text-align:center">10000</p></td>
+                        </tr>
                       </tbody>
                     </table>
                       <!-- /.row -->
