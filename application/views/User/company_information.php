@@ -76,7 +76,7 @@
                     <input type="text" class="form-control" name="company_gst_no" id="company_gst_no" value="<?php if(isset($company_gst_no)){ echo $company_gst_no; } ?>" placeholder="GST No.">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control" name="company_lic1" id="company_lic1" value="<?php if(isset($company_lic1)){ echo $company_lic1; } ?>" placeholder="Lic No. 1">
+                    <input type="text" class="form-control" name="company_lic1" id="company_lic1" value="<?php if(isset($company_lic1)){ echo $company_lic1; } ?>" placeholder="Attorney Code">
                   </div>
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control" name="company_lic2" id="company_lic2" value="<?php if(isset($company_lic2)){ echo $company_lic2; } ?>" placeholder="Lic No. 2">

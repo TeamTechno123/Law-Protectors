@@ -47,25 +47,19 @@ $page = "party_list";
                   <div class="form-group col-md-8 offset-md-2">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select Branch" title="Select Branch" name="branch_id" id="branch_id">
                       <option selected="selected"  value="">Select Branch</option>
-                        <option  > Branch</option>
+                        <option> Branch</option>
                     </select>
                   </div>
-
-
                   <div class="form-group col-md-8 offset-md-2">
                     <select class="form-control select2 form-control-sm" data-placeholder ="Select Service / Product" title="Select Service / Product" name="service_id" id="service_id">
                       <option selected="selected"  value="">Select Service / Product</option>
                       <?php foreach ($service_list as $list) { ?>
-                      <option value="<?php echo $list->service_id; ?>" <?php if(isset($service_id)){ if($list->service_id == $service_id){ echo "selected"; } }  ?>><?php echo $list->service_name; ?></option>
+                      <option value="<?php echo $list->service_id; ?>" ><?php echo $list->service_name; ?></option>
                       <?php } ?>
                     </select>
                   </div>
 
-                  <div class="form-group col-md-8 offset-md-2">
-                    <select class="form-control select2 form-control-sm" data-placeholder="Select Manager" title="Select Manager" name="" id="">
-                      <option selected="selected"  value="">Select Manager</option>
-                    </select>
-                  </div>
+
                   <div class="col-md-12 w-100 text-center">
                     <button type="submit" class="btn btn-success btn-sm">View</button>
                     <button type="submit" class="btn btn-default btn-sm ml-4">Cancel</button>
@@ -79,52 +73,48 @@ $page = "party_list";
                     <div class="col-md-12">
                         <p style="text-align:center; font-size:18px;"> Outstanding Report </p>
                     </div>
-
+                    <style media="print">
+                    .table-responsive table {
+                      border-collapse: collapse!important;
+                      Width:100%!important;
+                    }
+                    .table-responsive table, .table-responsive tr, .table-responsive td, .table-responsive th{
+                      border: 1px solid #000;
+                      margin-left: auto;
+                      margin-right: auto;
+                      padding: 5px;
+                    }
+                    </style>
+                    <style media="screen">
+                    .table-responsive table {
+                      border-collapse: collapse!important;
+                      Width:100%!important;
+                      margin-bottom: 0px!important;
+                    }
+                    .table-responsive .table thead th{
+                        border: 1px solid #000;
+                    }
+                    .table-responsive table, .table-responsive tr, .table-responsive td, .table-responsive th{
+                      border: 1px solid #000;
+                      margin-left: auto;
+                      margin-right: auto;
+                      padding: 5px;
+                    }
+                    </style>
                     <div class="col-12 table-responsive" id="result_tbl">
-                      <table class="table table-botttom" id="exp_tbl" width="100%">
-                        <style media="print">
-                        .table-responsive table {
-                          border-collapse: collapse!important;
-                          Width:100%!important;
-                        }
-                        .table-responsive table, .table-responsive tr, .table-responsive td, .table-responsive th{
-                          border: 1px solid #000;
-                          margin-left: auto;
-                          margin-right: auto;
-                          padding: 5px;
-                        }
-                      </style>
-                      <style media="screen">
-                        .table-responsive table {
-                          border-collapse: collapse!important;
-                          Width:100%!important;
-                          margin-bottom: 0px!important;
-                        }
-                        .table-responsive .table thead th{
-                            border: 1px solid #000;
-                        }
-                        .table-responsive table, .table-responsive tr, .table-responsive td, .table-responsive th{
-                          border: 1px solid #000;
-                          margin-left: auto;
-                          margin-right: auto;
-                          padding: 5px;
-                        }
-                      </style>
-
+                      <?php
+                      if(isset($report_type) && $report_type == 'branchwise'){
+                        $branch_list = $this->User_Model->get_list($company_id2,'branch_id','ASC','law_branch');
+                        foreach ($branch_list as $branch_list1) {
+                          $branch_id2 = $branch_list1->branch_id;
+                      ?>
+                      <table class="table table-botttom" id="exp_tbl" width="100%" style="margin-top:40px;">
                         <thead>
-                          <tr>
-                            <th colspan="5"><p style="text-align:center">From Date : 12/12/2019 </p> </th>
-                            <th colspan="5"><p style="text-align:center">To Date : 14/12/2019 </p> </th>
-                          </tr>
-                          <tr>
+                          <!-- <tr>
                             <th colspan="10"><p style="text-align:center"> Company Name : Lawprotectors </p> </th>
-                          </tr>
+                          </tr> -->
                           <tr>
-                            <th colspan="10"><p style="text-align:center"> Branch Name : Kolhapur </p> </th>
-                          </tr>
-                          <tr>
-                            <th colspan="5"><p style="text-align:center"> Branch Name : Kolhapur </p> </th>
-                            <th colspan="5"><p style="text-align:center"> Manager Name : Vaibhav </p> </th>
+                            <th colspan="10"><p style="text-align:center"> Branch Name : <?php echo $branch_list1->branch_name; ?> </p> </th>
                           </tr>
                           <tr>
                             <th> <p style="text-align:center">Sr. No.</p> </th>
@@ -138,51 +128,148 @@ $page = "party_list";
                             <th> <p style="text-align:center">B2B</p> </th>
                             <th> <p style="text-align:center">TDS</p> </th>
                           </tr>
-
                           </thead>
-                        <tbody>
-                          <?php $i = 0;
-                          foreach ($outstanding_report_list as $details) {
-                            $i++;
-                            $service_id = $details->service_id;
+                          <tbody>
+                            <?php
+                            $outstanding_report_list = $this->Report_Model->outstanding_branch_wise_report_list($from_date,$to_date,$company_id2,$branch_id2,$service_id);
                             ?>
-                          <tr>
-                            <?php //echo print_r($details).'<br><br>'; ?>
-                            <td> <p style="text-align:center"><?php echo $i; ?></p></td>
+                            <?php $i = 0;
+                            $tot_CONTRACTAMOUNT = 0;
+                            $tot_RECEVIEDAMOUNT = 0;
+                            $tot_GSTAMOUNT = 0;
+                            $tot_LP_AMOUNT = 0;
+                            $tot_GOVT_FEES = 0;
+                            $tot_GSTAMOUNT = 0;
+                            $tot_B2B = 0;
+                            $tot_TDS = 0;
+                            $tot_bal = 0;
+                            foreach ($outstanding_report_list as $details) {
+                              $i++;
+                              $bal = $details->CONTRACTAMOUNT - $details->RECEVIEDAMOUNT;
+                              $tot_CONTRACTAMOUNT = $tot_CONTRACTAMOUNT = $details->CONTRACTAMOUNT;
+                              $tot_RECEVIEDAMOUNT = $tot_RECEVIEDAMOUNT = $details->RECEVIEDAMOUNT;
+                              $tot_GSTAMOUNT = $tot_GSTAMOUNT = $details->GSTAMOUNT;
+                              $tot_LP_AMOUNT = $tot_LP_AMOUNT = $details->LP_AMOUNT;
+                              $tot_GOVT_FEES = $tot_GOVT_FEES = $details->GOVT_FEES;
+                              $tot_GSTAMOUNT = $tot_GSTAMOUNT = $details->GSTAMOUNT;
+                              $tot_B2B = $tot_B2B = $details->B2B;
+                              $tot_TDS = $tot_TDS = $details->TDS;
+                              $tot_bal = $tot_bal + $bal;
+                              ?>
+                            <tr>
+                              <?php //echo print_r($details).'<br><br>'; ?>
                               <td> <p style="text-align:center"><?php echo $i; ?></p></td>
-                            <td> <p style="text-align:center"><?php echo $details->branch_name; ?></p></td>
-                            <td> <p style="text-align:center"><?php echo $details->service_name; ?></p></td>
-                            <td> <p style="text-align:center"><?php echo $details->organization_name; ?></p></td>
-                            <?php if($service_id == 1){ ?>
-                              <td> <p style="text-align:center"><?php echo $details->ORGANIZATION; ?></p></td>
-                              <td> <p style="text-align:center"><?php echo $details->NAME; ?></p></td>
-                            <?php } elseif ($service_id == 2) { ?>
-                              <td> <p style="text-align:center"><?php echo $details->org_name; ?></p></td>
-                              <td> <p style="text-align:center"><?php echo $details->appl_name; ?></p></td>
-                            <?php } else{ ?>
-                              <td> <p style="text-align:center"><?php echo $details->appl_org_name; ?></p></td>
-                              <td> <p style="text-align:center"><?php echo $details->appl_org_name; ?></p></td>
-                            <?php } ?>
-                            <td> <p style="text-align:center"><?php echo $details->TOTALAMOUNT; ?></p></td>
-                            <td> <p style="text-align:center"><?php echo $details->RECEVIEDAMOUNT; ?></p></td>
-                            <td> <p style="text-align:center"><?php echo $details->BALANCEAMOUNT; ?></p></td>
-                          </tr>
+                              <td> <p style="text-align:center"><?php echo $details->service_name; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->CONTRACTAMOUNT; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->RECEVIEDAMOUNT; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $bal; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->LP_AMOUNT; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->GOVT_FEES; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->GSTAMOUNT; ?></p> </p></td>
+                              <td> <p style="text-align:center"><?php echo $details->B2B; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->TDS; ?></p></td>
+                            </tr>
+                          <?php } ?>
                           <tr>
-
+                            <td colspan="3"><p style="text-align:center"> <b>Total : </b> </p></td>
+                            <td><p style="text-align:center"><?php echo $tot_RECEVIEDAMOUNT; ?></p></td>
+                            <td><p style="text-align:center"><?php echo $tot_bal; ?></p></td>
+                            <td><p style="text-align:center"><?php echo $tot_LP_AMOUNT; ?></p></td>
+                            <td><p style="text-align:center"><?php echo $tot_GOVT_FEES; ?></p></td>
+                            <td><p style="text-align:center"><?php echo $tot_GSTAMOUNT; ?></p></td>
+                            <td><p style="text-align:center"><?php echo $tot_B2B; ?></p></td>
+                            <td><p style="text-align:center"><?php echo $tot_TDS; ?></p></td>
                           </tr>
-                        <?php } ?>
-                        <tr>
-                          <td colspan="3"><p style="text-align:center"> <b>Total : </b> </p></td>
-                          <td><p style="text-align:center">10000</p></td>
-                          <td><p style="text-align:center">10000</p></td>
-                          <td><p style="text-align:center">10000</p></td>
-                          <td><p style="text-align:center">10000</p></td>
-                          <td><p style="text-align:center">10000</p></td>
-                          <td><p style="text-align:center">10000</p></td>
-                          <td><p style="text-align:center">10000</p></td>
-                        </tr>
-                      </tbody>
-                    </table>
+
+                          </tbody>
+                          </table>
+                      <?php } } ?>
+                      <?php if(isset($report_type) && ($report_type == 'servicewise' || $report_type == 'service') ){
+                        $branch_details = $this->User_Model->get_info('branch_id', $branch_id, 'law_branch');
+                        foreach ($branch_details as $branch_details1) {
+                          $branch_name = $branch_details1->branch_name;
+                        }
+                        ?>
+                        <table class="table table-botttom" id="exp_tbl" width="100%">
+                          <thead>
+                            <tr>
+                              <th colspan="10"><p style="text-align:center"> Branch Name : <?php echo $branch_name; ?> </p> </th>
+                            </tr>
+                            <?php if($report_type == 'service'){
+                              $service_details = $this->User_Model->get_info('service_id', $service_id, 'law_service');
+                              foreach ($service_details as $service_details1) {
+                                $service_name = $service_details1->service_name;
+                              }
+                              ?>
+                              <th colspan="10"><p style="text-align:center"> Service Name : <?php echo $service_name; ?> </p> </th>
+                            <?php } ?>
+                            <tr>
+                              <th> <p style="text-align:center">Sr. No.</p> </th>
+                              <th> <p style="text-align:center">Service Name</th>
+                              <th> <p style="text-align:center">Contract Total</th>
+                              <th> <p style="text-align:center">Recieved Total</p> </th>
+                              <th> <p style="text-align:center">Balance Total</p> </th>
+                              <th> <p style="text-align:center">Total LP</p> </th>
+                              <th> <p style="text-align:center">GOVT Fee</p> </th>
+                              <th> <p style="text-align:center">GST</p> </th>
+                              <th> <p style="text-align:center">B2B</p> </th>
+                              <th> <p style="text-align:center">TDS</p> </th>
+                            </tr>
+                            </thead>
+                          <tbody>
+                            <?php $i = 0;
+                            $tot_CONTRACTAMOUNT = 0;
+                            $tot_RECEVIEDAMOUNT = 0;
+                            $tot_GSTAMOUNT = 0;
+                            $tot_LP_AMOUNT = 0;
+                            $tot_GOVT_FEES = 0;
+                            $tot_GSTAMOUNT = 0;
+                            $tot_B2B = 0;
+                            $tot_TDS = 0;
+                            $tot_bal = 0;
+                            foreach ($outstanding_service_wise_report as $details) {
+                              $i++;
+                              $bal = $details->CONTRACTAMOUNT - $details->RECEVIEDAMOUNT;
+                              $tot_CONTRACTAMOUNT = $tot_CONTRACTAMOUNT = $details->CONTRACTAMOUNT;
+                              $tot_RECEVIEDAMOUNT = $tot_RECEVIEDAMOUNT = $details->RECEVIEDAMOUNT;
+                              $tot_GSTAMOUNT = $tot_GSTAMOUNT = $details->GSTAMOUNT;
+                              $tot_LP_AMOUNT = $tot_LP_AMOUNT = $details->LP_AMOUNT;
+                              $tot_GOVT_FEES = $tot_GOVT_FEES = $details->GOVT_FEES;
+                              $tot_GSTAMOUNT = $tot_GSTAMOUNT = $details->GSTAMOUNT;
+                              $tot_B2B = $tot_B2B = $details->B2B;
+                              $tot_TDS = $tot_TDS = $details->TDS;
+                              $tot_bal = $tot_bal + $bal;
+                              ?>
+                            <tr>
+                              <?php //echo print_r($details).'<br><br>'; ?>
+                              <td> <p style="text-align:center"><?php echo $i; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->service_name; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->CONTRACTAMOUNT; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->RECEVIEDAMOUNT; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $bal; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->LP_AMOUNT; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->GOVT_FEES; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->GSTAMOUNT; ?></p> </p></td>
+                              <td> <p style="text-align:center"><?php echo $details->B2B; ?></p></td>
+                              <td> <p style="text-align:center"><?php echo $details->TDS; ?></p></td>
+                            </tr>
+                            <tr>
+
+                            </tr>
+                          <?php } ?>
+                          <tr>
+                            <td colspan="3"><p style="text-align:center"> <b>Total : </b> </p></td>
+                            <td><p style="text-align:center"><?php echo $tot_RECEVIEDAMOUNT; ?></p></td>
+                            <td><p style="text-align:center"><?php echo $tot_bal; ?></p></td>
+                            <td><p style="text-align:center"><?php echo $tot_LP_AMOUNT; ?></p></td>
+                            <td><p style="text-align:center"><?php echo $tot_GOVT_FEES; ?></p></td>
+                            <td><p style="text-align:center"><?php echo $tot_GSTAMOUNT; ?></p></td>
+                            <td><p style="text-align:center"><?php echo $tot_B2B; ?></p></td>
+                            <td><p style="text-align:center"><?php echo $tot_TDS; ?></p></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <?php } ?>
                       <!-- /.row -->
                     <!-- this row will not appear when printing -->
                 </div>
@@ -221,7 +308,7 @@ $page = "party_list";
           $('#branch_id').html(result);
         }
       });
-    })
+    });
 
     function printDiv()
     {

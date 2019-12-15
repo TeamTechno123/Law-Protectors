@@ -48,15 +48,50 @@
       <div class="" style="padding:10px 30px; ">
       <p style="font-size:12px; text-align:center; ">:2: </p>
       <br>
-      <p style="font-size:12px; text-align:justify; ">1.	I am running a business in my personal name, having its present address <?php echo $FIRMADDRESS; ?>. (hereinafter referred to as “my concern”), </p>
 
-      <p style="font-size:12px; text-align:justify; ">I am authorized and competent to make this affidavit. The statements made here in under are partly based on my personal knowledge, partly on information derived by me from the records of my concern to which I have full access and which I believe to be true, and partly these are my submissions. </p>
 
-      <p style="font-size:12px; text-align:justify; "> 3.	The said Trade Mark has been used in India continuously since <?php echo $PROPOSED; ?> in connection with the said goods and by reason of such use the said services bearing the Trade Mark have come to be understood as being <?php if(isset($TRADE_0)){ echo $TRADE_0.', '; } ?>
-      <?php if(isset($TRADE_1)){ echo $TRADE_1.', '; } ?>
-      <?php if(isset($TRADE_2)){ echo $TRADE_2.', '; } ?>
-      <?php if(isset($TRADE_3)){ echo $TRADE_3.', '; } ?>
-      <?php if(isset($TRADE_4)){ echo $TRADE_4.', '; } ?> by my concern.</p>
+
+    <?php if(isset($organization_id) && ($organization_id == 1)){ //Applicant ?>
+      <p style="font-size:12px; text-align:justify; ">1. I am running a business in my personal name, having its present address <b><?php echo $FIRMADDRESS; ?></b>. (hereinafter referred to as “my concern”), </p>
+      <p style="font-size:12px; text-align:justify; "> &nbsp;&nbsp;&nbsp; I am authorized and competent to make this affidavit. The statements made here in under are partly based on my personal knowledge, partly on information derived by me from the records of my concern to which I have full access and which I believe to be true, and partly these are my submissions. </p>
+      <p style="font-size:12px; text-align:justify; ">2. I have been engaged As <b><?php echo $SERVICES; ?></b> (hereinafter reffered to as "said goods"), which are marketed under the Trade Mark "<b><?php echo $BRAND; ?></b>"  </p>
+      <p style="font-size:12px; text-align:justify; ">3. The said Trade Mark has been used in India continuously since <b><?php echo $PROPOSED; ?></b> in connection with the said goods and by reason of such use the said services bearing the Trade Mark have come to be understood as being
+      <b><?php if(isset($TRADE)){ echo $TRADE; } ?></b> by my concern.</p>
+    <?php } elseif (isset($organization_id) && ($organization_id == 3 || $organization_id == 5)) {
+      // HUF | Propritor ?>
+      <p style="font-size:12px; text-align:justify; ">
+      1. I am <?php if($organization_id == 3){ echo 'KARTA';} if($organization_id == 5){ echo 'PROPRIETOR';} ?> of the Applicant concern, <b><?php echo $ORGANIZATION; ?></b> having its present address at <?php echo $FIRMADDRESS; ?>. (hereinafter referred to as “my concern”),</p>
+      <p style="font-size:12px; text-align:justify; "> &nbsp;&nbsp;&nbsp; By virtue of my position in the company I am competent to make this affidavit. The statements made here under which partly are submissions and partly facts based on my personal knowledge and partly on information derived by me from the records of my concern to which I have full access and which I believe to be true.</p>
+      <p style="font-size:12px; text-align:justify; ">2. My concern is engaged as of <b><?php echo $SERVICES; ?></b> (hereinafter referred to as “said goods”), which are marketed under the said Trade Mark “<b><?php echo $BRAND; ?></b>”.</p>
+      <p style="font-size:12px; text-align:justify; ">3. The said Trade Mark <b><?php echo $BRAND; ?></b> has been used in India continuously since <b><?php echo $PROPOSED; ?></b> in connection with the said goods and by reason of such use the said services bearing the Trade Mark <b><?php echo $BRAND; ?></b> have come to be understood as being
+      <b><?php if(isset($TRADE)){ echo $TRADE; } ?></b> by my concern.</p>
+    <?php } elseif (isset($organization_id) && ($organization_id == 4 || $organization_id == 7 || $organization_id == 10)) {
+      // LLP | Partnership | Unregistered Partnership ?>
+      <p style="font-size:12px; text-align:justify; ">1. I am Partner of the Applicant Firm, <b><?php echo $ORGANIZATION; ?></b> having its present address at <?php echo $FIRMADDRESS; ?>. (hereinafter referred to as “my concern”),</p>
+      <p style="font-size:12px; text-align:justify; "> &nbsp;&nbsp;&nbsp; I am authorized and competent to make this affidavit. The statements made here in under are partly based on my personal knowledge, partly on information derived by me from the records of my concern to which I have full access and which I believe to be true, and partly these are my submissions. </p>
+      <p style="font-size:12px; text-align:justify; ">2. Our Firm is engaged as <b><?php echo $SERVICES; ?></b> (hereinafter referred to as “said services), which are marketed under the said Trade Mark “<b><?php echo $BRAND; ?></b>”.</p>
+      <p style="font-size:12px; text-align:justify; ">3. The said Trade Mark <b><?php echo $BRAND; ?></b> has been used in India continuously since <b><?php echo $PROPOSED; ?></b> in connection with the said goods and by reason of such use the said services bearing the Trade Mark <b><?php echo $BRAND; ?></b> have come to be understood as being
+      <b><?php if(isset($TRADE)){ echo $TRADE; } ?></b> by my concern.</p>
+    <?php } elseif (isset($organization_id) && ($organization_id == 6)) {
+      // Reg. Company |  ?>
+      <p style="font-size:12px; text-align:justify; ">1. I am director of the Applicant Company, <b><?php echo $ORGANIZATION; ?></b> having its present address at <?php echo $FIRMADDRESS; ?>. (hereinafter referred to as “my concern”),</p>
+      <p style="font-size:12px; text-align:justify; "> &nbsp;&nbsp;&nbsp; I am authorized and competent to make this affidavit. The statements made here in under are partly based on my personal knowledge, partly on information derived by me from the records of my concern to which I have full access and which I believe to be true, and partly these are my submissions. </p>
+      <p style="font-size:12px; text-align:justify; ">2. Our Firm is engaged as <b><?php echo $SERVICES; ?></b> (hereinafter referred to as “said services), which are marketed under the said Trade Mark “<b><?php echo $BRAND; ?></b>”.</p>
+      <p style="font-size:12px; text-align:justify; ">3. The said Trade Mark <b><?php echo $BRAND; ?></b> has been used in India continuously since <b><?php echo $PROPOSED; ?></b> in connection with the said goods and by reason of such use the said services bearing the Trade Mark <b><?php echo $BRAND; ?></b> have come to be understood as being
+      <b><?php if(isset($TRADE)){ echo $TRADE; } ?></b> by my concern.</p>
+    <?php } elseif (isset($organization_id) && ($organization_id == 2 || $organization_id == 8 || $organization_id == 9)) {
+      // Gov. Dep | Society | Trust ?>
+      <p style="font-size:12px; text-align:justify; ">1. I am Member- Board of Governors of the Applicant Concern, <b><?php echo $ORGANIZATION; ?></b> having its present address at <?php echo $FIRMADDRESS; ?>. (hereinafter referred to as “my concern”),</p>
+      <p style="font-size:12px; text-align:justify; "> &nbsp;&nbsp;&nbsp; I am authorized and competent to make this affidavit. The statements made here in under are partly based on my personal knowledge, partly on information derived by me from the records of my concern to which I have full access and which I believe to be true, and partly these are my submissions. </p>
+      <p style="font-size:12px; text-align:justify; ">2. Our Firm is engaged as <b><?php echo $SERVICES; ?></b> (hereinafter referred to as “said services), which are marketed under the said Trade Mark “<b><?php echo $BRAND; ?></b>”.</p>
+      <p style="font-size:12px; text-align:justify; ">3. The said Trade Mark <b><?php echo $BRAND; ?></b> has been used in India continuously since <b><?php echo $PROPOSED; ?></b> in connection with the said goods and by reason of such use the said services bearing the Trade Mark <b><?php echo $BRAND; ?></b> have come to be understood as being
+      <b><?php if(isset($TRADE)){ echo $TRADE; } ?></b> by my concern.</p>
+    <?php }?>
+
+
+
+
+
       <p style="font-size:12px; text-align:justify; ">4.	Sales of the said goods in India by my concern have been considerable and I give details thereof:  </p>
 
       <table>
@@ -132,11 +167,12 @@
         <?php $k++; } ?>
       </table>
       <p style="font-size:12px; text-align:justify; ">6. Annexed hereto and collectively marked Exhibit A-1, are a bunch of invoices showing that goods bearing Trade Mark have been supplied to various clients and Exhibit A-2 has the copies of advertisement material in respect of the above trademark.</p>
-      <p style="font-size:12px; text-align:justify; ">7. The said goods are of high standard and by reason of such and by the use of Trade Mark in relation to said goods the Trade Mark denotes to those trades a distinctive symbol of the <?php if(isset($TRADE_0)){ echo $TRADE_0.', '; } ?>
-      <?php if(isset($TRADE_1)){ echo $TRADE_1.', '; } ?>
-      <?php if(isset($TRADE_2)){ echo $TRADE_2.', '; } ?>
+      <p style="font-size:12px; text-align:justify; ">7. The said goods are of high standard and by reason of such and by the use of Trade Mark in relation to said goods the Trade Mark denotes to those trades a distinctive symbol of the <?php if(isset($TRADE)){ echo $TRADE; } ?> by my concern. I believe that my concern is entitled to the registration of the Trade Mark in respect of the goods, the subject of this application.
+      <?php if(isset($TRADE)){ echo $TRADE; } ?>
+      <!-- <?php if(isset($TRADE_2)){ echo $TRADE_2.', '; } ?>
       <?php if(isset($TRADE_3)){ echo $TRADE_3.', '; } ?>
-      <?php if(isset($TRADE_4)){ echo $TRADE_4.', '; } ?> by my concern. I believe that my concern is entitled to the registration of the Trade Mark in respect of the goods, the subject of this application.</p>
+      <?php if(isset($TRADE_4)){ echo $TRADE_4.', '; } ?>  -->
+      by my concern. I believe that my concern is entitled to the registration of the Trade Mark in respect of the goods, the subject of this application.</p>
       </div>
 
       <div class="" style="padding:10px 30px; ">
@@ -149,10 +185,20 @@
          ?>
         <p style="font-size:12px; text-align:justify;">The statements made in paragraph 1, 2, & 3 are true to my knowledge, and the extracts in paragraph 4 & 5 are according to the available records of my concern, and those of 7 are my submissions to the Learned Registrar.</p>
         <p style="font-size:12px; text-align:justify;">SIGNED, SEALED AND DELIVERED this <?php echo $day; ?> day of <?php echo $month; ?> <?php echo $year; ?> by the said (Deponent)</p>
-        <p style="font-size:12px;  "> <span style="text-align:left;">NOTARY PUBLIC</span>  <span style="float:right;">________________________________ </span>    </p>
+        <p style="font-size:12px;  "> <span style="text-align:left;">NOTARY PUBLIC</span>  <span style="float:right;"><b> For <?php echo $ORGANIZATION; ?> </b></span>    </p><br><br>
+        <p style="font-size:12px;  "> <span style="text-align:left;"></span>  <span style="float:right;">________________________________ </span>    </p>
           <p style="font-size:12px; text-align:right;  font-weight:bold;"> <?php echo $single_name[0]; ?></p>
 
-          <p style="font-size:12px; text-align: right;  font-weight:bold;"> (Applicant)</p>
+          <p style="font-size:12px; text-align: right;  font-weight:bold;">
+          (  <?php
+              if(isset($organization_id) && ($organization_id == 1)){ echo 'Applicant'; }
+              elseif (isset($organization_id) && ($organization_id == 5 )){ echo 'Propritor'; }
+              elseif (isset($organization_id) && ($organization_id == 6 )){ echo 'Director'; }
+              elseif (isset($organization_id) && ($organization_id == 7 || $organization_id == 10)){ echo 'Partner'; }
+              elseif (isset($organization_id) && ($organization_id == 3 )){ echo 'Karta'; }
+              else{ echo ''; }
+            ?> )
+          </p>
       </div>
 
     </div>

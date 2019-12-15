@@ -35,8 +35,8 @@
     ?>
     <div class=""  style="padding:10px 30px; ">
 
-      <p style="font-size:12px; text-align:right;">Date: <?php echo $COV_DATE; ?></p>
-      <p style="font-size:12px; text-align:left;"> <br><br><br><br><br><br> To, </p>
+      <p style="font-size:12px; text-align:right;"><br><br><br><br><br><br><br><br>Date: <?php echo $COV_DATE; ?></p>
+      <p style="font-size:12px; text-align:left;">  To, </p>
       <p style="font-size:12px; text-align:left;"><?php echo $ORGANIZATION; ?></p>
       <p style="font-size:12px; text-align:left;">Address: <?php echo $FIRMADDRESS; ?> </p>
 
@@ -107,7 +107,9 @@
 
       </table>
       <p style="font-size:12px; text-align:left;">•	IMP NOTE : The column in which there is no right tick mark, you have to submit that documents.  </p>
-
+      <?php if(isset($BALANCEAMOUNT) && $BALANCEAMOUNT > 0){ ?>
+      <p style="font-size:12px; text-align:left;">•	Kindly issue the payment of Rs. <?php echo $BALANCEAMOUNT; ?>/- in favor of <?php echo $company_name; ?>.  </p>
+    <?php } ?>
     </div>
   </div>
     <input type='button' id='btn' value='Print' onclick='printDiv();'>

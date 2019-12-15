@@ -87,7 +87,11 @@
     <tr >
 
       <td   colspan="6" >
-        <img style="padding-top:12px;" src="<?php echo base_url() ?>assets/images/header.png" alt="" width="100%">
+        <?php if($comp_id == 1){ ?>
+          <img style="padding-top:12px;" src="<?php echo base_url() ?>assets/images/LLP.jpg" alt="" width="100%">
+        <?php } else{ ?>
+          <img style="padding-top:12px;" src="<?php echo base_url() ?>assets/images/lp.jpg" alt="" width="100%">
+        <?php } ?>
       </td>
 
       <!-- <td   colspan="6" >
@@ -226,6 +230,7 @@
       </td>
       <td colspan="2" Width="25%" valign="top">
         <p><b>Basic Amount</b> : </p> <hr style="margin-left:-10px;">
+        <p><b>Govt. Fees</b> : </p> <hr style="margin-left:-10px;">
         <p><b>TDS Amount</b> : </p> <hr style="margin-left:-10px;">
         <?php
         $roundup = ($basic_amt + $gst_amt) - $net_amt;
@@ -243,9 +248,10 @@
       </td>
       <td colspan="1" Width="15%" valign="top">
         <p style="text-align:right; padding-right:15px;"><?php echo number_format($basic_amt,2); ?> </p> <hr style="margin-left:-10px;">
+        <p style="text-align:right; padding-right:15px;"><?php echo number_format($gov_fees_amt,2); ?> </p> <hr style="margin-left:-10px;">
         <p style="text-align:right; padding-right:15px;"> <?php echo number_format($tds_amt,2); ?></p> <hr style="margin-left:-10px;">
         <?php
-        $roundup = ($basic_amt + $gst_amt) - $net_amt;
+        $roundup = round($net_amt) - $net_amt;
         if($company_statecode == $party_statecode){
           $cgst = $gst_amt/2;
         ?>
@@ -256,7 +262,7 @@
       <?php } ?>
 
         <p style="text-align:right; padding-right:15px;"><?php echo number_format($roundup,2); ?> </p>  <hr style="margin-left:-10px;">
-        <p style="text-align:right; padding-right:15px;"> <?php echo number_format($net_amt,2); ?> </p>
+        <p style="text-align:right; padding-right:15px;"> <?php echo round($net_amt); ?> </p>
       </td>
 
     </tr>
@@ -271,28 +277,6 @@
         <img src="<?php echo base_url() ?>assets/images/<?php echo $company_seal; ?>" alt="">
       </td>
     </tr>
-    <!-- <tr>
-      <td colspan="2">
-          <p> <b>Bank Name</b> : &nbsp;AXIS Bank</p>
-          <p> <b>Account No</b> : 917020070150451 </p>
-          <p> <b>IFSC Code </b>&nbsp; : UTIB0001168 </p>
-
-      </td>
-      <td colspan="3">
-          <p> <b>Bank Name</b> : &nbsp;ICICI Bank</p>
-          <p> <b>Account No</b> : 645005002303 </p>
-          <p> <b>IFSC Code </b>&nbsp; : ICIC0006450 </p>
-
-      </td>
-      <td colspan="2" rowspan="2">
-        <img src="<?php echo base_url() ?>assets/images/<?php echo $company_seal; ?>" alt="">
-      </td>
-    </tr>
-    <tr>
-      <td colspan="5" >
-         <p> <b>Declaration </b> : We declare that the invoice shows the actual price of the goods described and that all particulars are true and correct. </p>
-        </td>
-    </tr>-->
   </table>
   <!-- /.content -->
 </div>

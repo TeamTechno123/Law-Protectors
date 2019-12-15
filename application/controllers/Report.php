@@ -81,6 +81,9 @@ class Report extends CI_Controller{
           $data['application_id'] = $info->application_id;
           $data['application_no'] = $info->application_no;
           $data['application_date'] = $info->application_date;
+          $data['company_name'] = $info->company_name;
+          $data['company_address'] = $info->company_address;
+          $data['company_lic1'] = $info->company_lic1;
           $data['branch_name'] = $info->branch_name;
           $data['service_name'] = $info->service_name;
           $data['organization_id'] = $info->organization_id;
@@ -117,6 +120,8 @@ class Report extends CI_Controller{
           $data['TRADE_1'] = $info->TRADE_1;
           $data['TRADE_2'] = $info->TRADE_2;
           $data['TRADE_3'] = $info->TRADE_3;
+          $data['ADV_NAME'] = $info->ADV_NAME;
+          $data['BAR_COUN_NO'] = $info->BAR_COUN_NO;
         }
       }
       $this->load->view('Report/authorization', $data);
@@ -136,6 +141,9 @@ class Report extends CI_Controller{
           $data['application_id'] = $info->application_id;
           $data['application_no'] = $info->application_no;
           $data['application_date'] = $info->application_date;
+          $data['company_name'] = $info->company_name;
+          $data['company_address'] = $info->company_address;
+          $data['company_lic1'] = $info->company_lic1;
           $data['branch_name'] = $info->branch_name;
           $data['service_name'] = $info->service_name;
           $data['organization_id'] = $info->organization_id;
@@ -169,6 +177,7 @@ class Report extends CI_Controller{
           $data['INFORMATION'] = $info->INFORMATION;
           $data['PLACE'] = $info->PLACE;
           $data['DATE'] = $info->DATE;
+          $data['TRADE'] = $info->TRADE;
           $data['TRADE_0'] = $info->TRADE_0;
           $data['TRADE_1'] = $info->TRADE_1;
           $data['TRADE_2'] = $info->TRADE_2;
@@ -193,6 +202,7 @@ class Report extends CI_Controller{
           $data['application_no'] = $info->application_no;
           $data['application_date'] = $info->application_date;
           $data['company_name'] = $info->company_name;
+          $data['company_address'] = $info->company_address;
           $data['branch_name'] = $info->branch_name;
           $data['service_name'] = $info->service_name;
           $data['organization_id'] = $info->organization_id;
@@ -253,6 +263,7 @@ class Report extends CI_Controller{
     foreach ($invice_details as $details) {
       $data['invoice_id'] = $invoice_id;
       $data['application_id'] = $details->application_id;
+      $data['comp_id'] = $details->company_id;
       $data['branch_id'] = $details->branch_id;
       $data['branch_bank'] = $details->branch_bank;
       $data['branch_b_branch'] = $details->branch_b_branch;
@@ -267,6 +278,7 @@ class Report extends CI_Controller{
       $data['po_no'] = $details->po_no;
       $data['po_date'] = $details->po_date;
       $data['basic_amt'] = $details->basic_amt;
+      $data['gov_fees_amt'] = $details->gov_fees_amt;
       $data['gst_amt'] = $details->gst_amt;
       $data['adv_amt'] = $details->adv_amt;
       $data['bal_amt'] = $details->bal_amt;
@@ -315,12 +327,12 @@ class Report extends CI_Controller{
     if($this->form_validation->run() != FALSE){
       $from_date = $this->input->post('from_date');
       $to_date = $this->input->post('to_date');
-      $company_id = $this->input->post('company_id');
+      $company_id2 = $this->input->post('company_id');
       $branch_id = $this->input->post('branch_id');
       $service_id = $this->input->post('service_id');
       $status_name = $this->input->post('status_name');
       $data['application_report'] = 'load';
-      $data['application_report_list'] = $this->Report_Model->application_report_list($from_date,$to_date,$company_id,$branch_id,$service_id,$status_name);
+      $data['application_report_list'] = $this->Report_Model->application_report_list($from_date,$to_date,$company_id2,$branch_id,$service_id,$status_name);
     }
     // echo $status_name;
     // echo print_r($data['application_report_list']);
@@ -336,17 +348,34 @@ class Report extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null){ header('location:'.base_url().'User'); }
     $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
-    $this->form_validation->set_rules('from_date', 'From Date', 'trim|required');
-    $this->form_validation->set_rules('to_date', 'To Date', 'trim|required');
+    $this->form_validation->set_rules('target_id', 'Target', 'trim|required');
+    $this->form_validation->set_rules('company_id', 'company_id', 'trim|required');
     if($this->form_validation->run() != FALSE){
-      $from_date = $this->input->post('from_date');
-      $to_date = $this->input->post('to_date');
-      $company_id = $this->input->post('company_id');
+      $target_id = $this->input->post('target_id');
+      $target_info = $this->User_Model->get_info('target_id', $target_id, 'law_target');
+      foreach ($target_info as $target_info1) {
+      }
+      $from_date = $target_info1->target_from;
+      $to_date = $target_info1->target_to;
+      $company_id2 = $this->input->post('company_id');
       $branch_id = $this->input->post('branch_id');
-      $manager_id = $this->input->post('manager_id');
       $data['manager_report'] = 'load';
-      $data['manager_report_list'] = $this->Report_Model->manager_report_list($from_date,$to_date,$company_id,$branch_id,$manager_id);
+      $data['from_date'] = $from_date;
+      $data['target_id'] = $target_id;
+      $data['to_date'] = $to_date;
+      $data['company_id2'] = $company_id2;
+      $data['branch_id'] = $branch_id;
+      if($branch_id == ''){
+        $data['report_type'] = 'branchwise';
+      }
+      if($branch_id != ''){
+        $data['report_type'] = 'userwise';
+      }
+      //$data['manager_report_list'] = $this->Report_Model->manager_report_list($from_date,$to_date,$company_id2,$branch_id,$manager_id);
     }
+
+    $data['target_list'] = $this->User_Model->get_list2('target_id','ASC','law_target');
+    $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
     $this->load->view('Report/manager_report',$data);
@@ -359,7 +388,7 @@ class Report extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null){ header('location:'.base_url().'User'); }
 
-    $data['branch_list'] = $this->User_Model->get_list($company_id,'branch_id','ASC','law_branch');
+    $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
     $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
     $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
     $this->form_validation->set_rules('from_date', 'From Date', 'trim|required');
@@ -367,11 +396,28 @@ class Report extends CI_Controller{
     if($this->form_validation->run() != FALSE){
       $from_date = $this->input->post('from_date');
       $to_date = $this->input->post('to_date');
-      $company_id = $this->input->post('company_id');
+      $company_id2 = $this->input->post('company_id');
       $branch_id = $this->input->post('branch_id');
       $service_id = $this->input->post('service_id');
       $data['outstanding_report'] = 'load';
-      $data['outstanding_report_list'] = $this->Report_Model->outstanding_report_list($from_date,$to_date,$company_id,$branch_id,$service_id);
+      $data['from_date'] = $from_date;
+      $data['to_date'] = $to_date;
+      $data['company_id2'] = $company_id2;
+      $data['branch_id'] = $branch_id;
+      $data['service_id'] = $service_id;
+      if($branch_id == '' && $service_id == ''){
+        $data['report_type'] = 'branchwise';
+      }
+      if($branch_id != '' && $service_id == ''){
+        $data['report_type'] = 'servicewise';
+        $data['outstanding_service_wise_report'] = $this->Report_Model->outstanding_service_wise_report_list($from_date,$to_date,$company_id2,$branch_id,$service_id);
+      }
+      if($branch_id != '' && $service_id != ''){
+        $data['report_type'] = 'service';
+        $data['outstanding_service_wise_report'] = $this->Report_Model->outstanding_service_wise_report_list($from_date,$to_date,$company_id2,$branch_id,$service_id);
+      }
+
+      //$data['outstanding_report_list'] = $this->Report_Model->outstanding_report_list($from_date,$to_date,$company_id,$branch_id,$service_id);
     }
 
     $this->load->view('Include/head',$data);

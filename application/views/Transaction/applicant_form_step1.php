@@ -68,7 +68,7 @@ $page = "step_1";
                     <input type="text" class="form-control form-control-sm" name="FIRMADDRESS" id="FIRMADDRESS" value="<?php if(isset($FIRMADDRESS)){ echo $FIRMADDRESS; } ?>" title="Firm Address" placeholder="Firm Address">
                   </div>
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="$STATE" id="$STATE" value="<?php if(isset($STATE)){ echo $STATE; } ?>" title="State" placeholder="State">
+                    <input type="text" class="form-control form-control-sm" name="STATE" id="STATE" value="<?php if(isset($STATE)){ echo $STATE; } ?>" title="State" placeholder="State">
                   </div>
                   <div class="form-group col-md-6">
                     <input type="number" min="5" class="form-control form-control-sm" name="AGE" id="AGE" value="<?php if(isset($AGE)){ echo $AGE; } ?>" title="Age" placeholder="Age">
@@ -142,8 +142,14 @@ $page = "step_1";
                       </label>
                     </div>
                   </div>
-                  <div class="form-group col-md-12">
+                  <div class="form-group col-md-4">
                     <input type="text" class="form-control form-control-sm" name="ASSOCIATE_MARK" id="ASSOCIATE_MARK" value="<?php if(isset($ASSOCIATE_MARK)){ echo $ASSOCIATE_MARK; } ?>" title="Associate of Mark" placeholder="Associate of Mark">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <input type="text" class="form-control form-control-sm" name="ADV_NAME" id="ADV_NAME" value="<?php if(isset($ADV_NAME) && $ADV_NAME != ''){ echo $ADV_NAME; } else{ echo 'Lalasaheb Anna Atole'; } ?>" title="Advocate Name" placeholder="Advocate Name">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <input type="text" class="form-control form-control-sm" name="BAR_COUN_NO" id="BAR_COUN_NO" value="<?php if(isset($BAR_COUN_NO) && $BAR_COUN_NO != ''){ echo $BAR_COUN_NO; } else{ echo 'MAH/2728/2016'; } ?>" title="Bar Council No" placeholder="Bar Council No">
                   </div>
 
                   <div class="form-group col-md-6">

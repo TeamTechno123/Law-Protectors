@@ -99,7 +99,7 @@ class Transaction_Model extends CI_Model{
   }
   //Trdemark Details...
   public function trademark_details($application_id){
-    $query = $this->db->select('application.*,company.company_name,branch.*,service.*,organization.*,trade.*,user_man.user_name as man_name,user_man.user_lastname as man_lname,user_tc.user_name as tc_name,user_tc.user_lastname as tc_lname,user_rc.user_name as rc_name,user_rc.user_lastname as rc_lname,')
+    $query = $this->db->select('application.*,company.*,branch.*,service.*,organization.*,trade.*,user_man.user_name as man_name,user_man.user_lastname as man_lname,user_tc.user_name as tc_name,user_tc.user_lastname as tc_lname,user_rc.user_name as rc_name,user_rc.user_lastname as rc_lname,')
     ->from('law_application as application')
     ->where('application.application_id',$application_id)
     ->join('law_company as company','application.company_id = company.company_id','LEFT')

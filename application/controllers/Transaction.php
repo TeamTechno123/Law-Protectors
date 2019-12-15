@@ -291,6 +291,8 @@ class Transaction extends CI_Controller{
           // $data['TRADE_3'] = $info->TRADE_3;
           $data['IS_MSME_REQ'] = $info->IS_MSME_REQ;
           $data['ASSOCIATE_MARK'] = $info->ASSOCIATE_MARK;
+          $data['ADV_NAME'] = $info->ADV_NAME;
+          $data['BAR_COUN_NO'] = $info->BAR_COUN_NO;
           $data['LOGO'] = $info->LOGO;
           $data['title'] = 'Trade Mark';
         }
@@ -449,6 +451,8 @@ class Transaction extends CI_Controller{
       $uodate_data['PLACE'] = $this->input->post('PLACE');
       $uodate_data['IS_MSME_REQ'] = $this->input->post('IS_MSME_REQ');
       $uodate_data['ASSOCIATE_MARK'] = $this->input->post('ASSOCIATE_MARK');
+      $uodate_data['ADV_NAME'] = $this->input->post('ADV_NAME');
+      $uodate_data['BAR_COUN_NO'] = $this->input->post('BAR_COUN_NO');
       $LOGO_old = $this->input->post('old_logo');
 
       if($_FILES['LOGO']['name']){
@@ -1176,6 +1180,7 @@ class Transaction extends CI_Controller{
       'po_no' => $this->input->post('po_no'),
       'po_date' => $this->input->post('po_date'),
       'basic_amt' => $this->input->post('basic_amt'),
+      'gov_fees_amt' => $this->input->post('gov_fees_amt'),
       'gst_amt' => $this->input->post('gst_amt'),
       'tds_amt' => $this->input->post('tds_amt'),
       'adv_amt' => $this->input->post('adv_amt'),
@@ -1216,6 +1221,7 @@ class Transaction extends CI_Controller{
       $data['po_no'] = $details->po_no;
       $data['po_date'] = $details->po_date;
       $data['basic_amt'] = $details->basic_amt;
+      $data['gov_fees_amt'] = $details->gov_fees_amt;
       $data['gst_amt'] = $details->gst_amt;
       $data['tds_amt'] = $details->tds_amt;
       $data['adv_amt'] = $details->adv_amt;
@@ -1244,6 +1250,7 @@ class Transaction extends CI_Controller{
       'po_no' => $this->input->post('po_no'),
       'po_date' => $this->input->post('po_date'),
       'basic_amt' => $this->input->post('basic_amt'),
+      'gov_fees_amt' => $this->input->post('gov_fees_amt'),
       'gst_amt' => $this->input->post('gst_amt'),
       'tds_amt' => $this->input->post('tds_amt'),
       'adv_amt' => $this->input->post('adv_amt'),

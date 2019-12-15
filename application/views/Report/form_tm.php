@@ -58,11 +58,14 @@
           margin-top: 3px;
           margin-bottom: 3px;
         }
+        .w-35{
+          width:35%;;
+        }
       </style>
 
       <tr>
         <td> <p >1.</p> </td>
-        <td class="bg-color"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > NATURE OF THE APPLICATION:</p> </td>
+        <td class="bg-color w-35"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > NATURE OF THE APPLICATION:</p> </td>
         <td><?php if(isset($service_name)){ echo $service_name; } ?></td>
       </tr>
 
@@ -70,7 +73,7 @@
         <td><p >2.</p></td>
         <td> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Whether application filed as </p></td>
         <td><?php
-          if(isset($organization_id) && ($organization_id == 1)){ echo 'Individual'; }
+          if(isset($organization_id) && ($organization_id == 1)){ echo 'Small Enterprises'; }
           elseif (isset($organization_id) && ($organization_id == 3 || $organization_id == 5 )){ echo 'Sole Propritor'; }
           else{ echo 'Small Enterprises'; }
         ?></td>
@@ -124,8 +127,8 @@
       </tr>
 
       <tr>
-        <td  rowspan="4" valign="top" style="padding-top:5px;">4</td>
-        <td> <p style="font-size:12px; text-align:center;  font-weight:bold;" > MARK TO BE REGISTERED: </p></td>
+        <td  rowspan="5" valign="top" style="padding-top:5px;">4</td>
+        <td> <p style="font-size:12px; text-align:center;  font-weight:bold;" > MARK TO BE REGISTERED: </p> </td>
         <td style="padding-top:5px;">
           <?php if(isset($LOGO) && $LOGO != ''){ ?>
             <img style="width:100px; height:60px;" src="<?php echo base_url(); ?>assets/images/trade_logo/<?php echo $LOGO; ?>" alt=""><br>
@@ -133,11 +136,11 @@
           <br>
         </td>
       </tr>
-      <!-- <tr>
+      <tr>
         <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Trade Mark: </p></td>
         <td style="background-color: #fff;">
         <?php if(isset($BRAND)){ echo $BRAND; } ?><br></td>
-      </tr> -->
+      </tr>
       <!-- <tr>
         <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Category of mark:* </p></td>
         <td style="background-color: #fff;">
@@ -202,9 +205,14 @@
         <td> <p style="font-size:12px; text-align:center;  font-weight:bold;" > STATEMENT AS TO USE OF MARK: </p></td>
         <td><?php if(isset($PROPOSED)){ echo $PROPOSED; } ?></td>
       </tr>
-
       <tr>
         <td> <p >9.</p> </td>
+        <td> <p style="font-size:12px; text-align:center;  font-weight:bold;" > ASSOCIATE OF MARK: </p></td>
+        <td><?php echo $ASSOCIATE_MARK; ?></td>
+      </tr>
+
+      <tr>
+        <td> <p >10.</p> </td>
         <td> <p style="font-size:12px; text-align:center;  font-weight:bold;" > VERIFICATION: </p></td>
         <td>I hereby verify that above mentioned facts are true
           and correct to best of my knowledge and belief.
@@ -212,9 +220,9 @@
       </tr>
 
       <tr>
-        <td  rowspan="3" valign="top" style="padding-top:0px;">10.</td>
+        <td  rowspan="3" valign="top" style="padding-top:0px;">11.</td>
         <td> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Signature: </p></td>
-        <td> <br> <br> </td>
+        <td> <br> <br><br><br> </td>
       </tr>
 
       <tr>
@@ -234,11 +242,6 @@
             else{ echo ''; }
           ?>
         <br></td>
-      </tr>
-      <tr>
-        <td> <p >11.</p> </td>
-        <td> <p style="font-size:12px; text-align:center;  font-weight:bold;" > ASSOCIATE OF MARK: </p></td>
-        <td><?php echo $ASSOCIATE_MARK; ?></td>
       </tr>
     </table>
 </div>

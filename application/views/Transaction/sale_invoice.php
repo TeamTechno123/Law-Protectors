@@ -168,6 +168,12 @@ $page = "add_user";
                     </div>
                   </div>
                   <div class="form-group row float-right">
+                    <label for="inputEmail3" class="col-form-label mr-3">Govt. Fees</label>
+                    <div class="">
+                      <input type="number" class="form-control" name="gov_fees_amt" id="gov_fees_amt" value="<?php if(isset($gov_fees_amt)){ echo $gov_fees_amt; } ?>">
+                    </div>
+                  </div>
+                  <div class="form-group row float-right">
                     <label for="inputEmail3" class="col-form-label mr-3">GST Amount</label>
                     <div class="">
                       <input type="number"  class="form-control" name="gst_amt" id="gst_amt" value="<?php if(isset($gst_amt)){ echo $gst_amt; } ?>">
@@ -188,13 +194,13 @@ $page = "add_user";
                   <div class="form-group row float-right">
                     <label for="inputEmail3" class=" col-form-label mr-3">Balance Payment</label>
                     <div class="">
-                      <input type="number" class="form-control delivery_total" name="bal_amt" id="bal_amt" value="<?php if(isset($bal_amt)){ echo $bal_amt; } ?>" >
+                      <input type="number"  class="form-control delivery_total" name="bal_amt" id="bal_amt" value="<?php if(isset($bal_amt)){ echo $bal_amt; } ?>" >
                     </div>
                   </div>
                   <div class="form-group row float-right">
                     <label for="inputEmail3" class=" col-form-label mr-3">Net Amount</label>
                     <div class="">
-                      <input type="number" class="form-control delivery_total" name="net_amt" id="net_amt" value="<?php if(isset($net_amt)){ echo $net_amt; } ?>" >
+                      <input type="number" type="number" min="1.00" step="0.01" class="form-control delivery_total" name="net_amt" id="net_amt" value="<?php if(isset($net_amt)){ echo $net_amt; } ?>" >
                     </div>
                   </div>
                 </div>
