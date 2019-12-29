@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html>
-<?php
-$page = "application_list";
-?>
 <style>
   td{
     padding:2px 10px !important;
@@ -22,7 +19,6 @@ $page = "application_list";
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -32,7 +28,6 @@ $page = "application_list";
             <div class="card">
             <div class="card-header">
               <h3 class="card-title"><i class="fa fa-list"></i> List Application Information</h3>
-              <!--  -->
             </div>
             <!-- /.card-header -->
             <div class="card-body" >
@@ -43,15 +38,11 @@ $page = "application_list";
                     <th class="sr_no">Sr. No.</th>
                     <th class="sr_no">Application No.</th>
                     <th>Date</th>
-                    <th>Branch</th>
                     <th>Org Type</th>
                     <th>Service</th>
-                    <th>Org. Name</th>
                     <th>Status</th>
+                    <th class="sr_no">Application Upload</th>
                     <th class="sr_no">Upload</th>
-                    <th class="sr_no">Invoice</th>
-                    <th class="sr_no">Status</th>
-                    <th class="sr_no">Action</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -62,43 +53,24 @@ $page = "application_list";
                     $i++;
                   ?>
                   <tr>
-                    <?php //echo print_r($list).'<br><br>';  ?>
+                    <?php // print_r($list).'<br><br>';  ?>
                     <td class="sr_no"><?php echo $i; ?></td>
                     <td class="sr_no"><?php echo $list->application_no; ?></td>
                     <td><?php echo $list->application_date; ?></td>
-                    <td><?php echo $list->branch_name; ?></td>
                     <td><?php echo $list->organization_name; ?></td>
                     <td><?php echo $list->service_name; ?></td>
-                    <?php if($service_id == 1){ ?>
-                      <td><?php echo $list->ORGANIZATION; ?></td>
-                    <?php } elseif ($service_id == 2) { ?>
-                      <td><?php echo $list->org_name; ?></td>
-                    <?php } else{ ?>
-                      <td><?php echo $list->appl_org_name; ?></td>
-                    <?php } ?>
                     <td><?php echo $list->application_status; ?></td>
                     <td class="sr_no">
-                      <a href="<?php echo base_url(); ?>Transaction/document_uploading_form/<?php echo $list->appl_id; ?>"> <i class="fa fa-upload"></i> </a>
+                      <a href="<?php echo base_url(); ?>Legal/application_upload/<?php echo $list->appl_id; ?>"> <i class="fa fa-eye"></i> </a>
                     </td>
                     <td class="sr_no">
-                      <a href="<?php echo base_url(); ?>Transaction/sale_invoice/<?php echo $list->appl_id; ?>"> <i class="fa fa-plus"></i> </a>
-                    </td>
-                    <td class="sr_no">
-                      <a href="<?php echo base_url(); ?>Transaction/change_status/<?php echo $list->appl_id; ?>"> <i class="fa fa-edit"></i> </a>
-                    </td>
-                    <td class="sr_no">
-                      <a href="<?php echo base_url(); ?>Transaction/edit_application/<?php echo $list->appl_id; ?>"> <i class="fa fa-edit"></i> </a>
-                      <?php if($user_roll == 1){ ?>
-                        <a href="<?php echo base_url(); ?>Transaction/delete_application/<?php echo $list->appl_id; ?>" onclick="return confirm('Delete this Application');" class="ml-4"> <i class="fa fa-trash"></i> </a>
-                      <?php } ?>
+                      <a href="<?php echo base_url(); ?>Legal/upload_doc/<?php echo $list->appl_id; ?>"> <i class="fa fa-upload"></i> </a>
                     </td>
                   </tr>
                   <?php } ?>
                   <tbody>
                 </table>
               </div>
-
-
             </div>
             <!-- /.card-body -->
           </div>

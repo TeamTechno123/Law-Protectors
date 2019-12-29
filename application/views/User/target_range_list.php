@@ -63,7 +63,9 @@ $page = "invoice_list";
                   <td><?php echo $list->target_to; ?></td>
                   <td>
                     <a href="<?php echo base_url(); ?>User/edit_target_range/<?php echo $list->target_id; ?>"> <i class="fa fa-edit"></i> </a>
-                    <a class="ml-2" href="<?php echo base_url(); ?>User/delete_target_range/<?php echo $list->target_id; ?>" onclick="return confirm('Delete this Target Title');"> <i class="fa fa-trash"></i> </a>
+                    <?php if($user_roll == 1){ ?>
+                      <a class="ml-2" href="<?php echo base_url(); ?>User/delete_target_range/<?php echo $list->target_id; ?>" onclick="return confirm('Delete this Target Title');"> <i class="fa fa-trash"></i> </a>
+                    <?php } ?>
                   </td>
                 </tr>
                 <?php } ?>

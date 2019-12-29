@@ -38,16 +38,17 @@ $page = "application_list";
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Sr. No.</th>
-                  <th>Date</th>
+                   <th>Date</th>
                   <th>Application No.</th>
-                  <th>File Ref. No.</th>
-                  <th>Party Name</th>
+                  <th>Company Name</th>
+                  <th>Brand Name</th>
+                   <th>Class</th>
                   <th>Status</th>
                   <th>TMA Application</th>
                   <th>Autorization Letter</th>
                   <th>Affidavit Letter</th>
                   <th>Covering Letter</th>
+                  
                 </tr>
                 </thead>
                 <tbody>
@@ -60,11 +61,12 @@ $page = "application_list";
                   $single_name = explode(',', $NAME);
                 ?>
                 <tr>
-                  <td><?php echo $list->application_id; ?></td>
+                 
                   <td><?php echo $list->application_date; ?></td>
                   <td><?php echo $list->application_no; ?></td>
-                  <td><?php echo $list->FILE_REF_NO; ?></td>
-                  <td><?php echo $single_name[0]; ?></td>
+                  <td><?php echo $list->ORGANIZATION ?></td>
+                  <td><?php echo $list->BRAND; ?></td>
+                  <td><?php echo $list->TM; ?></td>
                   <td><?php echo $list->application_status; ?></td>
                   <td>
                     <a target="_blank" href="<?php echo base_url(); ?>Report/form_tm/<?php echo $list->application_id; ?>"> <i class="fa fa-print"></i> </a>

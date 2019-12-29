@@ -3,12 +3,32 @@ class User_Model extends CI_Model{
 
   function check_login($email, $password){
     $query = $this->db->select('*')
-        ->where('user_email', $email)
-        ->where('user_password', $password)
+      ->where('user_email', $email)
+      ->where('user_password', $password)
+      ->from('law_user')
+      ->get();
+    $result = $query->result_array();
+    return $result;
+  }
+
+  function check_otp($otp, $user_id){
+    $query = $this->db->select('*')
+        ->where('user_otp', $otp)
+        ->where('user_id', $user_id)
         ->from('law_user')
         ->get();
-      $result = $query->result_array();
-      return $result;
+    $result = $query->result_array();
+    return $result;
+  }
+
+  function check_pwd($user_id,$old_password){
+    $query = $this->db->select('user_id')
+        ->where('user_password', $old_password)
+        ->where('user_id', $user_id)
+        ->from('law_user')
+        ->get();
+    $result = $query->result_array();
+    return $result;
   }
 
   public function get_count($id_type,$company_id,$key,$tbl_name){
@@ -70,12 +90,32 @@ class User_Model extends CI_Model{
     return $result;
   }
 
+  public function get_user_list2($company_id){
+    $this->db->select('law_user.*,law_company.*,law_roll.*');
+    $this->db->from('law_user');
+    $this->db->where('law_user.is_admin', 0);
+    $this->db->join('law_company','law_user.company_id = law_company.company_id','LEFT');
+    $this->db->join('law_roll','law_user.roll_id = law_roll.roll_id','LEFT');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
   public function get_info($id_type, $id, $tbl_name){
     $query = $this->db->select('*')
             ->where($id_type, $id)
             ->from($tbl_name)
             ->get();
     $result = $query->result();
+    return $result;
+  }
+
+  public function get_info_arr($id_type, $id, $tbl_name){
+    $query = $this->db->select('*')
+            ->where($id_type, $id)
+            ->from($tbl_name)
+            ->get();
+    $result = $query->result_array();
     return $result;
   }
 
@@ -178,6 +218,15 @@ class User_Model extends CI_Model{
     $this->db->where('law_target_details.target_no',$target_no);
     $this->db->join('law_user','law_target_details.user_id = law_user.user_id','LEFT');
     $this->db->join('law_roll','law_user.roll_id = law_roll.roll_id','LEFT');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
+  public function leg_doc_list($application_id){
+    $this->db->select('*');
+    $this->db->from('law_leg_doc_up');
+    $this->db->where('application_id',$application_id);
     $query = $this->db->get();
     $result = $query->result();
     return $result;

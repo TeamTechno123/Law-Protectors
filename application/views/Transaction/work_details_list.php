@@ -65,7 +65,9 @@ $page = "work_details_list";
                   <td><?php echo $list->work_date; ?></td>
                   <td>
                     <a href="<?php echo base_url(); ?>Transaction/edit_work_details/<?php echo $list->work_id; ?>"> <i class="fa fa-edit"></i> </a>
-                    <a href="<?php echo base_url(); ?>Transaction/delete_work_details/<?php echo $list->work_id; ?>" onclick="return confirm('Delete this Application');" class="ml-4"> <i class="fa fa-trash"></i> </a>
+                    <?php if($user_roll == 1){ ?>
+                      <a href="<?php echo base_url(); ?>Transaction/delete_work_details/<?php echo $list->work_id; ?>" onclick="return confirm('Delete this Application');" class="ml-4"> <i class="fa fa-trash"></i> </a>
+                    <?php } ?>
                   </td>
                 </tr>
                 <?php } ?>

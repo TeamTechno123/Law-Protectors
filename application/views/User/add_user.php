@@ -40,18 +40,6 @@ $page = "add_user";
                       <?php } ?>
                     </select>
                   </div>
-
-                  <div class="col-md-12 drop-lg">
-                    <div class="form-group">
-                      <select class="form-control select2" name="branch_id" id="branch_id" data-placeholder="Select Branch" required>
-                        <option selected="selected" value="" >Select Branch </option>
-                        <?php if(isset($branch_id)){ ?>  <option selected="selected" value="<?php echo $branch_id ?>" ><?php echo $branch_name ?> </option> <?php } ?>
-                        <!-- <?php foreach ($branch_list as $list) { ?>
-                        <option value="<?php echo $list->branch_id; ?>" <?php if(isset($branch_id)){ if($list->branch_id == $branch_id){ echo "selected"; } }  ?>><?php echo $list->branch_name; ?></option>
-                        <?php } ?> -->
-                      </select>
-                    </div>
-                  </div>
                   <div class="form-group col-md-12 drop-lg">
                     <select class="form-control select2" name="roll_id" title="Select Roll Name" data-placeholder="Select Roll Name" id="roll_id" style="width: 100%;" required>
                       <option selected="selected" value="" >Select Roll Name </option>
@@ -61,6 +49,25 @@ $page = "add_user";
                       <?php } } ?>
                     </select>
                   </div>
+                  <div class="col-md-12 drop-lg">
+                    <div class="form-group">
+                      <select class="form-control select2" multiple="multiple"  name="branch_id[]" id="branch_id" data-placeholder="Select Branch" required >
+                        <?php foreach ($branch_list as $list) { ?>
+                        <option value="<?php echo $list->branch_id; ?>"
+                          <?php if(isset($branch_id)) {
+                            $str_arr = explode (",", $branch_id);
+                            foreach ($str_arr as $x) {
+                              if($x == $list->branch_id) { echo "selected"; }
+                            }
+                          } ?>
+                           ><?php echo $list->branch_name; ?>
+                         </option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                  </div>
+                  <input type="hidden" name="branch_id_old" value="<?php if(isset($branch_id)){ echo $branch_id; }  ?>">
+
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control" name="user_name" id="user_name" value="<?php if(isset($user_name)){ echo $user_name; } ?>" title="First Name" placeholder="First Name" required>
                   </div>
@@ -101,7 +108,7 @@ $page = "add_user";
     </section>
   </div>
 
-  <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/toastr/toastr.min.js"></script>
   <script type="text/javascript">
     <?php if($this->session->flashdata('check_email')){ ?>
@@ -121,7 +128,27 @@ $page = "add_user";
           $('#branch_id').html(result);
         }
       });
-    })
+    });
+
+    $('#roll_id').on('change',function(){
+      var roll_id =  $(this).find("option:selected").val();
+      if(roll_id == 6){
+        $('#branch_id').prop('disabled', true);
+      }
+      else{
+        $('#branch_id').prop('disabled', false);
+      }
+    });
+
+    $(document).ready(function(){
+      var roll_id =  $('#roll_id').find("option:selected").val();
+      if(roll_id == 6){
+        $('#branch_id').prop('disabled', true);
+      }
+      else{
+        $('#branch_id').prop('disabled', false);
+      }
+    });
   </script>
 </body>
 </html>

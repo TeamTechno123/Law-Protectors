@@ -57,7 +57,9 @@ $page = "make_information_list";
                   <td><?php echo $list->branch_name; ?></td>
                   <td>
                     <a href="<?php echo base_url(); ?>User/edit_branch/<?php echo $list->branch_id; ?>"> <i class="fa fa-edit"></i> </a>
+                    <?php if($user_roll == 1){ ?>
                     <a href="<?php echo base_url(); ?>User/delete_branch/<?php echo $list->branch_id; ?>" onclick="return confirm('Delete this Company');" class="ml-4"> <i class="fa fa-trash"></i> </a>
+                    <?php } ?>
                   </td>
                 </tr>
               <?php } ?>

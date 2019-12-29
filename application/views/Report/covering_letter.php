@@ -35,25 +35,27 @@
     ?>
     <div class=""  style="padding:10px 30px; ">
 
-      <p style="font-size:12px; text-align:right;"><br><br><br><br><br><br><br><br>Date: <?php echo $COV_DATE; ?></p>
-      <p style="font-size:12px; text-align:left;">  To, </p>
-      <p style="font-size:12px; text-align:left;"><?php echo $ORGANIZATION; ?></p>
-      <p style="font-size:12px; text-align:left;">Address: <?php echo $FIRMADDRESS; ?> </p>
+      <p style="font-size:13px; text-align:right;"><br><br><br><br><br><br><br><br>Date: <?php echo $COV_DATE; ?></p>
+      <p style="font-size:13px; text-align:left;">  To, </p>
 
-      <p style="font-size:12px; text-align:left;">Cell: <?php echo $MOBILE; ?> </p>
+      <p style="font-size:13px; text-align:left;"><?php echo $ORGANIZATION; ?></p>
+      <p style="font-size:13px; text-align:left;"><?php echo $SIGN_AUTH; ?> </p>
+      <p style="font-size:13px; text-align:left;">Address: <?php echo $FIRMADDRESS; ?> </p>
 
-      <p style="font-size:12px; text-align:left;">Kind Attn : <?php echo $single_name[0]; ?> </p>
-      <p style="font-size:12px; text-align:left; padding-top:10px; padding-bottom:10px;">Sub: Trademark of “<?php echo $BRAND; ?>” in class <?php echo $TM; ?> under the Trademarks Act 1999 and Trademarks Rules 2017. </p>
-      <p style="font-size:12px; text-align:left;">Respected Sir /Madam, </p>
-      <p style="font-size:12px; text-align:justify;">As per Trademark Act 1999 and Trademarks Rules 2017 we have prepared an application for Trade mark Registration of the above Subject matter.  </p>
-      <p style="font-size:12px; text-align:justify;">Kindly sign the document & give it to us as early as possible, so that we can file the same in trademark registry to obtain Provisional Registration no and to carry on with further Proceedings. </p>
-      <p style="font-size:12px; text-align:justify;">Let’s have long mutual beneficial relationship. </p> <br>
-      <p style="font-size:12px; text-align:left;">Thanking You, </p>
-      <p style="font-size:12px; text-align:left; padding-bottom:8px;">Yours faithfully, </p>
-      <p style="font-size:12px; text-align:left;">For <?php echo $company_name; ?>. </p> <br>
-      <p style="font-size:12px; text-align:left;">Authorised Signatory </p>
-      <p style="font-size:12px; text-align:left;  padding-bottom:8px;">(020) 26051325/ 3325/ 9575/ 9576.     </p>
-      <p style="font-size:12px; text-align:left;">NOTE : For TM A Filing the documents required are as follows:</p>
+      <p style="font-size:13px; text-align:left;">Cell: <?php echo $MOBILE; ?> </p>
+
+
+      <p style="font-size:13px; text-align:left; padding-top:10px; padding-bottom:10px;">Sub: Trademark of “<?php echo $BRAND; ?>” in class <?php echo $TM; ?> under the Trademarks Act 1999 and Trademarks Rules 2017. </p>
+      <p style="font-size:13px; text-align:left;">Respected Sir /Madam, </p>
+      <p style="font-size:13px; text-align:justify;">As per Trademark Act 1999 and Trademarks Rules 2017 we have prepared an application for Trade mark Registration of the above Subject matter.  </p>
+      <p style="font-size:13px; text-align:justify;">Kindly sign the document & give it to us as early as possible, so that we can file the same in trademark registry to obtain Provisional Registration no and to carry on with further Proceedings. </p>
+      <p style="font-size:13px; text-align:justify;">Let’s have long mutual beneficial relationship. </p> <br>
+      <p style="font-size:13px; text-align:left;">Thanking You, </p>
+      <p style="font-size:13px; text-align:left; padding-bottom:8px;">Yours faithfully, </p>
+      <p style="font-size:13px; text-align:left;">For <?php echo $company_name; ?>. </p> <br>
+      <p style="font-size:13px; text-align:left;">Authorised Signatory </p>
+      <p style="font-size:13px; text-align:left;  padding-bottom:8px;">(020) 26051325/ 3325/ 9575/ 9576.     </p>
+      <p style="font-size:13px; text-align:left;">NOTE : For TM A Filing the documents required are as follows:</p>
       <table>
         <style media="print">
         table {
@@ -106,9 +108,9 @@
         <?php } ?>
 
       </table>
-      <p style="font-size:12px; text-align:left;">•	IMP NOTE : The column in which there is no right tick mark, you have to submit that documents.  </p>
+      <p style="font-size:13px; text-align:left;">•	IMP NOTE : The column in which there is no right tick mark, you have to submit that documents.  </p>
       <?php if(isset($BALANCEAMOUNT) && $BALANCEAMOUNT > 0){ ?>
-      <p style="font-size:12px; text-align:left;">•	Kindly issue the payment of Rs. <?php echo $BALANCEAMOUNT; ?>/- in favor of <?php echo $company_name; ?>.  </p>
+      <p style="font-size:13px; text-align:left;">•	Kindly issue the payment of Rs. <?php echo $BALANCEAMOUNT; ?>/- in favor of <?php echo $company_name; ?>.  </p>
     <?php } ?>
     </div>
   </div>

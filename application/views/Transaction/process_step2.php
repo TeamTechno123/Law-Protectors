@@ -38,17 +38,39 @@ $page = "step_2";
                 <input type="hidden" name="payment_id" value="<?php echo $payment_id; ?>">
 
                 <div class="card-body row">
+
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> BASIC AMOUNT :</label>
+                  </div>
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> GST AMOUNT : </label>
+                  </div>
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control form-control-sm" name="CONTRACTAMOUNT" id="CONTRACTAMOUNT" value="<?php if(isset($CONTRACTAMOUNT)){ echo $CONTRACTAMOUNT;} ?>" title="Contract Final Amount" placeholder="Contract Final Amount" required>
+                    <input type="text" class="form-control form-control-sm" name="CONTRACTAMOUNT" id="CONTRACTAMOUNT" value="<?php if(isset($CONTRACTAMOUNT)){ echo $CONTRACTAMOUNT;} ?>" title="Contract Final Amount" placeholder="Basic Amount" required>
                   </div>
                   <div class="form-group col-md-6 ">
                     <input type="text" class="form-control form-control-sm" name="GSTAMOUNT" id="GSTAMOUNT" value="<?php if(isset($GSTAMOUNT) && $GSTAMOUNT != 0){ echo $GSTAMOUNT;} ?>" title="GST Amount" placeholder="GST Amount">
                   </div>
+
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> TOTAL CONTRACT AMOUNT :</label>
+                  </div>
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> RECEIVED AMOUNT : </label>
+                  </div>
+
                   <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" name="TOTALAMOUNT" id="TOTALAMOUNT" value="<?php if(isset($TOTALAMOUNT) && $TOTALAMOUNT != 0){ echo $TOTALAMOUNT;} ?>" title="Total Amount" placeholder="Total Amount">
+                    <input type="text" class="form-control form-control-sm" name="TOTALAMOUNT" id="TOTALAMOUNT" value="<?php if(isset($TOTALAMOUNT) && $TOTALAMOUNT != 0){ echo $TOTALAMOUNT;} ?>" title="Total Amount" placeholder="Total Contract Amount">
                   </div>
                   <div class="form-group col-md-6 ">
                     <input type="number" class="form-control form-control-sm" name="RECEVIEDAMOUNT" id="RECEVIEDAMOUNT" value="<?php if(isset($RECEVIEDAMOUNT) && $RECEVIEDAMOUNT != 0){ echo $RECEVIEDAMOUNT;} ?>" title="Received Amount" placeholder="Received Amount">
+                  </div>
+
+                <div class=" col-md-6 ">
+                    <label for="" class=""> BALANCE AMOUNT :</label>
+                  </div>
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> GST NUMBER : </label>
                   </div>
 
                   <div class="form-group col-md-6">
@@ -58,12 +80,26 @@ $page = "step_2";
                     <input type="text" class="form-control form-control-sm" name="GSTNUMBER" id="GSTNUMBER" value="<?php if(isset($GSTNUMBER)){ echo $GSTNUMBER;} ?>" title="GST Number" placeholder="GST Number">
                   </div>
 
-                  <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control form-control-sm" name="LP_AMOUNT" id="LP_AMOUNT" value="<?php if(isset($LP_AMOUNT) && $LP_AMOUNT != 0){ echo $LP_AMOUNT;} ?>" title="LP Amount" placeholder="LP Amount" required>
+                    <div class=" col-md-6 ">
+                    <label for="" class=""> LP AMOUNT :</label>
+                  </div>
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> GOVT FEES : </label>
                   </div>
 
                   <div class="form-group col-md-6 ">
-                    <input type="text" class="form-control form-control-sm" name="GOVT_FEES" id="GOVT_FEES" value="<?php if(isset($GOVT_FEES) && $GOVT_FEES != 0){ echo $GOVT_FEES;} ?>" title="Govt Fees" placeholder="Govt Fees" required>
+                    <input type="text" class="form-control form-control-sm" name="LP_AMOUNT" id="LP_AMOUNT" value="<?php if(isset($LP_AMOUNT)){ echo $LP_AMOUNT;} ?>" title="LP Amount" placeholder="LP Amount" required>
+                  </div>
+
+                  <div class="form-group col-md-6 ">
+                    <input type="text" class="form-control form-control-sm" name="GOVT_FEES" id="GOVT_FEES" value="<?php if(isset($GOVT_FEES)){ echo $GOVT_FEES;} ?>" title="Govt Fees" placeholder="Govt Fees" >
+                  </div>
+
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> TDS AMOUNT :</label>
+                  </div>
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> B2B AMOUNT : </label>
                   </div>
                   <div class="form-group col-md-6 ">
                     <input type="text" class="form-control form-control-sm" name="TDS" id="TDS" value="<?php if(isset($TDS) && $TDS != 0){ echo $TDS;} ?>" title="TDS" placeholder="TDS">
@@ -82,21 +118,48 @@ $page = "step_2";
                   </div>
                   <br>
                   <div class="col-md-12">
-                    <label for="">Cheque Details : </label>
+                    <label for="" ><b></b>Cheque Details : </b></label>
                   </div>
                   <br>
+
+                  <div class=" col-md-3 ">
+                    <label for="" class=""> CHEQUE NUMBER :</label>
+                  </div>
+                  <div class=" col-md-3 ">
+                    <label for="" class=""> CHEQUE DATE :</label>
+                  </div>
+                  <div class=" col-md-3 ">
+                    <label for="" class=""> BANK NAME :</label>
+                  </div>
+                  <div class=" col-md-3 ">
+                    <label for="" class=""> CHEQUE AMOUNT :</label>
+                  </div>
                   <div class="form-group col-md-3">
                     <input type="text" class="form-control form-control-sm" name="CHEQUENUMBER" id="CHEQUENUMBER" value="<?php if(isset($CHEQUENUMBER)){ echo $CHEQUENUMBER;} ?>" title="Cheque No." placeholder="Cheque No.">
                   </div>
+
+
+
                   <div class="form-group col-md-3 ">
                     <input type="text" class="form-control form-control-sm" name="CHQDATE" id="date1" data-target="#date1" data-toggle="datetimepicker" value="<?php if(isset($CHQDATE)){ echo $CHQDATE;} ?>" title="Cheque Date" placeholder="Cheque Date">
                   </div>
+
+
+
                   <div class="form-group col-md-3 ">
                     <input type="text" class="form-control form-control-sm" name="BANKNAME" id="BANKNAME" value="<?php if(isset($BANKNAME)){ echo $BANKNAME;} ?>" title="Bank Name" placeholder="Bank Name">
                   </div>
+
+
+
                   <div class="form-group col-md-3 ">
                     <input type="text" class="form-control form-control-sm" name="CHEQUEAMOUNT" id="CHEQUEAMOUNT" value="<?php if(isset($CHEQUEAMOUNT) && $CHEQUEAMOUNT != 0){ echo $CHEQUEAMOUNT;} ?>" title="Amount" placeholder="Amount">
                   </div>
+
+                   <div class=" col-md-12 ">
+                    <label for="" class=""> GROUND OF CONTRACT :</label>
+                  </div>
+
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="GROUNDOFCONTRACT" id="GROUNDOFCONTRACT" value="<?php if(isset($GROUNDOFCONTRACT)){ echo $GROUNDOFCONTRACT;} ?>" title="Enter Ground Of Contract" placeholder="Enter Ground Of Contract">
                   </div>

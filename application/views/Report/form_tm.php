@@ -73,17 +73,19 @@
         <td><p >2.</p></td>
         <td> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Whether application filed as </p></td>
         <td><?php
-          if(isset($organization_id) && ($organization_id == 1)){ echo 'Small Enterprises'; }
-          elseif (isset($organization_id) && ($organization_id == 3 || $organization_id == 5 )){ echo 'Sole Propritor'; }
+          if(isset($organization_id) && ($organization_id == 1)){ echo 'Individual'; }
+          elseif (isset($organization_id) && ($organization_id == 5 )){ echo 'Sole Propritor'; }
           else{ echo 'Small Enterprises'; }
         ?></td>
       </tr>
-
+         <?php  if(isset($organization_id) && ($organization_id == 1) && ($organization_id == 5)){ ?>
       <tr>
         <td> <p ></p> </td>
+
         <td class="bg-color"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > MSME SSI certificate Received: </p></td>
         <td><?php if(isset($IS_MSME_REQ)){ echo $IS_MSME_REQ; } ?></td>
       </tr>
+      <?php  } ?>
       <?php
       $single_name = explode(',', $NAME);
       ?>
@@ -109,15 +111,16 @@
       <tr>
         <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Name of Authorized Signatory: * </p></td>
         <td style="background-color: #fff;padding-top:5px; ">
-          <?php foreach ($single_name as $item) {
+         <?php foreach ($single_name as $item) {
               echo '<b>'.$item.'</b><br>';
-          } ?>
+          }
+         ?>
         <br> </td>
       </tr>
 
       <tr>
         <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Address:* </p></td>
-        <td style="background-color: #fff;"><?php if(isset($ADDRESS)){ echo $ADDRESS; } ?><br></td>
+        <td style="background-color: #fff;"><?php if(isset($FIRMADDRESS)){ echo $FIRMADDRESS; } ?><br></td>
       </tr>
 
       <tr>
@@ -138,7 +141,7 @@
       </tr>
       <tr>
         <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Trade Mark: </p></td>
-        <td style="background-color: #fff;">
+        <td style="background-color: #fff; text-transform:uppercase;">
         <?php if(isset($BRAND)){ echo $BRAND; } ?><br></td>
       </tr>
       <!-- <tr>
@@ -154,11 +157,11 @@
       <tr>
         <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Category of mark:* </p></td>
         <td style="background-color: #fff;">
-          <?php if(isset($MARK_0) && $MARK_0 != ''){ echo $MARK_0.', '; } ?>
-          <?php if(isset($MARK_1) && $MARK_1 != ''){ echo $MARK_1.', '; } ?>
-          <?php if(isset($MARK_2) && $MARK_2 != ''){ echo $MARK_2.', '; } ?>
-          <?php if(isset($MARK_3) && $MARK_3 != ''){ echo $MARK_3.', '; } ?>
-          <?php if(isset($MARK_4) && $MARK_4 != ''){ echo $MARK_4.', '; } ?><br> </td>
+          <?php if(isset($MARK_0) && $MARK_0 != ''){ echo $MARK_0.' '; } ?>
+          <?php if(isset($MARK_1) && $MARK_1 != ''){ echo $MARK_1.' '; } ?>
+          <?php if(isset($MARK_2) && $MARK_2 != ''){ echo $MARK_2.' '; } ?>
+          <?php if(isset($MARK_3) && $MARK_3 != ''){ echo $MARK_3.' '; } ?>
+          <?php if(isset($MARK_4) && $MARK_4 != ''){ echo $MARK_4.' '; } ?><br> </td>
       </tr>
 
       <tr>
@@ -203,7 +206,14 @@
       <tr>
         <td> <p >8.</p> </td>
         <td> <p style="font-size:12px; text-align:center;  font-weight:bold;" > STATEMENT AS TO USE OF MARK: </p></td>
-        <td><?php if(isset($PROPOSED)){ echo $PROPOSED; } ?></td>
+        <td><?php
+          if(isset($PROPOSED_TO_BE) && $PROPOSED_TO_BE != ''){
+            echo 'Proposed To Be Used';
+          } else{
+            if(isset($PROPOSED)){ echo $PROPOSED; }
+          }
+        ?>
+        </td>
       </tr>
       <tr>
         <td> <p >9.</p> </td>
@@ -227,7 +237,8 @@
 
       <tr>
         <td style="background-color: #d0d0d0;"> <p style="font-size:12px; text-align:center;  font-weight:bold;" > Name: </p></td>
-        <td style="background-color: #fff; padding-top:5px;"><?php if(isset($NAME)){ echo $single_name[0] ; } ?><br> </td>
+        <td style="background-color: #fff; padding-top:5px;">
+          <?php echo $SIGN_AUTH; ?><br> </td>
       </tr>
 
       <tr>
@@ -236,9 +247,11 @@
           <?php
             if(isset($organization_id) && ($organization_id == 1)){ echo 'Applicant'; }
             elseif (isset($organization_id) && ($organization_id == 5 )){ echo 'Propritor'; }
+            elseif (isset($organization_id) && ($organization_id == 9 )){ echo 'Board Of Trustees'; }
             elseif (isset($organization_id) && ($organization_id == 6 )){ echo 'Director'; }
             elseif (isset($organization_id) && ($organization_id == 7 || $organization_id == 10)){ echo 'Partner'; }
             elseif (isset($organization_id) && ($organization_id == 3 )){ echo 'Karta'; }
+            elseif (isset($organization_id) && ($organization_id == 4 )){ echo 'Partner'; }
             else{ echo ''; }
           ?>
         <br></td>

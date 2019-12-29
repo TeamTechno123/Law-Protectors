@@ -210,7 +210,7 @@
     </tr>
   <?php } ?>
   <?php
-  $k=8-$i;
+  $k=5-$i;
   for ($j=0; $j < $k ; $j++) { ?>
     <tr>
       <td style="text-align:center; height:15px;"></td>

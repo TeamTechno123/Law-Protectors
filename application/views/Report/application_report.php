@@ -38,23 +38,41 @@ $page = "party_list";
                     <label class="text-red"> <?php echo form_error('to_date'); ?> </label>
                   </div>
                   <div class="form-group col-md-8 offset-md-2 drop-sm">
-                    <select class="form-control select2 form-control-sm" title="Select Company" name="company_id" id="company_id" required>
-                      <option selected="selected" value="" >Select Company Name </option>
-                      <?php foreach ($company_list as $list) { ?>
-                      <option value="<?php echo $list->company_id; ?>" <?php if(isset($company_id)){ if($list->company_id == $company_id){ echo "selected"; } }  ?>><?php echo $list->company_name; ?></option>
+                    <select class="form-control select2 form-control-sm"  data-placeholder="Select Manager" title="Select Manager" name="manager_id" id="manager_id">
+                      <option selected="selected" value="" >Select Manager </option>
+                      <?php foreach ($manager_list as $list) { ?>
+                      <option value="<?php echo $list->user_id; ?>"><?php echo $list->user_name; ?></option>
                       <?php } ?>
                     </select>
                   </div>
                   <div class="form-group col-md-8 offset-md-2 drop-sm">
-                    <select class="form-control select2 form-control-sm" title="Select Branch" name="branch_id" id="branch_id">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select Branch" title="Select Branch" name="branch_id" id="branch_id">
                       <option selected="selected"  value="">Select Branch</option>
+                      <!-- <?php foreach ($branch_list as $list) { ?>
+                      <option value="<?php echo $list->branch_id; ?>"><?php echo $list->branch_name; ?></option>
+                      <?php } ?> -->
                     </select>
                   </div>
+                  
+                  <div class="form-group col-md-4 offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select RC" title="Select RC" name="rc_id" id="rc_id">
+                      <option selected="selected"  value="">Select RC</option>
+                      
+                    </select>
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select TC" title="Select TC" name="tc_id" id="tc_id">
+                      <option selected="selected"  value="">Select TC</option>
+                      
+                    </select>
+                  </div>
+                  
                   <div class="form-group col-md-4 offset-md-2 drop-sm">
                     <select class="form-control select2 form-control-sm" title="Select Service / Product" name="service_id" id="service_id">
                       <option selected="selected"  value="">Select Service / Product</option>
                       <?php foreach ($service_list as $list) { ?>
-                      <option value="<?php echo $list->service_id; ?>" <?php if(isset($service_id)){ if($list->service_id == $service_id){ echo "selected"; } }  ?>><?php echo $list->service_name; ?></option>
+                      <option value="<?php echo $list->service_id; ?>"><?php echo $list->service_name; ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -109,6 +127,42 @@ $page = "party_list";
                         }
                       </style>
                       <thead>
+                        <tr>
+                          <td colspan="9">From : <?php echo $from_date2; ?> To : <?php echo $to_date2; ?> </td>
+                        </tr>
+                        <?php if(isset($manager_id2) && $manager_id2 != ''){ ?>
+                          <tr>
+                            <td colspan="5">Manager :
+                              <?php foreach ($manager_list as $list) {
+                                if($manager_id2 == $list->user_id){
+                                  echo $list->user_name.' '.$list->user_lastname;
+                                }
+                              } ?>
+                           </td>
+                           <td colspan="4">Branch :
+                             <?php foreach ($branch_list as $list) {
+                               if($branch_id2 == $list->branch_id){
+                                 echo $list->branch_name;
+                               }
+                             } ?>
+                          </td>
+                          </tr>
+                        <?php } ?>
+                        <?php if(isset($service_id2) && $service_id2 != ''){ ?>
+                          <tr>
+                            <td colspan="5">Service :
+                              <?php foreach ($service_list as $list) {
+                                if($service_id2 == $list->service_id){
+                                  echo $list->service_name;
+                                }
+                              } ?>
+                           </td>
+                           <td colspan="4">Status :
+                             <?php echo $status_name2; ?>
+                          </td>
+                          </tr>
+                        <?php } ?>
+
                         <th> <p style="text-align:center">Sr. No.</p> </th>
                         <th> <p style="text-align:center">Appl<sup>n</sup> No. </p> </th>
                         <th> <p style="text-align:center">Appl<sup>n</sup> date</p> </th>
@@ -174,18 +228,63 @@ $page = "party_list";
   <script src="<?php echo base_url(); ?>assets/js/table2excel.js"></script>
   <script type="text/javascript">
     // Get Branch Info on Select...
-    $('#company_id').on('change',function(){
-      var company_id = $(this).val();
+    // $('#company_id').on('change',function(){
+    //   var company_id = $(this).val();
+    //   $.ajax({
+    //     url:'<?php echo base_url(); ?>Transaction/get_branch_by_company',
+    //     type: 'POST',
+    //     data: {"company_id":company_id},
+    //     context: this,
+    //     success: function(result){
+    //       $('#branch_id').html(result);
+    //     }
+    //   });
+    // })
+
+    $('#manager_id').on('change',function(){
+      var manager_id = $(this).val();
       $.ajax({
-        url:'<?php echo base_url(); ?>Transaction/get_branch_by_company',
+        url:'<?php echo base_url(); ?>Transaction/get_branch_by_manager',
         type: 'POST',
-        data: {"company_id":company_id},
+        data: {"manager_id":manager_id},
         context: this,
         success: function(result){
           $('#branch_id').html(result);
         }
       });
-    })
+    });
+    
+    $('#branch_id').on('change',function(){
+      var branch_id = $(this).val();
+      $.ajax({
+        url:'<?php echo base_url(); ?>Transaction/get_users_by_branch_rel',
+        type: 'POST',
+        data: {"branch_id":branch_id},
+        context: this,
+        success: function(result){
+          var data = JSON.parse(result)
+          // $('#manager_id').html(data['manager']);
+          $('#rc_id').html('<option selected="selected"  value="">Select RC</option>'+data['rc']);
+          $('#tc_id').html('<option selected="selected"  value="">Select TC</option>'+data['tc']);
+        }
+      });
+    });
+    
+    $('#rc_id').on('change',function(){
+        var rc_id = $(this).val();
+        if(rc_id != ''){
+            // alert();
+            $('#tc_id').attr('disabled',true);
+        }
+    });
+    
+    $('#tc_id').on('change',function(){
+        var tc_id = $(this).val();
+        if(tc_id != ''){
+            // alert();
+            $('#rc_id').attr('disabled',true);
+        }
+    });
 
     function printDiv()
     {

@@ -54,16 +54,28 @@ $page = "make_information_list";
                   $i=0;
                   foreach ($user_list as $list) {
                     $i++;
+                    $branch_id = $list->branch_id;
                   ?>
                   <tr>
                     <td><?php echo $i; ?></td>
                     <td><?php echo $list->company_name; ?></td>
-                    <td><?php echo $list->branch_name; ?></td>
+                    <td>
+                      <?php if(isset($branch_id) && $branch_id != 0) {
+                        // echo $branch_id
+                        $str_arr = explode (",", $branch_id);
+                        foreach ($str_arr as $x) {
+                          $branch = $this->User_Model->get_info_arr('branch_id', $x, 'law_branch');
+                          echo $branch[0]['branch_name'].', ';
+                        }
+                      } ?>
+                    </td>
                     <td><?php echo $list->roll_name; ?></td>
                     <td><?php echo $list->user_name.' '.$list->user_lastname; ?></td>
                     <td>
                       <a href="<?php echo base_url(); ?>User/edit_user/<?php echo $list->user_id; ?>"> <i class="fa fa-edit"></i> </a>
+                      <?php if($user_roll == 1){ ?>
                       <a href="<?php echo base_url(); ?>User/delete_user/<?php echo $list->user_id; ?>" onclick="return confirm('Delete this Company');" class="ml-4"> <i class="fa fa-trash"></i> </a>
+                      <?php } ?>
                     </td>
                   </tr>
                 <?php } ?>

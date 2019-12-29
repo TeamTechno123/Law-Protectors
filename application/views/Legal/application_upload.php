@@ -15,11 +15,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1 text-center">
-            <?php if(isset($change_status)){ ?>
-              <h4>Change Status</h4>
-            <?php } else{ ?>
-              <h4>Document Upload</h4>
-            <?php } ?>
+              <h4>Application Document Upload</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -54,8 +50,6 @@
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="" id="" value="<?php if(isset($organization_name)){ echo $organization_name; } ?>" title="Organization Name" placeholder="Organization Name" readonly>
                   </div>
-
-                  <?php if(!isset($change_status)){ ?>
                   <?php
                   if(isset($service_document)){
                     $str_arr = explode (",", $service_document);
@@ -74,25 +68,21 @@
                           <a target="_blank" href="<?php echo base_url(); ?>/assets/images/document/<?php echo $pre_doc[0]['doc_name']; ?>"><?php echo $pre_doc[0]['doc_name']; ?></a>
                         </div>
                         <div class="form-group col-md-2">
-                          <a class="del_doc" id="<?php echo $pre_doc[0]['upload_id']; ?>" href="#"><i class="fa fa-trash text-danger"></i></a>
+                          <!-- <a class="del_doc" id="<?php echo $pre_doc[0]['upload_id']; ?>" href="#"><i class="fa fa-trash text-danger"></i></a> -->
                         </div>
                     <?php  }else{ ?>
                       <div class="form-group col-md-8">
-                        <input type="file" class="form-control form-control-sm" name="doc_name[]" id="" title="" placeholder="">
-                        <input type="hidden" name="doc_type[]" value="<?php echo $str_arr[$i]; ?>">
+                        Not Uploaded
                       </div>
                     <?php  }
                     }
                     else{ ?>
                       <div class="form-group col-md-8">
-                        <input type="file" class="form-control form-control-sm" name="doc_name[]" id="" title="" placeholder="">
-                        <input type="hidden" name="doc_type[]" value="<?php echo $str_arr[$i]; ?>">
+                        Not Uploaded
                       </div>
                   <?php  }
                     ?>
                   <?php } }
-                }
-                  //echo $application_status;
                   ?>
 
                   <?php if(isset($application_status) && ($application_status != 'Filed Application' && $application_status != 'Application Closed')){ ?>
@@ -103,35 +93,20 @@
                   </style>
                 <?php } ?>
                     <div class="form-group col-md-6 ">
-                      <select class="form-control select2 form-control-sm" name="application_status" id="application_status" title="Select Status" style="width: 100%;" required <?php //if(isset($change_status)){ echo 'disabled'; } ?>>
+                      <select class="form-control select2 form-control-sm" name="application_status" id="application_status" title="Select Status" style="width: 100%;" required disabled>
                         <option selected="selected" value="" >Select Status </option>
-                        <option <?php if(isset($application_status) && $application_status == 'Ready To File'){ echo 'selected'; }?> >Ready To File</option>
                         <option <?php if(isset($application_status) && $application_status == 'Legal In Process'){ echo 'selected'; }?> >Legal In Process</option>
-                        <option <?php if(isset($application_status) && $application_status == 'Pending for Legal'){ echo 'selected'; }?> disabled>Pending for Legal</option>
-                        <option <?php if(isset($application_status) && $application_status == 'Legal Completed'){ echo 'selected'; }?> disabled>Legal Completed</option>
-                        <option <?php if(isset($application_status) && $application_status == 'Filed Application'){ echo 'selected'; }?>>Filed Application</option>
-                        <option <?php if(isset($application_status) && $application_status == 'Application Closed'){ echo 'selected'; }?> >Application Closed</option>
+                        <option <?php if(isset($application_status) && $application_status == 'Pending for Legal'){ echo 'selected'; }?>>Pending for Legal</option>
+                        <option <?php if(isset($application_status) && $application_status == 'Legal Completed'){ echo 'selected'; }?> >Legal Completed</option>
                       </select>
                     </div>
                     <div class="form-group col-md-6">
-                      <input type="number" min="0" class="form-control form-control-sm" name="alert_days" id="alert_days" value="<?php if(isset($alert_days)){ echo $alert_days; } ?>" title="Enter No. Of Days" placeholder="Enter No. Of Days" <?php if(isset($change_status)){ echo 'readonly'; } ?>>
+                      <input type="number" min="0" class="form-control form-control-sm" name="alert_days" id="alert_days" value="<?php if(isset($alert_days)){ echo $alert_days; } ?>" title="Enter No. Of Days" placeholder="Enter No. Of Days" readonly>
                     </div>
-                    <div class="form-group col-md-6 prn dis-no">
-                      <input type="text" class="form-control form-control-sm" name="prn_no" id="prn_no" value="<?php if(isset($prn_no)){ echo $prn_no; } ?>" title="PRN No." placeholder="PRN No." <?php if(isset($change_status)){ echo 'readonly'; } ?>>
-                    </div>
-                    <div class="form-group col-md-6 prn dis-no">
-                      <input type="text" class="form-control form-control-sm" name="prn_date" id="date2" data-target="#date2" data-toggle="datetimepicker" value="<?php if(isset($prn_date)){ echo $prn_date; } ?>" title="PRN Date" placeholder="PRN Date" <?php if(isset($change_status)){ echo 'readonly'; } ?>>
-                    </div>
-                    <?php if(isset($change_status)){ ?>
-                      <div class="form-group col-md-6 prn dis-no d-none">
-                        <input type="checkbox" name="complete_status" id="complete_status" value="Application Closed" <?php if(isset($application_status) && $application_status == 'Application Closed'){ echo 'checked'; } ?>>
-                        Application Closed
-                      </div>
-                    <?php } ?>
-                  <div class="col-md-6 offset-md-4">
+                  <!-- <div class="col-md-6 offset-md-4">
                     <button type="submit" class="btn btn-primary  mr-3">Add</button>
                     <button type="submit" class="btn btn-default ">Cancel</button>
-                  </div>
+                  </div> -->
                 </div>
               </form>
             </div>

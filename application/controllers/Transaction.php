@@ -15,7 +15,7 @@ class Transaction extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
       $data['application_no'] = $this->Transaction_Model->get_count_no('application_no','law_application');
-      $data['branch_list'] = $this->User_Model->get_list($company_id,'branch_id','ASC','law_branch');
+      $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
       $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
       $data['organization_list'] = $this->User_Model->get_list2('organization_id','ASC','law_organization');
       $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
@@ -32,6 +32,16 @@ class Transaction extends CI_Controller{
   public function get_branch_by_company(){
     $company_id = $this->input->post('company_id');
     $branch_list = $this->User_Model->get_list($company_id,'branch_id','ASC','law_branch');
+
+    //echo "<option value='' selected >Select Branch</option>";
+  	foreach ($branch_list as $data) {
+  		echo "<option class='cls_".$data->branch_id."' value=".$data->branch_id."> ".$data->branch_name." </option>";
+  	}
+  }
+
+  public function get_branch_by_manager(){
+    $manager_id = $this->input->post('manager_id');
+    $branch_list = $this->Transaction_Model->get_branch_by_manager($manager_id);
     echo "<option value='' selected >Select Branch</option>";
   	foreach ($branch_list as $data) {
   		echo "<option class='cls_".$data->branch_id."' value=".$data->branch_id."> ".$data->branch_name." </option>";
@@ -63,24 +73,100 @@ class Transaction extends CI_Controller{
     echo json_encode($data);
   }
 
+  public function get_users_by_branch_rel(){
+    $branch_id = $this->input->post('branch_id');
+    $manager_list = $this->Transaction_Model->get_users_by_branch_rel('2',$branch_id);
+    $rc_list = $this->Transaction_Model->get_users_by_branch_rel('3',$branch_id);
+    $tc_list = $this->Transaction_Model->get_users_by_branch_rel('4',$branch_id);
+    // echo $manager_list;
+    $manager = "";
+    foreach ($manager_list as $manager1) {
+      $manager = $manager."<option value=".$manager1->user_id."> ".$manager1->user_name." ".$manager1->user_lastname."</option>";
+  	}
+    $data['manager'] = $manager;
+
+    $rc = "";
+    foreach ($rc_list as $rc1) {
+      $rc = $rc."<option value=".$rc1->user_id."> ".$rc1->user_name." ".$rc1->user_lastname."</option>";
+  	}
+    $data['rc'] = $rc;
+
+    $tc = "";
+    foreach ($tc_list as $tc1) {
+      $tc = $tc."<option value=".$tc1->user_id."> ".$tc1->user_name." ".$tc1->user_lastname."</option>";
+  	}
+    $data['tc'] = $tc;
+    echo json_encode($data);
+  }
+
   // Save Application...
   public function save_application(){
     $user_id = $this->session->userdata('law_user_id');
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
+
+      $manager_id = $this->input->post('manager_id');
+      $manager = implode(", ", $manager_id);
+
+      $rc_id = $this->input->post('rc_id');
+      if($rc_id != ''){ $rc = implode(", ", $rc_id); } else{ $rc = '';}
+
+      $tc_id = $this->input->post('tc_id');
+      if($tc_id != ''){ $tc = implode(", ", $tc_id); } else{ $tc = '';}
+
+
       $application_data = array(
         'company_id' => $this->input->post('company_id'),
         'application_no' => $this->input->post('application_no'),
         'application_date' => $this->input->post('application_date'),
         'branch_id' => $this->input->post('branch_id'),
-        'manager_id' => $this->input->post('manager_id'),
-        'tc_id' => $this->input->post('tc_id'),
-        'rc_id' => $this->input->post('rc_id'),
+        'manager_id' => $manager,
+        'tc_id' => $rc,
+        'rc_id' => $tc,
         'service_id' => $this->input->post('service_id'),
         'organization_id' => $this->input->post('organization_id'),
       );
       $application_id = $this->User_Model->save_data('law_application', $application_data);
+
+      // Add To Relation Table...
+      $i = 0;
+      foreach ($manager_id as $a) {
+        $rel_data = array(
+          'user_id' => $manager_id[$i],
+          'roll_id' => 2,
+          'application_id' => $application_id,
+        );
+        $this->User_Model->save_data('law_appl_user_rel', $rel_data);
+        $i++;
+      }
+
+      if($rc_id != ''){
+        $i = 0;
+        foreach ($rc_id as $a) {
+          $rel_data = array(
+            'user_id' => $rc_id[$i],
+            'roll_id' => 3,
+            'application_id' => $application_id,
+          );
+          $this->User_Model->save_data('law_appl_user_rel', $rel_data);
+          $i++;
+        }
+      }
+
+      if($tc_id != ''){
+        $i = 0;
+        foreach ($tc_id as $a) {
+          $rel_data = array(
+            'user_id' => $tc_id[$i],
+            'roll_id' => 4,
+            'application_id' => $application_id,
+          );
+          $this->User_Model->save_data('law_appl_user_rel', $rel_data);
+          $i++;
+        }
+      }
+
       $service_id = $this->input->post('service_id');
       $row['application_id'] = $application_id;
       $row2['is_master'] = 1;
@@ -107,7 +193,31 @@ class Transaction extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
+      $data['user_roll'] = $roll_id;
       $status = '';
+      $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'DESC');
+      $this->load->view('Include/head', $data);
+      $this->load->view('Include/navbar', $data);
+      $this->load->view('Transaction/application_list', $data);
+      $this->load->view('Include/footer', $data);
+    } else{
+      header('location:'.base_url().'User');
+    }
+  }
+
+  // Application List....
+  public function application_list2($status_id){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($company_id){
+      $data['user_roll'] = $roll_id;
+      if($status_id == 1){ $status = 'Open'; }
+      if($status_id == 2){ $status = 'In Process'; }
+      if($status_id == 3){ $status = 'Ready To File'; }
+      if($status_id == 4){ $status = 'Filed Application'; }
+      if($status_id == 5){ $status = 'Application Closed'; }
+      //$status = '';
       $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'DESC');
 
       $this->load->view('Include/head', $data);
@@ -128,7 +238,6 @@ class Transaction extends CI_Controller{
     foreach ($appl_details as $details) {
       $service_id = $details->service_id;
     }
-
     if($service_id == 1){
       $this->User_Model->delete_info('application_id', $application_id, 'law_trademark');
     }
@@ -137,35 +246,14 @@ class Transaction extends CI_Controller{
     } else{
       $this->User_Model->delete_info('application_id', $application_id, 'law_otherservice');
     }
-
     $this->User_Model->delete_info('application_id', $application_id, 'law_application');
     $this->User_Model->delete_info('application_id', $application_id, 'law_payment');
     $this->User_Model->delete_info('application_id', $application_id, 'law_doc_upload');
+    $this->User_Model->delete_info('application_id', $application_id, 'law_appl_user_rel');
     header('location:'.base_url().'Transaction/application_list');
   }
 
-  // Application List....
-  public function application_list2($status_id){
-    $user_id = $this->session->userdata('law_user_id');
-    $company_id = $this->session->userdata('law_company_id');
-    $roll_id = $this->session->userdata('roll_id');
-    if($company_id){
-      if($status_id == 1){ $status = 'Open'; }
-      if($status_id == 2){ $status = 'In Process'; }
-      if($status_id == 3){ $status = 'Ready To File'; }
-      if($status_id == 4){ $status = 'Filed Application'; }
-      if($status_id == 5){ $status = 'Application Closed'; }
-      //$status = '';
-      $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'DESC');
 
-      $this->load->view('Include/head', $data);
-      $this->load->view('Include/navbar', $data);
-      $this->load->view('Transaction/application_list', $data);
-      $this->load->view('Include/footer', $data);
-    } else{
-      header('location:'.base_url().'User');
-    }
-  }
 
   // Edit Application....
   public function edit_application($application_id){
@@ -202,6 +290,7 @@ class Transaction extends CI_Controller{
       $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
       $data['organization_list'] = $this->User_Model->get_list2('organization_id','ASC','law_organization');
       $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
+      $data['user_list'] = $this->User_Model->get_user_list($company_id2);
 
       $this->load->view('Include/head', $data);
       $this->load->view('Include/navbar', $data);
@@ -219,23 +308,78 @@ class Transaction extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($company_id){
       $application_id = $this->input->post('application_id');
+
+      $manager_id = $this->input->post('manager_id');
+      $manager = implode(", ", $manager_id);
+
+      $rc_id = $this->input->post('rc_id');
+      if($rc_id != ''){ $rc = implode(", ", $rc_id); } else{ $rc = '';}
+
+      $tc_id = $this->input->post('tc_id');
+      if($tc_id != ''){ $tc = implode(", ", $tc_id); } else{ $tc = '';}
+
       $data = array(
         'company_id' => $this->input->post('company_id'),
         'application_no' => $this->input->post('application_no'),
         'application_date' => $this->input->post('application_date'),
         'branch_id' => $this->input->post('branch_id'),
-        'manager_id' => $this->input->post('manager_id'),
-        'tc_id' => $this->input->post('tc_id'),
-        'rc_id' => $this->input->post('rc_id'),
+        'manager_id' => $manager,
+        'tc_id' => $tc,
+        'rc_id' => $rc,
       );
       $this->User_Model->update_info('application_id', $application_id, 'law_application', $data);
 
       $organization_id = $this->input->post('organization_id');
       $this->session->set_userdata('organization_id',$organization_id);
       $this->session->set_userdata('application_id',$application_id);
-      // echo $application_id;
+
+      $this->User_Model->delete_info('application_id', $application_id, 'law_appl_user_rel');
+      $i = 0;
+      foreach ($manager_id as $a) {
+        $rel_data = array(
+          'user_id' => $manager_id[$i],
+          'roll_id' => 2,
+          'application_id' => $application_id,
+        );
+        $this->User_Model->save_data('law_appl_user_rel', $rel_data);
+        $i++;
+      }
+
+      if($rc_id != ''){
+        $i = 0;
+        foreach ($rc_id as $a) {
+          $rel_data = array(
+            'user_id' => $rc_id[$i],
+            'roll_id' => 3,
+            'application_id' => $application_id,
+          );
+          $this->User_Model->save_data('law_appl_user_rel', $rel_data);
+          $i++;
+        }
+      }
+
+      if($tc_id != ''){
+        $i = 0;
+        foreach ($tc_id as $a) {
+          $rel_data = array(
+            'user_id' => $tc_id[$i],
+            'roll_id' => 4,
+            'application_id' => $application_id,
+          );
+          $this->User_Model->save_data('law_appl_user_rel', $rel_data);
+          $i++;
+        }
+      }
+
       $service_id = $this->input->post('service_id');
-      header('location:'.base_url().'Transaction/process_step_two');
+      if($service_id == 1){
+        header('location:'.base_url().'Transaction/trade_mark_step_one');
+      } elseif ($service_id == 2) {
+        header('location:'.base_url().'Transaction/copyright_step_one');
+      }
+      else{
+        header('location:'.base_url().'Transaction/other_service_step_one');
+      }
 
     } else{
       header('location:'.base_url().'User');
@@ -261,6 +405,7 @@ class Transaction extends CI_Controller{
           $data['NAME'] = $info->NAME;
           $data['ADDRESS'] = $info->ADDRESS;
           $data['MOBILE'] = $info->MOBILE;
+          $data['SIGN_AUTH'] = $info->SIGN_AUTH;
           $data['AFF_DATE'] = $info->AFF_DATE;
           $data['COV_DATE'] = $info->COV_DATE;
           $data['BRAND'] = $info->BRAND;
@@ -285,10 +430,6 @@ class Transaction extends CI_Controller{
           $data['PLACE'] = $info->PLACE;
           $data['DATE'] = $info->DATE;
           $data['TRADE'] = $info->TRADE;
-          // $data['TRADE_0'] = $info->TRADE_0;
-          // $data['TRADE_1'] = $info->TRADE_1;
-          // $data['TRADE_2'] = $info->TRADE_2;
-          // $data['TRADE_3'] = $info->TRADE_3;
           $data['IS_MSME_REQ'] = $info->IS_MSME_REQ;
           $data['ASSOCIATE_MARK'] = $info->ASSOCIATE_MARK;
           $data['ADV_NAME'] = $info->ADV_NAME;
@@ -297,72 +438,87 @@ class Transaction extends CI_Controller{
           $data['title'] = 'Trade Mark';
         }
 
+        $payment_details = $this->Transaction_Model->get_payment_info($application_id);
+        if(!$payment_details){ header('location:'.base_url().'Transaction/application_list');  }
+        foreach ($payment_details as $info) {
+          $data['application_id'] = $application_id;
+          $data['organization_id'] = $organization_id;
+
+          $data['payment_id'] = $info->payment_id;
+          $data['CONTRACTAMOUNT'] = $info->CONTRACTAMOUNT;
+          $data['GSTAMOUNT'] = $info->GSTAMOUNT;
+          $data['TOTALAMOUNT'] = $info->TOTALAMOUNT;
+          $data['RECEVIEDAMOUNT'] = $info->RECEVIEDAMOUNT;
+          $data['BALANCEAMOUNT'] = $info->BALANCEAMOUNT;
+          $data['GSTNUMBER'] = $info->GSTNUMBER;
+          $data['LP_AMOUNT'] = $info->LP_AMOUNT;
+          $data['GOVT_FEES'] = $info->GOVT_FEES;
+          $data['TDS'] = $info->TDS;
+          $data['B2B'] = $info->B2B;
+          $data['PAYMENTMODE_0'] = $info->PAYMENTMODE_0;
+          $data['PAYMENTMODE_1'] = $info->PAYMENTMODE_1;
+          $data['CHEQUENUMBER'] = $info->CHEQUENUMBER;
+          $data['CHQDATE'] = $info->CHQDATE;
+          $data['BANKNAME'] = $info->BANKNAME;
+          $data['CHEQUEAMOUNT'] = $info->CHEQUEAMOUNT;
+          $data['GROUNDOFCONTRACT'] = $info->GROUNDOFCONTRACT;
+        }
+
         if($organization_id == 1){
-          // $data['title'] = 'APPLICANT';
           $data['pl_name'] = 'Full Name of Applicant';
           $data['pl_nation'] = 'Nationality of Applicant';
-          $data['pl_father'] = 'Father / Husabnt of Applicant';
+          $data['pl_father'] = 'Father / Husband of Applicant';
           $data['pl_res_addr'] = 'Residential Address';
         }
         elseif ($organization_id == 2) {
-          // $data['title'] = 'Government Department';
           $data['pl_name'] = 'Full Name of Director / Authorized Signatory';
           $data['pl_nation'] = 'Nationality of Chairman';
           $data['pl_association'] = 'Association of Chairman Full Name';
           $data['pl_res_addr'] = 'Residential Address of Chairman';
         }
         elseif ($organization_id == 3) {
-          // $data['title'] = 'APPLICANT';
           $data['pl_name'] = 'Full Name of Karta';
           $data['pl_nation'] = 'Nationality of Karta';
           $data['pl_association'] = 'Association of Karta';
           $data['pl_res_addr'] = 'Residential Address';
         }
         elseif ($organization_id == 4) {
-          // $data['title'] = 'LLP';
           $data['pl_name'] = 'Full Name of All Partner';
           $data['pl_nation'] = 'Nationality of Single Partner';
           $data['pl_association'] = 'Association of Authorized Partner';
           $data['pl_res_addr'] = 'Residential Address of Partner';
         }
         elseif ($organization_id == 5) {
-          // $data['title'] = 'PROPRITORSHIP';
           $data['pl_name'] = 'Full Name of Propriter';
           $data['pl_nation'] = 'Nationality of Propriter';
-          $data['pl_father'] = 'Father / Husabnt Name of Propriter';
+          $data['pl_father'] = 'Father / Husband Name of Propriter';
           $data['pl_res_addr'] = 'Residential Address of Propriter';
         }
         elseif ($organization_id == 6) {
-          // $data['title'] = 'REGD COMPANY';
           $data['pl_name'] = 'Full Name of Director';
           $data['pl_nation'] = 'Nationality of Director';
-          // $data['pl_father'] = 'Father / Husabnt Of Applicant';
           $data['pl_res_addr'] = 'Residential Address of Director';
         }
         elseif ($organization_id == 7) {
-          // $data['title'] = 'REGD PARTNERSHIP';
           $data['pl_name'] = 'Full Name of all Partener';
           $data['pl_nation'] = 'Nationality of Signing Authorized Partener';
           $data['pl_father'] = 'Father School Name of Partener';
           $data['pl_res_addr'] = 'Residential Address of Partener';
         }
         elseif ($organization_id == 8) {
-          // $data['title'] = 'SOCIETY';
           $data['pl_name'] = 'Full Name of Chairman';
           $data['pl_nation'] = 'Nationality of Chairman';
           $data['pl_association'] = 'Association of Chairman Full Name';
           $data['pl_res_addr'] = 'Residential Address of Chairman';
         }
         elseif ($organization_id == 9) {
-          // $data['title'] = 'TRUST';
-          $data['pl_name'] = 'Full Name of Chairman';
-          $data['pl_nation'] = 'Nationality of Chairman';
+          $data['pl_name'] = 'Name of Authorized Signatory';
+          $data['pl_nation'] = 'Nationality of Authorized Signatory ';
           // $data['pl_father'] = 'Father / Husabnt Of Applicant';
-          $data['pl_association'] = 'Association of Chairman Full Name';
-          $data['pl_res_addr'] = 'Residential Address of Chairman';
+          $data['pl_association'] = 'Name All Trusties';
+          $data['pl_res_addr'] = 'Residential Address of Trustee';
         }
         elseif ($organization_id == 10) {
-          // $data['title'] = 'Unregistered Partnership';
           $data['pl_name'] = 'Full Name of all Partner';
           $data['pl_nation'] = 'Nationality of Signing authorize Partner';
           $data['pl_father'] = 'Father School Name of Partener';
@@ -394,20 +550,12 @@ class Transaction extends CI_Controller{
       $MARK_2 = $this->input->post('MARK_2');
       $MARK_3 = $this->input->post('MARK_3');
       $MARK_4 = $this->input->post('MARK_4');
-      // $TRADE_0 = $this->input->post('TRADE_0');
-      // $TRADE_1 = $this->input->post('TRADE_1');
-      // $TRADE_2 = $this->input->post('TRADE_2');
-      // $TRADE_3 = $this->input->post('TRADE_3');
 
       if(!isset($MARK_0)){ $MARK_0 = '';}
       if(!isset($MARK_1)){ $MARK_1 = '';}
       if(!isset($MARK_2)){ $MARK_2 = '';}
       if(!isset($MARK_3)){ $MARK_3 = '';}
       if(!isset($MARK_4)){ $MARK_4 = '';}
-      // if(!isset($TRADE_0)){ $TRADE_0 = '';}
-      // if(!isset($TRADE_1)){ $TRADE_1 = '';}
-      // if(!isset($TRADE_2)){ $TRADE_2 = '';}
-      // if(!isset($TRADE_3)){ $TRADE_3 = '';}
 
       $PROPOSED_TO_BE = $this->input->post('PROPOSED_TO_BE');
       if(!isset($PROPOSED_TO_BE)){ $PROPOSED_TO_BE = '';}
@@ -423,6 +571,7 @@ class Transaction extends CI_Controller{
       $uodate_data['NAME'] = $this->input->post('NAME');
       $uodate_data['NATIONALITY'] = $this->input->post('NATIONALITY');
       $uodate_data['MOBILE'] = $this->input->post('MOBILE');
+      $uodate_data['SIGN_AUTH'] = $this->input->post('SIGN_AUTH');
       $uodate_data['AFF_DATE'] = $this->input->post('AFF_DATE');
       $uodate_data['COV_DATE'] = $this->input->post('COV_DATE');
       $uodate_data['ADDRESS'] = $this->input->post('ADDRESS');
@@ -436,10 +585,6 @@ class Transaction extends CI_Controller{
       $uodate_data['MARK_3'] = $MARK_3;
       $uodate_data['MARK_4'] = $MARK_4;
       $uodate_data['TRADE'] = $this->input->post('TRADE');
-      // $uodate_data['TRADE_0'] = $TRADE_0;
-      // $uodate_data['TRADE_1'] = $TRADE_1;
-      // $uodate_data['TRADE_2'] = $TRADE_2;
-      // $uodate_data['TRADE_3'] = $TRADE_3;
       $uodate_data['BRAND'] = $this->input->post('BRAND');
       $uodate_data['SIGNIFICANCE'] = $this->input->post('SIGNIFICANCE');
       $uodate_data['TM'] = $this->input->post('TM');
@@ -463,14 +608,9 @@ class Transaction extends CI_Controller{
         $config['file_name'] = $image_name;
         $filename = $_FILES['LOGO']['name'];
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
-        // $this->load->library('upload', $config);
         $this->upload->initialize($config);
         if ($this->upload->do_upload('LOGO')){
           $uodate_data['LOGO'] = $image_name.'.'.$ext;
-          // $tour_up_image = array(
-          //   'LOGO' => $image_name.'.'.$ext,
-          // );
-          // $this->Admin_Model->update_tour_image($tour_id,$tour_up_image);
           if($LOGO_old != ''){
             unlink("assets/images/trade_logo/".$LOGO_old);
           }
@@ -481,9 +621,45 @@ class Transaction extends CI_Controller{
           $this->session->set_flashdata('status',$this->upload->display_errors());
         }
       }
-
       $this->User_Model->update_info('application_id', $application_id, 'law_trademark', $uodate_data);
-      // header('location:'.base_url().'Transaction/process_step_two');
+
+      // Save Payment....
+      $payment_id = $this->input->post('payment_id');
+      $application_details = $this->Transaction_Model->application_details($application_id);
+      foreach ($application_details as $appl_details) {  }
+      $service_name = $appl_details->service_name;
+      $service_id = $appl_details->service_id;
+
+      $PAYMENTMODE_0 = $this->input->post('PAYMENTMODE_0');
+      $PAYMENTMODE_1 = $this->input->post('PAYMENTMODE_1');
+
+      if(!isset($PAYMENTMODE_0))( $PAYMENTMODE_0 = '');
+      if(!isset($PAYMENTMODE_1))( $PAYMENTMODE_1 = '');
+
+      $uodate_data2['CONTRACTAMOUNT'] = $this->input->post('CONTRACTAMOUNT');
+      $uodate_data2['GSTAMOUNT'] = $this->input->post('GSTAMOUNT');
+      $uodate_data2['TOTALAMOUNT'] = $this->input->post('TOTALAMOUNT');
+      $uodate_data2['RECEVIEDAMOUNT'] = $this->input->post('RECEVIEDAMOUNT');
+      $uodate_data2['BALANCEAMOUNT'] = $this->input->post('BALANCEAMOUNT');
+      $uodate_data2['LP_AMOUNT'] = $this->input->post('LP_AMOUNT');
+      $uodate_data2['GOVT_FEES'] = $this->input->post('GOVT_FEES');
+      $uodate_data2['TDS'] = $this->input->post('TDS');
+      $uodate_data2['B2B'] = $this->input->post('B2B');
+      $uodate_data2['GSTNUMBER'] = $this->input->post('GSTNUMBER');
+      $uodate_data2['PAYMENTMODE_0'] = $PAYMENTMODE_0;
+      $uodate_data2['PAYMENTMODE_1'] = $PAYMENTMODE_1;
+      $uodate_data2['CHEQUENUMBER'] = $this->input->post('CHEQUENUMBER');
+      $uodate_data2['CHQDATE'] = $this->input->post('CHQDATE');
+      $uodate_data2['BANKNAME'] = $this->input->post('BANKNAME');
+      $uodate_data2['CHEQUEAMOUNT'] = $this->input->post('CHEQUEAMOUNT');
+      $uodate_data2['GROUNDOFCONTRACT'] = $this->input->post('GROUNDOFCONTRACT');
+      $uodate_data2['payment_date'] = date('d-m-Y');
+      $uodate_data2['is_master'] = 1;
+
+      $this->User_Model->update_info('payment_id', $payment_id, 'law_payment', $uodate_data2);
+      $app_data['application_status'] = 'In Process';
+      $this->User_Model->update_info('application_id', $application_id, 'law_application', $app_data);
+
       header('location:'.base_url().'Transaction/application_list');
     } else{
       header('location:'.base_url().'User');
@@ -499,14 +675,16 @@ class Transaction extends CI_Controller{
 
       $organization_id = $this->session->userdata('organization_id');
       $application_id = $this->session->userdata('application_id');
+      $application_details = $this->Transaction_Model->application_details($application_id);
+      foreach ($application_details as $appl_details) {  }
+      $service_name = $appl_details->service_name;
 
       $form_details = $this->User_Model->get_info('application_id', $application_id, 'law_copyright');
-
-      // echo print_r($application_id);
-      if($form_details){
+      if($form_details){ }
         foreach ($form_details as $info) {
           $data['application_id'] = $application_id;
           $data['organization_id'] = $organization_id;
+          $data['title'] = $service_name;
           $data['copy_title'] = $info->copy_title;
           $data['org_name'] = $info->org_name;
           $data['org_address'] = $info->org_address;
@@ -533,14 +711,38 @@ class Transaction extends CI_Controller{
           $data['place'] = $info->place;
         }
 
-        $this->load->view('Include/head', $data);
-        $this->load->view('Include/navbar', $data);
-        $this->load->view('Transaction/copyright_step1', $data);
-        $this->load->view('Include/footer', $data);
+        // Payment...
+      $payment_details = $this->Transaction_Model->get_payment_info($application_id);
+      if(!$payment_details){ header('location:'.base_url().'Transaction/application_list');  }
+      foreach ($payment_details as $info) {
+        $data['application_id'] = $application_id;
+        $data['organization_id'] = $organization_id;
+
+        $data['payment_id'] = $info->payment_id;
+        $data['CONTRACTAMOUNT'] = $info->CONTRACTAMOUNT;
+        $data['GSTAMOUNT'] = $info->GSTAMOUNT;
+        $data['TOTALAMOUNT'] = $info->TOTALAMOUNT;
+        $data['RECEVIEDAMOUNT'] = $info->RECEVIEDAMOUNT;
+        $data['BALANCEAMOUNT'] = $info->BALANCEAMOUNT;
+        $data['GSTNUMBER'] = $info->GSTNUMBER;
+        $data['LP_AMOUNT'] = $info->LP_AMOUNT;
+        $data['GOVT_FEES'] = $info->GOVT_FEES;
+        $data['TDS'] = $info->TDS;
+        $data['B2B'] = $info->B2B;
+        $data['PAYMENTMODE_0'] = $info->PAYMENTMODE_0;
+        $data['PAYMENTMODE_1'] = $info->PAYMENTMODE_1;
+        $data['CHEQUENUMBER'] = $info->CHEQUENUMBER;
+        $data['CHQDATE'] = $info->CHQDATE;
+        $data['BANKNAME'] = $info->BANKNAME;
+        $data['CHEQUEAMOUNT'] = $info->CHEQUEAMOUNT;
+        $data['GROUNDOFCONTRACT'] = $info->GROUNDOFCONTRACT;
       }
-      else{
-        header('location:'.base_url().'Transaction/application_list');
-      }
+
+      $this->load->view('Include/head', $data);
+      $this->load->view('Include/navbar', $data);
+      $this->load->view('Transaction/copyright_step1', $data);
+      $this->load->view('Include/footer', $data);
+
   }
 
 // Save Copyright... Update Row...
@@ -599,8 +801,45 @@ class Transaction extends CI_Controller{
       'pro_containt1' => $pro_containt1,
       'pro_containt2' => $pro_containt2,
     );
-
     $this->User_Model->update_info('application_id', $application_id, 'law_copyright', $update_data);
+
+    // Save Payment....
+    $payment_id = $this->input->post('payment_id');
+    $application_details = $this->Transaction_Model->application_details($application_id);
+    foreach ($application_details as $appl_details) {  }
+    $service_name = $appl_details->service_name;
+    $service_id = $appl_details->service_id;
+
+    $PAYMENTMODE_0 = $this->input->post('PAYMENTMODE_0');
+    $PAYMENTMODE_1 = $this->input->post('PAYMENTMODE_1');
+
+    if(!isset($PAYMENTMODE_0))( $PAYMENTMODE_0 = '');
+    if(!isset($PAYMENTMODE_1))( $PAYMENTMODE_1 = '');
+
+    $uodate_data2['CONTRACTAMOUNT'] = $this->input->post('CONTRACTAMOUNT');
+    $uodate_data2['GSTAMOUNT'] = $this->input->post('GSTAMOUNT');
+    $uodate_data2['TOTALAMOUNT'] = $this->input->post('TOTALAMOUNT');
+    $uodate_data2['RECEVIEDAMOUNT'] = $this->input->post('RECEVIEDAMOUNT');
+    $uodate_data2['BALANCEAMOUNT'] = $this->input->post('BALANCEAMOUNT');
+    $uodate_data2['LP_AMOUNT'] = $this->input->post('LP_AMOUNT');
+    $uodate_data2['GOVT_FEES'] = $this->input->post('GOVT_FEES');
+    $uodate_data2['TDS'] = $this->input->post('TDS');
+    $uodate_data2['B2B'] = $this->input->post('B2B');
+    $uodate_data2['GSTNUMBER'] = $this->input->post('GSTNUMBER');
+    $uodate_data2['PAYMENTMODE_0'] = $PAYMENTMODE_0;
+    $uodate_data2['PAYMENTMODE_1'] = $PAYMENTMODE_1;
+    $uodate_data2['CHEQUENUMBER'] = $this->input->post('CHEQUENUMBER');
+    $uodate_data2['CHQDATE'] = $this->input->post('CHQDATE');
+    $uodate_data2['BANKNAME'] = $this->input->post('BANKNAME');
+    $uodate_data2['CHEQUEAMOUNT'] = $this->input->post('CHEQUEAMOUNT');
+    $uodate_data2['GROUNDOFCONTRACT'] = $this->input->post('GROUNDOFCONTRACT');
+    $uodate_data2['payment_date'] = date('d-m-Y');
+    $uodate_data2['is_master'] = 1;
+
+    $this->User_Model->update_info('payment_id', $payment_id, 'law_payment', $uodate_data2);
+    $app_data['application_status'] = 'In Process';
+    $this->User_Model->update_info('application_id', $application_id, 'law_application', $app_data);
+
     header('location:'.base_url().'Transaction/application_list');
   }
 
@@ -614,7 +853,6 @@ class Transaction extends CI_Controller{
     $application_id = $this->session->userdata('application_id');
     $application_details = $this->Transaction_Model->application_details($application_id);
     foreach ($application_details as $appl_details) {  }
-    $service_name = $appl_details->service_name;
     $service_name = $appl_details->service_name;
 
     $payment_details = $this->Transaction_Model->get_payment_info($application_id);
@@ -739,6 +977,33 @@ class Transaction extends CI_Controller{
         $data['other_place'] = $info->other_place;
       }
 
+      $payment_details = $this->Transaction_Model->get_payment_info($application_id);
+      if(!$payment_details){ header('location:'.base_url().'Transaction/application_list');  }
+      foreach ($payment_details as $info) {
+        $data['application_id'] = $application_id;
+        $data['organization_id'] = $organization_id;
+
+        $data['payment_id'] = $info->payment_id;
+        $data['CONTRACTAMOUNT'] = $info->CONTRACTAMOUNT;
+        $data['GSTAMOUNT'] = $info->GSTAMOUNT;
+        $data['TOTALAMOUNT'] = $info->TOTALAMOUNT;
+        $data['RECEVIEDAMOUNT'] = $info->RECEVIEDAMOUNT;
+        $data['BALANCEAMOUNT'] = $info->BALANCEAMOUNT;
+        $data['GSTNUMBER'] = $info->GSTNUMBER;
+        $data['LP_AMOUNT'] = $info->LP_AMOUNT;
+        $data['GOVT_FEES'] = $info->GOVT_FEES;
+        $data['TDS'] = $info->TDS;
+        $data['B2B'] = $info->B2B;
+        $data['PAYMENTMODE_0'] = $info->PAYMENTMODE_0;
+        $data['PAYMENTMODE_1'] = $info->PAYMENTMODE_1;
+        $data['CHEQUENUMBER'] = $info->CHEQUENUMBER;
+        $data['CHQDATE'] = $info->CHQDATE;
+        $data['BANKNAME'] = $info->BANKNAME;
+        $data['CHEQUEAMOUNT'] = $info->CHEQUEAMOUNT;
+        $data['GROUNDOFCONTRACT'] = $info->GROUNDOFCONTRACT;
+      }
+
+
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
     $this->load->view('Transaction/other_service_step1',$data);
@@ -766,6 +1031,44 @@ class Transaction extends CI_Controller{
       'other_place' => $this->input->post('other_place'),
     );
     $this->User_Model->update_info('application_id', $application_id, 'law_otherservice', $update_data);
+
+    // Save Payment....
+    $payment_id = $this->input->post('payment_id');
+    $application_details = $this->Transaction_Model->application_details($application_id);
+    foreach ($application_details as $appl_details) {  }
+    $service_name = $appl_details->service_name;
+    $service_id = $appl_details->service_id;
+
+    $PAYMENTMODE_0 = $this->input->post('PAYMENTMODE_0');
+    $PAYMENTMODE_1 = $this->input->post('PAYMENTMODE_1');
+
+    if(!isset($PAYMENTMODE_0))( $PAYMENTMODE_0 = '');
+    if(!isset($PAYMENTMODE_1))( $PAYMENTMODE_1 = '');
+
+    $uodate_data2['CONTRACTAMOUNT'] = $this->input->post('CONTRACTAMOUNT');
+    $uodate_data2['GSTAMOUNT'] = $this->input->post('GSTAMOUNT');
+    $uodate_data2['TOTALAMOUNT'] = $this->input->post('TOTALAMOUNT');
+    $uodate_data2['RECEVIEDAMOUNT'] = $this->input->post('RECEVIEDAMOUNT');
+    $uodate_data2['BALANCEAMOUNT'] = $this->input->post('BALANCEAMOUNT');
+    $uodate_data2['LP_AMOUNT'] = $this->input->post('LP_AMOUNT');
+    $uodate_data2['GOVT_FEES'] = $this->input->post('GOVT_FEES');
+    $uodate_data2['TDS'] = $this->input->post('TDS');
+    $uodate_data2['B2B'] = $this->input->post('B2B');
+    $uodate_data2['GSTNUMBER'] = $this->input->post('GSTNUMBER');
+    $uodate_data2['PAYMENTMODE_0'] = $PAYMENTMODE_0;
+    $uodate_data2['PAYMENTMODE_1'] = $PAYMENTMODE_1;
+    $uodate_data2['CHEQUENUMBER'] = $this->input->post('CHEQUENUMBER');
+    $uodate_data2['CHQDATE'] = $this->input->post('CHQDATE');
+    $uodate_data2['BANKNAME'] = $this->input->post('BANKNAME');
+    $uodate_data2['CHEQUEAMOUNT'] = $this->input->post('CHEQUEAMOUNT');
+    $uodate_data2['GROUNDOFCONTRACT'] = $this->input->post('GROUNDOFCONTRACT');
+    $uodate_data2['payment_date'] = date('d-m-Y');
+    $uodate_data2['is_master'] = 1;
+
+    $this->User_Model->update_info('payment_id', $payment_id, 'law_payment', $uodate_data2);
+    $app_data['application_status'] = 'In Process';
+    $this->User_Model->update_info('application_id', $application_id, 'law_application', $app_data);
+
     header('location:'.base_url().'Transaction/application_list');
     // header('location:'.base_url().'Transaction/process_step_two');
   }
@@ -791,7 +1094,6 @@ class Transaction extends CI_Controller{
       $data['prn_no'] = $details->prn_no;
       $data['prn_date'] = $details->prn_date;
     }
-
     // echo $data['application_date'];
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
@@ -830,7 +1132,7 @@ class Transaction extends CI_Controller{
           $_FILES['doc_name']['error']= $files['doc_name']['error'][$i];
           $_FILES['doc_name']['size']= $files['doc_name']['size'][$i];
           $config['upload_path'] = 'assets/images/document/';
-          $config['allowed_types'] = 'gif|jpg|png';
+          $config['allowed_types'] = 'gif|jpg|png|pdf|docx|ppt';
           $config['file_name'] = $image_name;
           $config['overwrite']     = FALSE;
           $filename = $files['doc_name']['name'][$i];
@@ -853,10 +1155,27 @@ class Transaction extends CI_Controller{
             $error = $this->upload->display_errors();
             $this->session->set_flashdata('status',$this->upload->display_errors());
             $this->User_Model->save_data('law_doc_upload', $file_data);
+
+            echo $error;
           }
       }
     }
     header('location:'.base_url().'Transaction/application_list');
+  }
+
+  public function delete_up_doc(){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id == null ){ header('location:'.base_url().'User'); }
+
+    $upload_id = $this->input->post('upload_id');
+    $doc_upload = $this->User_Model->get_info_arr('upload_id', $upload_id, 'law_doc_upload');
+    $img = $doc_upload[0]['doc_name'];
+    $file = base_url().'assets/images/document/'.$img;
+    unlink('assets/images/document/'.$img);
+    // echo $file;
+    $this->User_Model->delete_info('upload_id', $upload_id, 'law_doc_upload');
   }
 
   public function change_status($application_id){
@@ -894,17 +1213,19 @@ class Transaction extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
     $application_id = $this->input->post('application_id');
-    $complete_status = $this->input->post('complete_status');
-    if(!isset($complete_status)){
-      $update_data = array(
-        'application_status' => 'Filed Application',
-      );
-    } else{
-      $update_data = array(
-        'application_status' => 'Application Closed',
-      );
-    }
-
+    // $complete_status = $this->input->post('complete_status');
+    // if(!isset($complete_status)){
+    //   $update_data = array(
+    //     'application_status' => 'Filed Application',
+    //   );
+    // } else{
+    //   $update_data = array(
+    //     'application_status' => 'Application Closed',
+    //   );
+    // }
+    $update_data = array(
+        'application_status' => $this->input->post('application_status'),
+    );
 
     $this->User_Model->update_info('application_id', $application_id, 'law_application', $update_data);
     header('location:'.base_url().'Transaction/application_list');
@@ -913,10 +1234,6 @@ class Transaction extends CI_Controller{
 /************************** Add Work Details ********************/
 
   public function add_work_details(){
-    $user_id = $this->session->userdata('law_user_id');
-    $company_id = $this->session->userdata('law_company_id');
-    $roll_id = $this->session->userdata('roll_id');
-    if($user_id == null ){ header('location:'.base_url().'User'); }
     $data['vc_no'] = $this->Transaction_Model->get_count_no2('vc_no','law_workdetails');
     $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
 
@@ -987,7 +1304,7 @@ class Transaction extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
-
+    $data['user_roll'] = $roll_id;
     $data['work_list'] = $this->User_Model->get_list2('work_id','ASC','law_workdetails');
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
@@ -1154,7 +1471,7 @@ class Transaction extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
-
+    $data['user_roll'] = $roll_id;
     $data['sale_invoice_list'] = $this->Transaction_Model->sale_invoice_list();
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
@@ -1350,7 +1667,7 @@ class Transaction extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
-
+    $data['user_roll'] = $roll_id;
     $data['receipt_list'] = $this->Transaction_Model->receipt_list();
     $this->load->view('Include/head', $data);
     $this->load->view('Include/navbar', $data);

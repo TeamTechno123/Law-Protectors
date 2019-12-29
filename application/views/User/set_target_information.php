@@ -122,7 +122,7 @@ $page = "set_target";
   $('#branch_id').on('change',function(){
     var branch_id = $(this).val();
     $.ajax({
-      url:'<?php echo base_url(); ?>User/get_user_list_by_branch',
+      url:'<?php echo base_url(); ?>User/get_user_list_by_branch2',
       type: 'POST',
       data: {"branch_id":branch_id},
       context: this,

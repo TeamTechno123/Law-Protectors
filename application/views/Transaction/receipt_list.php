@@ -90,7 +90,9 @@ $page = "receipt_list";
                     <td>
                       <a href="<?php echo base_url(); ?>Transaction/edit_receipt/<?php echo $list->payment_id; ?>"> <i class="fa fa-edit"></i> </a>
                       <!-- <a class="ml-2" target="_blank" href="<?php echo base_url(); ?>Report/invoice_print/<?php echo $list->payment_id; ?>"> <i class="fa fa-print"></i> </a> -->
+                      <?php if($user_roll == 1){ ?>
                       <a class="ml-2" href="<?php echo base_url(); ?>Transaction/delete_receipt/<?php echo $list->payment_id; ?>" onclick="return confirm('Delete this Application');"> <i class="fa fa-trash"></i> </a>
+                      <?php } ?>
                     </td>
                   </tr>
                   <?php } ?>
@@ -102,7 +104,7 @@ $page = "receipt_list";
           </div>
           <!-- /.card -->
           </div>
-        </div>        
+        </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>

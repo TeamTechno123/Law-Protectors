@@ -6,7 +6,6 @@
   <title>Lawprotectors</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/fontawesome-free/css/all.min.css">
   <!-- Ionicons -->
@@ -26,41 +25,27 @@
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
-
+      <p class="login-box-msg">OTP</p>
       <form method="post">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" name="email" id="email" placeholder="Email">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        <span class="text-red"> <?php echo form_error('email'); ?> </span>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+          <input type="text" class="form-control" name="otp" id="otp" placeholder="Enter OTP">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
-        <span class="text-red"> <?php echo form_error('password'); ?> </span>
+        <span class="text-red"> <?php echo form_error('otp'); ?> </span>
         <div class="alert alert-danger py-1" role="alert" style="display:none;">
-          Invalid Login Information.
+          Invalid OTP.
         </div>
         <div class="row">
           <div class="col-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+          <button type="submit" class="btn btn-primary btn-block btn-flat">Validate</button>
           </div>
           <!-- /.col -->
         </div>
       </form>
-      <!-- /.social-auth-links -->
-      <!-- <p class="mb-1">
-        <a href="#">I forgot my password</a>
-      </p> -->
     </div>
     <!-- /.login-card-body -->
   </div>
@@ -73,8 +58,6 @@
 <script src="<?php echo base_url(); ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo base_url(); ?>assets/dist/js/adminlte.min.js"></script>
-
-
 <?php if($this->session->flashdata('msg')){ ?>
   <script type="text/javascript">
     $(document).ready(function(){

@@ -54,16 +54,54 @@ class Transaction_Model extends CI_Model{
     if($roll_id != ''){
       $this->db->where('user.roll_id',$roll_id);
     }
-    $this->db->where('user.branch_id',$branch_id);
+    if($branch_id != ''){
+      $this->db->where('user.branch_id',$branch_id);
+    }
     $this->db->where('user.user_status','active');
     $this->db->join('law_roll','user.roll_id = law_roll.roll_id','LEFT');
     $query = $this->db->get();
     $result = $query->result();
     return $result;
   }
+
+  //
+  public function get_users_by_branch_rel($roll_id,$branch_id){
+    $this->db->select('law_user_branch_rel.*,user.user_id,user.roll_id,user.user_name,user.user_lastname,user.user_mobile,law_roll.roll_name');
+    $this->db->from('law_user_branch_rel');
+    if($roll_id != ''){
+      $this->db->where('law_user_branch_rel.roll_id',$roll_id);
+    }
+    $this->db->where('law_user_branch_rel.branch_id',$branch_id);
+    $this->db->where('user.user_status','active');
+    $this->db->join('law_user as user','user.user_id = law_user_branch_rel.user_id','LEFT');
+    $this->db->join('law_roll','user.roll_id = law_roll.roll_id','LEFT');
+    $query = $this->db->get();
+    $q = $this->db->last_query();
+    $result = $query->result();
+    return $result;
+  }
+  
+  public function get_users_by_branch_rel2($roll_id,$branch_id){
+    $this->db->select('law_user_branch_rel.*,user.user_id,user.roll_id,user.user_name,user.user_lastname,user.user_mobile,law_roll.roll_name');
+    $this->db->from('law_user_branch_rel');
+    if($roll_id != ''){
+      $this->db->where('law_user_branch_rel.roll_id',$roll_id);
+    }
+    
+    $this->db->where('law_user_branch_rel.branch_id',$branch_id);
+    $this->db->where('user.user_status','active');
+    $this->db->where('user.roll_id !=',5);
+    $this->db->join('law_user as user','user.user_id = law_user_branch_rel.user_id','LEFT');
+    $this->db->join('law_roll','user.roll_id = law_roll.roll_id','LEFT');
+    $query = $this->db->get();
+    $q = $this->db->last_query();
+    $result = $query->result();
+    return $result;
+  }
+  
   // Application List...
   public function application_list($company_id,$status,$order){
-    $this->db->select('application.*,application.application_id as appl_id,branch.*,service.*,trade.*,copy.*,other.*');
+    $this->db->select('application.*,application.application_id as appl_id,branch.*,service.*,trade.*,copy.*,other.*,org.*');
     $this->db->from('law_application as application');
     if($status){
       $this->db->where('application.application_status',$status);
@@ -74,6 +112,7 @@ class Transaction_Model extends CI_Model{
     $this->db->join('law_trademark as trade','application.application_id = trade.application_id','LEFT');
     $this->db->join('law_copyright as copy','application.application_id = copy.application_id','LEFT');
     $this->db->join('law_otherservice as other','application.application_id = other.application_id','LEFT');
+    $this->db->join('law_organization as org','application.organization_id = org.organization_id','LEFT');
     // $this->db->join('law_trademark as appl','application.application_id = appl.application_id','LEFT');
     $query = $this->db->get();
     $result = $query->result();
@@ -268,6 +307,16 @@ class Transaction_Model extends CI_Model{
     $this->db->select('*');
     $this->db->from('law_invoice_details');
     $this->db->where('invoice_id',$invoice_id);
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
+  public function get_branch_by_manager($manager_id){
+    $this->db->select('law_user_branch_rel.*,law_branch.*');
+    $this->db->from('law_user_branch_rel');
+    $this->db->where('law_user_branch_rel.user_id',$manager_id);
+    $this->db->join('law_branch','law_user_branch_rel.branch_id = law_branch.branch_id','LEFT');
     $query = $this->db->get();
     $result = $query->result();
     return $result;

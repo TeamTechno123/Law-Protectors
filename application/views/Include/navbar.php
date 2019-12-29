@@ -1,3 +1,9 @@
+<?php
+  $user_roll = $this->session->userdata('roll_id');
+  $law_user_id = $this->session->userdata('law_user_id');
+  $user_info = $this->User_Model->get_info_arr('user_id', $law_user_id, 'law_user');
+  $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
+?>
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
   <!-- Left navbar links -->
   <ul class="navbar-nav">
@@ -7,6 +13,23 @@
   </ul>
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto">
+    <li class="nav-item dropdown">
+      <a class="nav-link" data-toggle="dropdown" href="#">
+        <i class="far fa-user"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <div class="text-center w-100 py-2"><b><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></b></div>
+        <div class="dropdown-divider"></div>
+        <a href="<?php echo base_url(); ?>User/change_password" class="dropdown-item">
+          <i class="fas fa-key mr-2"></i> Change Password
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="<?php echo base_url(); ?>User/logout" class="dropdown-item">
+          <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </a>
+      </div>
+    </li>
+
     <li class="nav-item">
       <a class="nav-link" href="<?php echo base_url(); ?>User/logout">
         <i class="fas fa-sign-out-alt"></i>
@@ -34,7 +57,8 @@
         <!-- <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"> -->
       </div>
       <div class="info">
-        <a href="#" class="d-block">Admin</a>
+        <a href="#" class="d-block"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></a>
+        <a href="#" class="d-block">(<?php echo $roll_info[0]['roll_name']; ?>)</a>
       </div>
     </div>
     <!-- Sidebar Menu -->
@@ -42,20 +66,16 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
         <li class="nav-item">
-          <a href="<?php echo base_url(); ?>User/dashboard" class="nav-link">
+          <a href="<?php echo base_url(); ?>User/dashboard" class="nav-link <?php if(isset($page) && $page=='dashboard'){ echo 'active'; } ?>">
             <i class="nav-icon fas fa-th"></i>
-            <p>
-              Dashboard
-            </p>
+            <p>Dashboard</p>
           </a>
         </li>
+        <?php //if(isset($$user_roll) && $user_roll == 1){ ?>
         <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link head">
               <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Master
-                <i class="right fas fa-angle-left"></i>
-              </p>
+              <p>Master <i class="right fas fa-angle-left"></i> </p>
             </a>
             <ul class="nav nav-treeview" style="display: none;">
               <li class="nav-item">
@@ -109,9 +129,11 @@
               </li>
             </ul>
           </li>
+        <?php //} ?>
+
 
     <li class="nav-item has-treeview">
-        <a href="#" class="nav-link">
+        <a href="#" class="nav-link head">
           <i class="nav-icon fas fa-chart-pie"></i>
           <p>
             Transaction
@@ -162,7 +184,7 @@
         </ul>
       </li>
       <li class="nav-item has-treeview">
-      <a href="#" class="nav-link">
+      <a href="#" class="nav-link head">
         <i class="nav-icon fas fa-chart-pie"></i>
         <p>
           Report
@@ -179,10 +201,10 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="<?php echo base_url(); ?>Report/manager_report" class="nav-link">
+          <a href="<?php echo base_url(); ?>Report/collection_report" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>
-              Manager Report
+              Collection Report
             </p>
           </a>
         </li>

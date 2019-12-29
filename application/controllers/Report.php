@@ -34,6 +34,7 @@ class Report extends CI_Controller{
           $data['MOBILE'] = $info->MOBILE;
           $data['AFF_DATE'] = $info->AFF_DATE;
           $data['COV_DATE'] = $info->COV_DATE;
+          $data['SIGN_AUTH'] = $info->SIGN_AUTH;
 
           $data['BRAND'] = $info->BRAND;
           $data['SIGNIFICANCE'] = $info->SIGNIFICANCE;
@@ -60,6 +61,7 @@ class Report extends CI_Controller{
           $data['TRADE_2'] = $info->TRADE_2;
           $data['TRADE_3'] = $info->TRADE_3;
           $data['ASSOCIATE_MARK'] = $info->ASSOCIATE_MARK;
+          $data['PROPOSED_TO_BE'] = $info->PROPOSED_TO_BE;
           $data['LOGO'] = $info->LOGO;
         }
       }
@@ -96,6 +98,7 @@ class Report extends CI_Controller{
           $data['MOBILE'] = $info->MOBILE;
           $data['AFF_DATE'] = $info->AFF_DATE;
           $data['COV_DATE'] = $info->COV_DATE;
+          $data['SIGN_AUTH'] = $info->SIGN_AUTH;
 
           $data['BRAND'] = $info->BRAND;
           $data['SIGNIFICANCE'] = $info->SIGNIFICANCE;
@@ -157,6 +160,7 @@ class Report extends CI_Controller{
           $data['MOBILE'] = $info->MOBILE;
           $data['AFF_DATE'] = $info->AFF_DATE;
           $data['COV_DATE'] = $info->COV_DATE;
+          $data['SIGN_AUTH'] = $info->SIGN_AUTH;
 
           $data['BRAND'] = $info->BRAND;
           $data['SIGNIFICANCE'] = $info->SIGNIFICANCE;
@@ -215,6 +219,7 @@ class Report extends CI_Controller{
           $data['MOBILE'] = $info->MOBILE;
           $data['AFF_DATE'] = $info->AFF_DATE;
           $data['COV_DATE'] = $info->COV_DATE;
+          $data['SIGN_AUTH'] = $info->SIGN_AUTH;
 
           $data['BRAND'] = $info->BRAND;
           $data['SIGNIFICANCE'] = $info->SIGNIFICANCE;
@@ -319,20 +324,35 @@ class Report extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null){ header('location:'.base_url().'User'); }
-    $data['branch_list'] = $this->User_Model->get_list($company_id,'branch_id','ASC','law_branch');
+    $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
     $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
     $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
+    $data['manager_list'] = $this->Transaction_Model->get_users_by_branch('2','');
     $this->form_validation->set_rules('from_date', 'From Date', 'trim|required');
     $this->form_validation->set_rules('to_date', 'To Date', 'trim|required');
     if($this->form_validation->run() != FALSE){
       $from_date = $this->input->post('from_date');
       $to_date = $this->input->post('to_date');
-      $company_id2 = $this->input->post('company_id');
+      // $company_id2 = $this->input->post('company_id');
+      $company_id2 = '';
+      $manager_id = $this->input->post('manager_id');
       $branch_id = $this->input->post('branch_id');
       $service_id = $this->input->post('service_id');
       $status_name = $this->input->post('status_name');
+      $rc_id = $this->input->post('rc_id');
+      $tc_id = $this->input->post('tc_id');
+
+      $data['from_date2'] = $from_date;
+      $data['to_date2'] = $to_date;
+      $data['manager_id2'] = $manager_id;
+      $data['branch_id2'] = $branch_id;
+      $data['service_id2'] = $service_id;
+      $data['status_name2'] = $status_name;
+      $data['rc_id'] = $rc_id;
+      $data['tc_id'] = $tc_id;
+
       $data['application_report'] = 'load';
-      $data['application_report_list'] = $this->Report_Model->application_report_list($from_date,$to_date,$company_id2,$branch_id,$service_id,$status_name);
+      $data['application_report_list'] = $this->Report_Model->application_report_list($from_date,$to_date,$company_id2,$manager_id,$branch_id,$service_id,$status_name,$rc_id,$tc_id);
     }
     // echo $status_name;
     // echo print_r($data['application_report_list']);
@@ -342,14 +362,14 @@ class Report extends CI_Controller{
     $this->load->view('Include/footer',$data);
   }
 
-  public function manager_report(){
+  public function collection_report(){
     $user_id = $this->session->userdata('law_user_id');
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null){ header('location:'.base_url().'User'); }
     $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
     $this->form_validation->set_rules('target_id', 'Target', 'trim|required');
-    $this->form_validation->set_rules('company_id', 'company_id', 'trim|required');
+    // $this->form_validation->set_rules('company_id', 'company_id', 'trim|required');
     if($this->form_validation->run() != FALSE){
       $target_id = $this->input->post('target_id');
       $target_info = $this->User_Model->get_info('target_id', $target_id, 'law_target');
@@ -357,14 +377,22 @@ class Report extends CI_Controller{
       }
       $from_date = $target_info1->target_from;
       $to_date = $target_info1->target_to;
-      $company_id2 = $this->input->post('company_id');
+      $manager_id = $this->input->post('manager_id');
+      $rc_id = $this->input->post('rc_id');
+      $tc_id = $this->input->post('tc_id');
+      
+      // $company_id2 = $this->input->post('company_id');
+      $company_id2 = '';
       $branch_id = $this->input->post('branch_id');
       $data['manager_report'] = 'load';
       $data['from_date'] = $from_date;
       $data['target_id'] = $target_id;
       $data['to_date'] = $to_date;
-      $data['company_id2'] = $company_id2;
+      // $data['company_id2'] = $company_id2;
+      $data['manager_id'] = $manager_id;
       $data['branch_id'] = $branch_id;
+      $data['rc_id'] = $rc_id;
+      $data['tc_id'] = $tc_id;
       if($branch_id == ''){
         $data['report_type'] = 'branchwise';
       }
@@ -376,9 +404,10 @@ class Report extends CI_Controller{
 
     $data['target_list'] = $this->User_Model->get_list2('target_id','ASC','law_target');
     $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
+    $data['manager_list'] = $this->Transaction_Model->get_users_by_branch('2','');
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
-    $this->load->view('Report/manager_report',$data);
+    $this->load->view('Report/collection_report',$data);
     $this->load->view('Include/footer',$data);
   }
 
@@ -390,31 +419,39 @@ class Report extends CI_Controller{
 
     $data['branch_list'] = $this->User_Model->get_list2('branch_id','ASC','law_branch');
     $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
-    $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
+    $data['manager_list'] = $this->Transaction_Model->get_users_by_branch('2','');
+    // $data['company_list'] = $this->User_Model->get_list2('company_id','ASC','law_company');
     $this->form_validation->set_rules('from_date', 'From Date', 'trim|required');
     $this->form_validation->set_rules('to_date', 'To Date', 'trim|required');
     if($this->form_validation->run() != FALSE){
       $from_date = $this->input->post('from_date');
       $to_date = $this->input->post('to_date');
-      $company_id2 = $this->input->post('company_id');
+      // $company_id2 = $this->input->post('company_id');
+      $company_id2 = '';
+      $manager_id = $this->input->post('manager_id');
       $branch_id = $this->input->post('branch_id');
       $service_id = $this->input->post('service_id');
+      $rc_id = $this->input->post('rc_id');
+      $tc_id = $this->input->post('tc_id');
       $data['outstanding_report'] = 'load';
       $data['from_date'] = $from_date;
       $data['to_date'] = $to_date;
       $data['company_id2'] = $company_id2;
+      $data['manager_id'] = $manager_id;
       $data['branch_id'] = $branch_id;
+      $data['rc_id'] = $rc_id;
+      $data['tc_id'] = $tc_id;
       $data['service_id'] = $service_id;
       if($branch_id == '' && $service_id == ''){
         $data['report_type'] = 'branchwise';
       }
       if($branch_id != '' && $service_id == ''){
         $data['report_type'] = 'servicewise';
-        $data['outstanding_service_wise_report'] = $this->Report_Model->outstanding_service_wise_report_list($from_date,$to_date,$company_id2,$branch_id,$service_id);
+        $data['outstanding_service_wise_report'] = $this->Report_Model->outstanding_service_wise_report_list($from_date,$to_date,$company_id2,$branch_id,$rc_id,$tc_id,$service_id);
       }
       if($branch_id != '' && $service_id != ''){
         $data['report_type'] = 'service';
-        $data['outstanding_service_wise_report'] = $this->Report_Model->outstanding_service_wise_report_list($from_date,$to_date,$company_id2,$branch_id,$service_id);
+        $data['outstanding_service_wise_report'] = $this->Report_Model->outstanding_service_wise_report_list($from_date,$to_date,$company_id2,$branch_id,$rc_id,$tc_id,$service_id);
       }
 
       //$data['outstanding_report_list'] = $this->Report_Model->outstanding_report_list($from_date,$to_date,$company_id,$branch_id,$service_id);
@@ -445,6 +482,21 @@ class Report extends CI_Controller{
     $this->load->view('Include/navbar',$data);
     $this->load->view('Report/invoice_report',$data);
     $this->load->view('Include/footer',$data);
+  }
+
+
+  public function manager_group_report(){
+    $this->load->view('Include/head');
+    $this->load->view('Include/navbar');
+    $this->load->view('Report/manager_group_report');
+    $this->load->view('Include/footer');
+  }
+
+  public function outstanding_manager_report(){
+    $this->load->view('Include/head');
+    $this->load->view('Include/navbar');
+    $this->load->view('Report/outstanding_manager_report');
+    $this->load->view('Include/footer');
   }
 
 }

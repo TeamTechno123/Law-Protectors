@@ -92,6 +92,7 @@ $page = "party_list";
                           <th> <p style="text-align:center">Bill No. </p> </th>
                           <th> <p style="text-align:center">Bill Date</p> </th>
                           <th> <p style="text-align:center">Party Name</p> </th>
+                          <th> <p style="text-align:center">Party Address</p> </th>
                           <th> <p style="text-align:center">GST No.</p> </th>
                           <th> <p style="text-align:center">Bill Amount</p> </th>
                           <th> <p style="text-align:center">Type </p> </th>

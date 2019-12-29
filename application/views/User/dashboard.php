@@ -317,5 +317,14 @@
       </div><!-- /.container-fluid -->
     </section>
   </div>
+  <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/plugins/toastr/toastr.min.js"></script>
+  <?php if($this->session->flashdata('change_password')){ ?>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      toastr.success('Password Changed Successfully.');
+    })
+  </script>
+  <?php } ?>
 </body>
 </html>

@@ -13,7 +13,7 @@ $page = "party_list";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1 text-center">
-            <h4>Managerwise Target Calculation Report</h4>
+            <h4>Collection Report</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -34,23 +34,61 @@ $page = "party_list";
                     <select class="form-control select2 " name="target_id" id="target_id" title="Select Target" style="width: 100%;" <?php if(isset($update)){ echo 'disabled'; } else{ echo 'required'; } ?>>
                       <option selected="selected" value="" >Select Target </option>
                       <?php foreach ($target_list as $list) { ?>
-                      <option value="<?php echo $list->target_id; ?>" <?php if(isset($target_id)){ if($list->target_id == $target_id){ echo "selected"; } }  ?>><?php echo $list->target_title; ?></option>
+                      <option value="<?php echo $list->target_id; ?>" ><?php echo $list->target_title; ?></option>
                       <?php } ?>
                     </select>
                   </div>
-                  <div class="form-group col-md-8 offset-md-2">
-                    <select class="form-control select2 form-control-sm" data-placeholder="Select Company Name" title="Select Company" name="company_id" id="company_id" required>
+                  <!-- <div class="form-group col-md-8 offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select Company Name" title="Select Company" name="company_id" id="company_id">
                       <option selected="selected" value="" >Select Company Name </option>
                       <?php foreach ($company_list as $list) { ?>
-                      <option value="<?php echo $list->company_id; ?>" <?php if(isset($company_id)){ if($list->company_id == $company_id){ echo "selected"; } }  ?>><?php echo $list->company_name; ?></option>
+                      <option value="<?php echo $list->company_id; ?>" ><?php echo $list->company_name; ?></option>
+                      <?php } ?>
+                    </select>
+                  </div> -->
+                  <div class="form-group col-md-4 offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select Manager" title="Select Manager" name="manager_id" id="manager_id">
+                      <option selected="selected"  value="">Select Manager</option>
+                      <?php foreach ($manager_list as $list) { ?>
+                      <option value="<?php echo $list->user_id; ?>" ><?php echo $list->user_name.' '.$list->user_lastname; ?></option>
                       <?php } ?>
                     </select>
                   </div>
-                  <div class="form-group col-md-8 offset-md-2">
+
+                  <div class="form-group col-md-4">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select Branch" title="Select Branch" name="branch_id" id="branch_id">
                       <option selected="selected"  value="">Select Branch</option>
+                      <!-- <?php foreach ($branch_list as $list) { ?>
+                      <option value="<?php echo $list->branch_id; ?>"><?php echo $list->branch_name; ?></option>
+                      <?php } ?> -->
                     </select>
                   </div>
+                  
+                  
+                  <div class="form-group col-md-4 offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select RC" title="Select RC" name="rc_id" id="rc_id">
+                      <option selected="selected"  value="">Select RC</option>
+                      
+                    </select>
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select TC" title="Select TC" name="tc_id" id="tc_id">
+                      <option selected="selected"  value="">Select TC</option>
+                      
+                    </select>
+                  </div>
+
+                  <!-- <div class="form-group col-md-4 offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select RC" title="Select RC" name="rc_id" id="rc_id">
+                      <option selected="selected"  value="">Select RC</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4 ">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select TC" title="Select TC" name="tc_id" id="tc_id">
+                      <option selected="selected"  value="">Select TC</option>
+                    </select>
+                  </div> -->
 
                   <div class="col-md-10 w-100 text-center mb-3">
                       <button type="submit" class="btn btn-success btn-sm">View</button>
@@ -63,7 +101,7 @@ $page = "party_list";
                       <!-- title row -->
                   <div class="row">
                     <div class="col-md-12">
-                        <p style="text-align:center; font-size:18px;"> Manager Report </p>
+                        <p style="text-align:center; font-size:18px;"> Collection Report </p>
                     </div>
                     <div class="col-12 table-responsive" id="result_tbl">
                       <style media="print">
@@ -96,18 +134,24 @@ $page = "party_list";
                     </style>
 
                     <?php if(isset($report_type) && $report_type == 'branchwise'){
-                      $branch_list = $this->User_Model->get_list($company_id2,'branch_id','ASC','law_branch');
-                      $company_info = $this->User_Model->get_info('company_id', $company_id2, 'law_company');
-
-                      foreach ($company_info as $company_info1) {
-                       $company_name = $company_info1->company_name;
+                      if(isset($manager_id) && $manager_id != ''){
+                        $branch_list = $this->Transaction_Model->get_branch_by_manager($manager_id);;
+                      } else {
+                        $branch_list = $this->User_Model->get_list2('branch_id','ASC','law_branch');
                       }
+
+
+                      // $company_info = $this->User_Model->get_info('company_id', $company_id2, 'law_company');
+                      //
+                      // foreach ($company_info as $company_info1) {
+                      //  $company_name = $company_info1->company_name;
+                      // }
                       ?>
                       <table class="table table-botttom" id="exp_tbl" width="100%">
                         <thead>
-                          <tr>
+                          <!-- <tr>
                             <th colspan="10"><p style="text-align:center"> Company Name : <?php echo $company_name; ?> </p> </th>
-                          </tr>
+                          </tr> -->
                           <tr>
                             <th colspan="10"><p style="text-align:center">Target Range  : <?php echo $from_date; ?> To <?php echo $to_date; ?></p> </th>
                           </tr>
@@ -136,7 +180,9 @@ $page = "party_list";
                           $tot_GSTAMOUNT = 0;
                           $tot_B2B = 0;
                           $tot_TDS = 0;
+                          $sr_no = 0;
                           foreach ($branch_list as $branch_list1) {
+                            $sr_no++;
                             $branch_id2 = $branch_list1->branch_id;
                             $target_amount = $this->Report_Model->get_target_amount($branch_id2,$target_id);
                             if($target_amount){ $target_amt = $target_amount[0]['target_amount']; }
@@ -174,7 +220,7 @@ $page = "party_list";
                             $tot_TDS = $tot_TDS + $TDS;
                           ?>
                           <tr>
-                            <td> <p style="text-align:center">1</p></td>
+                            <td> <p style="text-align:center"><?php echo $sr_no; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $branch_list1->branch_name; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $target_amt; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $CONTRACTAMOUNT; ?></p></td>
@@ -201,24 +247,30 @@ $page = "party_list";
 
                     <?php if(isset($report_type) && $report_type == 'userwise'){
 
-                      $user_list = $this->Report_Model->get_user_target_list($branch_id,$target_id);
+
+
+                      $user_list = $this->Report_Model->get_user_target_list2($branch_id,$target_id,$rc_id,$tc_id);
                       $branch_info = $this->User_Model->get_info('branch_id', $branch_id, 'law_branch');
-                      $company_info = $this->User_Model->get_info('company_id', $company_id2, 'law_company');
+                      
+                    //   echo print_r($user_list).'<br><br>';
+                      
+                      
+                      // $company_info = $this->User_Model->get_info('company_id', $company_id2, 'law_company');
                       foreach ($branch_info as $branch_info1) {
                        $branch_name = $branch_info1->branch_name;
                       }
-                      foreach ($company_info as $company_info1) {
-                       $company_name = $company_info1->company_name;
-                      }
+                      // foreach ($company_info as $company_info1) {
+                      //  $company_name = $company_info1->company_name;
+                      // }
                       ?>
                     <table class="table table-botttom" id="exp_tbl" width="100%">
                       <tbody>
                         <tr>
                           <th colspan="11"><p style="text-align:center">Target Range  : <?php echo $from_date; ?> To <?php echo $to_date; ?></p> </th>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                           <th colspan="11"><p style="text-align:center"> Company Name : <?php echo $company_name; ?> </p> </th>
-                        </tr>
+                        </tr> -->
                         <tr>
                           <th colspan="11"><p style="text-align:center"> Branch Name : <?php echo $branch_name; ?> </p> </th>
                         </tr>
@@ -348,19 +400,51 @@ $page = "party_list";
   <script src="<?php echo base_url(); ?>assets/js/table2excel.js"></script>
   <script type="text/javascript">
     // Get Item Info on Select...
-    $('#company_id').on('change',function(){
-      var company_id = $(this).val();
+    $('#manager_id').on('change',function(){
+      var manager_id = $(this).val();
       $.ajax({
-        url:'<?php echo base_url(); ?>Transaction/get_branch_by_company',
+        url:'<?php echo base_url(); ?>Transaction/get_branch_by_manager',
         type: 'POST',
-        data: {"company_id":company_id},
+        data: {"manager_id":manager_id},
         context: this,
         success: function(result){
           $('#branch_id').html(result);
         }
       });
     });
-
+    
+    $('#branch_id').on('change',function(){
+      var branch_id = $(this).val();
+      $.ajax({
+        url:'<?php echo base_url(); ?>Transaction/get_users_by_branch_rel',
+        type: 'POST',
+        data: {"branch_id":branch_id},
+        context: this,
+        success: function(result){
+          var data = JSON.parse(result)
+          // $('#manager_id').html(data['manager']);
+          $('#rc_id').html('<option selected="selected"  value="">Select RC</option>'+data['rc']);
+          $('#tc_id').html('<option selected="selected"  value="">Select TC</option>'+data['tc']);
+        }
+      });
+    });
+    
+    $('#rc_id').on('change',function(){
+        var rc_id = $(this).val();
+        if(rc_id != ''){
+            // alert();
+            $('#tc_id').attr('disabled',true);
+        }
+    });
+    
+    $('#tc_id').on('change',function(){
+        var tc_id = $(this).val();
+        if(tc_id != ''){
+            // alert();
+            $('#rc_id').attr('disabled',true);
+        }
+    });
+    
     function printDiv()
     {
       var divToPrint=document.getElementById('print_invoice');

@@ -34,6 +34,9 @@ $page = "step_2";
             <div class="card-body" >
               <form role="form" method="post" autocomplete="off">
                 <div class="card-body row">
+                    <div class=" col-md-12 ">
+                    <label for="" class=""> SELECT APPLICATION :</label>
+                  </div>
                   <div class="form-group col-md-12 drop-sm">
                     <select class="form-control select2 form-control-sm" title="Select Application" name="application_id" id="application_id" required>
                       <option selected="selected" value="" >Select Application </option>
@@ -63,30 +66,63 @@ $page = "step_2";
                       <?php } ?>
                     </select>
                   </div>
+                  
+                  
+                  
                   <div class="form-group col-md-6 ">
                     <label class="text-success">Contract Amount : <span class="contract_amount"><?php if(isset($contract_amount)){ echo $contract_amount;} ?></span> </label>
                   </div>
                   <div class="form-group col-md-6 ">
                     <label class="text-danger">Outstanding Amount : <span class="outstanding_amount"><?php if(isset($outstanding_amount)){ echo $outstanding_amount;} ?></span> </label>
                   </div>
+                  
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> RECEIVED AMOUNT :</label>
+                  </div>
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> GST AMOUNT : </label>
+                  </div>
+                  
                   <div class="form-group col-md-6 ">
                     <input type="number" class="form-control form-control-sm" name="RECEVIEDAMOUNT" id="RECEVIEDAMOUNT" value="<?php if(isset($RECEVIEDAMOUNT) && $RECEVIEDAMOUNT != 0){ echo $RECEVIEDAMOUNT;} ?>" title="Received Amount" placeholder="Received Amount" required>
                   </div>
                   <div class="form-group col-md-6 ">
                     <input type="text" class="form-control form-control-sm" name="GSTAMOUNT" id="GSTAMOUNT" value="<?php if(isset($GSTAMOUNT) && $GSTAMOUNT != 0){ echo $GSTAMOUNT;} ?>" title="GST Amount" placeholder="GST Amount">
                   </div>
+                  
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> BALANCE AMOUNT :</label>
+                  </div>
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> LP AMOUNT : </label>
+                  </div>
+                  
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control form-control-sm" name="BALANCEAMOUNT" id="BALANCEAMOUNT" value="<?php if(isset($BALANCEAMOUNT) && $BALANCEAMOUNT != 0){ echo $BALANCEAMOUNT;} ?>" title="Balance Amount" placeholder="Balance Amount">
                   </div>
                   <div class="form-group col-md-6 ">
                     <input type="text" class="form-control form-control-sm" name="LP_AMOUNT" id="LP_AMOUNT" value="<?php if(isset($LP_AMOUNT) && $LP_AMOUNT != 0){ echo $LP_AMOUNT;} ?>" title="LP Amount" placeholder="LP Amount" required>
                   </div>
+                  
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> GOVT FEES :</label>
+                  </div>
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> TDS AMOUNT : </label>
+                  </div>
+                  
                   <div class="form-group col-md-6 ">
                     <input type="text" class="form-control form-control-sm" name="GOVT_FEES" id="GOVT_FEES" value="<?php if(isset($GOVT_FEES) && $GOVT_FEES != 0){ echo $GOVT_FEES;} ?>" title="Govt Fees" placeholder="Govt Fees" required>
                   </div>
                   <div class="form-group col-md-6 ">
                     <input type="text" class="form-control form-control-sm" name="TDS" id="TDS" value="<?php if(isset($TDS) && $TDS != 0){ echo $TDS;} ?>" title="TDS" placeholder="TDS">
                   </div>
+                  
+                  <div class=" col-md-6 ">
+                    <label for="" class=""> B2B AMOUNT :</label>
+                  </div>
+                  
+                  
                   <div class="form-group col-md-6 ">
                     <input type="text" class="form-control form-control-sm" name="B2B" id="B2B" value="<?php if(isset($B2B) && $B2B != 0){ echo $B2B;} ?>" title="B2B" placeholder="B2B">
                   </div>
@@ -99,10 +135,24 @@ $page = "step_2";
                     </div>
                   </div>
                   <br>
+                  
                   <div class="col-md-12">
                     <label for="">Cheque Details : </label>
                   </div>
                   <br>
+                  
+                   <div class=" col-md-3 ">
+                    <label for="" class=""> CHEQUE NUMBER :</label>
+                  </div>
+                  <div class=" col-md-3 ">
+                    <label for="" class=""> CHEQUE DATE :</label>
+                  </div>
+                  <div class=" col-md-3 ">
+                    <label for="" class=""> BANK NAME :</label>
+                  </div>
+                  <div class=" col-md-3 ">
+                    <label for="" class=""> CHEQUE AMOUNT :</label>
+                  </div>
                   <div class="form-group col-md-3">
                     <input type="text" class="form-control form-control-sm" name="CHEQUENUMBER" id="CHEQUENUMBER" value="<?php if(isset($CHEQUENUMBER)){ echo $CHEQUENUMBER;} ?>" title="Cheque No." placeholder="Cheque No.">
                   </div>
