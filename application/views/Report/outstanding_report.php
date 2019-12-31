@@ -2,6 +2,10 @@
 <html>
 <?php
 $page = "party_list";
+$user_roll = $this->session->userdata('roll_id');
+$law_user_id = $this->session->userdata('law_user_id');
+$user_info = $this->User_Model->get_info_arr('user_id', $law_user_id, 'law_user');
+$roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
 ?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -48,8 +52,11 @@ $page = "party_list";
                   <div class="form-group col-md-4 offset-md-2">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select Manager" title="Select Manager" name="manager_id" id="manager_id">
                       <option selected="selected"  value="">Select Manager</option>
-                      <?php foreach ($manager_list as $list) { ?>
-                      <option value="<?php echo $list->user_id; ?>" ><?php echo $list->user_name.' '.$list->user_lastname; ?></option>
+                      <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){
+                        foreach ($manager_list as $list) { ?>
+                        <option value="<?php echo $list->user_id; ?>"><?php echo $list->user_name; ?></option>
+                      <?php } } else{ ?>
+                        <option value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -66,9 +73,9 @@ $page = "party_list";
                   <div class="form-group col-md-4 offset-md-2">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select RC" title="Select RC" name="rc_id" id="rc_id">
                       <option selected="selected"  value="">Select RC</option>
-                      <?php foreach ($manager_list as $list) { ?>
+                      <!-- <?php foreach ($manager_list as $list) { ?>
                       <option value="<?php echo $list->user_id; ?>" ><?php echo $list->user_name.' '.$list->user_lastname; ?></option>
-                      <?php } ?>
+                      <?php } ?> -->
                     </select>
                   </div>
 

@@ -405,6 +405,7 @@ class Transaction extends CI_Controller{
           $data['NAME'] = $info->NAME;
           $data['ADDRESS'] = $info->ADDRESS;
           $data['MOBILE'] = $info->MOBILE;
+          $data['EMAIL'] = $info->EMAIL;
           $data['SIGN_AUTH'] = $info->SIGN_AUTH;
           $data['AFF_DATE'] = $info->AFF_DATE;
           $data['COV_DATE'] = $info->COV_DATE;
@@ -571,6 +572,7 @@ class Transaction extends CI_Controller{
       $uodate_data['NAME'] = $this->input->post('NAME');
       $uodate_data['NATIONALITY'] = $this->input->post('NATIONALITY');
       $uodate_data['MOBILE'] = $this->input->post('MOBILE');
+      $uodate_data['EMAIL'] = $this->input->post('EMAIL');
       $uodate_data['SIGN_AUTH'] = $this->input->post('SIGN_AUTH');
       $uodate_data['AFF_DATE'] = $this->input->post('AFF_DATE');
       $uodate_data['COV_DATE'] = $this->input->post('COV_DATE');
@@ -1073,6 +1075,33 @@ class Transaction extends CI_Controller{
     // header('location:'.base_url().'Transaction/process_step_two');
   }
 
+  public function legal_doc_view($application_id){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id == null ){ header('location:'.base_url().'User'); }
+    $application_details = $this->Transaction_Model->application_details($application_id);
+    if(!$application_details){ header('location:'.base_url().'Transaction/application_list'); }
+    foreach ($application_details as $details) {
+      $data['application_id'] = $application_id;
+      $data['application_date'] = $details->application_date;
+      $data['branch_name'] = $details->branch_name;
+      $data['service_name'] = $details->service_name;
+      $data['organization_name'] = $details->organization_name;
+      $data['service_id'] = $details->service_id;
+      $data['service_document'] = $details->service_document;
+      $data['application_status'] = $details->application_status;
+      $data['alert_days'] = $details->alert_days;
+      $data['prn_no'] = $details->prn_no;
+      $data['prn_date'] = $details->prn_date;
+    }
+
+    $data['doc_list'] = $this->User_Model->leg_doc_list($application_id);
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Transaction/legal_doc_view',$data);
+    $this->load->view('Include/footer',$data);
+  }
 
   public function document_uploading_form($application_id){
     $user_id = $this->session->userdata('law_user_id');
@@ -1197,10 +1226,13 @@ class Transaction extends CI_Controller{
       $data['alert_days'] = $details->alert_days;
       $data['prn_no'] = $details->prn_no;
       $data['prn_date'] = $details->prn_date;
+      $data['legal_user'] = $details->legal_user;
       $data['change_status'] = 'yes';
     }
 
     // echo $data['application_date'];
+    $data['legal_user_list'] = $this->User_Model->legal_user_list();
+    // print_r($data['legal_user_list']);
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
     $this->load->view('Transaction/document_uploading',$data);
@@ -1213,21 +1245,17 @@ class Transaction extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
     $application_id = $this->input->post('application_id');
-    // $complete_status = $this->input->post('complete_status');
-    // if(!isset($complete_status)){
-    //   $update_data = array(
-    //     'application_status' => 'Filed Application',
-    //   );
-    // } else{
-    //   $update_data = array(
-    //     'application_status' => 'Application Closed',
-    //   );
-    // }
-    $update_data = array(
-        'application_status' => $this->input->post('application_status'),
-    );
-
-    $this->User_Model->update_info('application_id', $application_id, 'law_application', $update_data);
+    $legal_user = $this->input->post('legal_user');
+    $application_status = $this->input->post('application_status');
+    if(isset($legal_user) && $legal_user != ''){
+      $update_data['legal_user'] = $this->input->post('legal_user');
+    }
+    if(isset($application_status) && $application_status != ''){
+      $update_data['application_status'] = $this->input->post('application_status');
+    }
+    if($update_data){
+      $this->User_Model->update_info('application_id', $application_id, 'law_application', $update_data);
+    }
     header('location:'.base_url().'Transaction/application_list');
   }
 

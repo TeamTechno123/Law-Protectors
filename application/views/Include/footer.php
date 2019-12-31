@@ -84,6 +84,9 @@
     $("#application_list").DataTable({
       "pageLength": 100,
     });
+    $("#application_list2").DataTable({
+      "pageLength": 100,
+    });
     $("#example1").DataTable();
     $('#example2').DataTable({
       "paging": true,

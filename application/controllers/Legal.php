@@ -14,9 +14,9 @@ class Legal extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
     $key = '';
-    $data['leg_pro_count'] = $this->User_Model->get_count2('application_id','Legal In Process','law_application');
-    $data['leg_pending_count'] = $this->User_Model->get_count2('application_id','Pending for Legal','law_application');
-    $data['leg_complete_count'] = $this->User_Model->get_count2('application_id','Legal Completed','law_application');
+    $data['leg_pro_count'] = $this->User_Model->get_legal_count($user_id,'application_id','Legal In Process','law_application');
+    $data['leg_pending_count'] = $this->User_Model->get_legal_count($user_id,'application_id','Pending for Legal','law_application');
+    $data['leg_complete_count'] = $this->User_Model->get_legal_count($user_id,'application_id','Legal Completed','law_application');
     $data['page'] = 'dashboard';
     $this->load->view('Include/head', $data);
     $this->load->view('Include/legal_navbar', $data);
@@ -29,8 +29,9 @@ class Legal extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
+    $data['title'] = 'Legal In Process Application List';
     $status = 'Legal In Process';
-    $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'ASC');
+    $data['application_list'] = $this->Transaction_Model->application_list_legal($user_id,$company_id,$status,'ASC');
     $this->load->view('Include/head',$data);
     $this->load->view('Include/legal_navbar',$data);
     $this->load->view('Legal/application_list',$data);
@@ -42,8 +43,9 @@ class Legal extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
+    $data['title'] = 'Pending for Legal Application List';
     $status = 'Pending for Legal';
-    $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'ASC');
+    $data['application_list'] = $this->Transaction_Model->application_list_legal($user_id,$company_id,$status,'ASC');
     $this->load->view('Include/head',$data);
     $this->load->view('Include/legal_navbar',$data);
     $this->load->view('Legal/application_list',$data);
@@ -55,8 +57,9 @@ class Legal extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
+    $data['title'] = 'Legal Complete Application List';
     $status = 'Legal Completed';
-    $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'ASC');
+    $data['application_list'] = $this->Transaction_Model->application_list_legal($user_id,$company_id,$status,'ASC');
     $this->load->view('Include/head',$data);
     $this->load->view('Include/legal_navbar',$data);
     $this->load->view('Legal/application_list',$data);
@@ -70,7 +73,7 @@ class Legal extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
     $application_details = $this->Transaction_Model->application_details($application_id);
-    if(!$application_details){ header('location:'.base_url().'Transaction/application_list'); }
+    if(!$application_details){ header('location:'.base_url().'Legal/application_list'); }
     foreach ($application_details as $details) {
       $data['application_id'] = $application_id;
       $data['application_date'] = $details->application_date;
@@ -96,7 +99,7 @@ class Legal extends CI_Controller{
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
     $application_details = $this->Transaction_Model->application_details($application_id);
-    if(!$application_details){ header('location:'.base_url().'Transaction/application_list'); }
+    if(!$application_details){ header('location:'.base_url().'Legal/application_list'); }
     foreach ($application_details as $details) {
       $data['application_id'] = $application_id;
       $data['application_date'] = $details->application_date;
@@ -149,6 +152,7 @@ class Legal extends CI_Controller{
         }
       }
       $up_data['application_status'] = $_POST['application_status'];
+      $up_data['legal_user'] = $user_id;
       $this->User_Model->update_info('application_id', $application_id, 'law_application', $up_data);
       header('location:'.base_url().'Legal/application_list');
     }

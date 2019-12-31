@@ -354,8 +354,6 @@ class Report extends CI_Controller{
       $data['application_report'] = 'load';
       $data['application_report_list'] = $this->Report_Model->application_report_list($from_date,$to_date,$company_id2,$manager_id,$branch_id,$service_id,$status_name,$rc_id,$tc_id);
     }
-    // echo $status_name;
-    // echo print_r($data['application_report_list']);
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
     $this->load->view('Report/application_report',$data);
@@ -380,7 +378,7 @@ class Report extends CI_Controller{
       $manager_id = $this->input->post('manager_id');
       $rc_id = $this->input->post('rc_id');
       $tc_id = $this->input->post('tc_id');
-      
+
       // $company_id2 = $this->input->post('company_id');
       $company_id2 = '';
       $branch_id = $this->input->post('branch_id');
@@ -453,10 +451,8 @@ class Report extends CI_Controller{
         $data['report_type'] = 'service';
         $data['outstanding_service_wise_report'] = $this->Report_Model->outstanding_service_wise_report_list($from_date,$to_date,$company_id2,$branch_id,$rc_id,$tc_id,$service_id);
       }
-
       //$data['outstanding_report_list'] = $this->Report_Model->outstanding_report_list($from_date,$to_date,$company_id,$branch_id,$service_id);
     }
-
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
     $this->load->view('Report/outstanding_report',$data);
@@ -474,9 +470,9 @@ class Report extends CI_Controller{
     if($this->form_validation->run() != FALSE){
       $from_date = $this->input->post('from_date');
       $to_date = $this->input->post('to_date');
-      $company_id = $this->input->post('company_id');
+      $company_id2 = $this->input->post('company_id');
       $data['invoice_report'] = 'load';
-      $data['invoice_report_list'] = $this->Report_Model->invoice_report_list($from_date,$to_date,$company_id);
+      $data['invoice_report_list'] = $this->Report_Model->invoice_report_list($from_date,$to_date,$company_id2);
     }
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
@@ -484,19 +480,30 @@ class Report extends CI_Controller{
     $this->load->view('Include/footer',$data);
   }
 
-
-  public function manager_group_report(){
-    $this->load->view('Include/head');
-    $this->load->view('Include/navbar');
-    $this->load->view('Report/manager_group_report');
-    $this->load->view('Include/footer');
-  }
-
-  public function outstanding_manager_report(){
-    $this->load->view('Include/head');
-    $this->load->view('Include/navbar');
-    $this->load->view('Report/outstanding_manager_report');
-    $this->load->view('Include/footer');
+  public function legal_assistant_report(){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id == null){ header('location:'.base_url().'User'); }
+    $this->form_validation->set_rules('from_date', 'From Date', 'trim|required');
+    $this->form_validation->set_rules('to_date', 'To Date', 'trim|required');
+    if($this->form_validation->run() != FALSE){
+      $from_date = $this->input->post('from_date');
+      $to_date = $this->input->post('to_date');
+      $legal_user = $this->input->post('legal_user');
+      $application_status = $this->input->post('application_status');
+      $data['from_date'] = $from_date;
+      $data['to_date'] = $to_date;
+      $data['legal_user'] = $legal_user;
+      $data['application_status'] = $application_status;
+      $data['legal_report'] = 'load';
+      $data['legal_report_list'] = $this->Report_Model->legal_report_list($from_date,$to_date,$legal_user,$application_status);
+    }
+    $data['legal_user_list'] = $this->User_Model->legal_user_list();
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Report/legal_assistant_report',$data);
+    $this->load->view('Include/footer',$data);
   }
 
 }

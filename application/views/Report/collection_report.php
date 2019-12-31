@@ -2,6 +2,10 @@
 <html>
 <?php
 $page = "party_list";
+$user_roll = $this->session->userdata('roll_id');
+$law_user_id = $this->session->userdata('law_user_id');
+$user_info = $this->User_Model->get_info_arr('user_id', $law_user_id, 'law_user');
+$roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
 ?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -48,9 +52,12 @@ $page = "party_list";
                   </div> -->
                   <div class="form-group col-md-4 offset-md-2">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select Manager" title="Select Manager" name="manager_id" id="manager_id">
-                      <option selected="selected"  value="">Select Manager</option>
-                      <?php foreach ($manager_list as $list) { ?>
-                      <option value="<?php echo $list->user_id; ?>" ><?php echo $list->user_name.' '.$list->user_lastname; ?></option>
+                      <option selected="selected" value="" >Select Manager </option>
+                      <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){
+                        foreach ($manager_list as $list) { ?>
+                        <option value="<?php echo $list->user_id; ?>"><?php echo $list->user_name; ?></option>
+                      <?php } } else{ ?>
+                        <option value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -63,19 +70,19 @@ $page = "party_list";
                       <?php } ?> -->
                     </select>
                   </div>
-                  
-                  
+
+
                   <div class="form-group col-md-4 offset-md-2">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select RC" title="Select RC" name="rc_id" id="rc_id">
                       <option selected="selected"  value="">Select RC</option>
-                      
+
                     </select>
                   </div>
 
                   <div class="form-group col-md-4">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select TC" title="Select TC" name="tc_id" id="tc_id">
                       <option selected="selected"  value="">Select TC</option>
-                      
+
                     </select>
                   </div>
 
@@ -251,10 +258,10 @@ $page = "party_list";
 
                       $user_list = $this->Report_Model->get_user_target_list2($branch_id,$target_id,$rc_id,$tc_id);
                       $branch_info = $this->User_Model->get_info('branch_id', $branch_id, 'law_branch');
-                      
+
                     //   echo print_r($user_list).'<br><br>';
-                      
-                      
+
+
                       // $company_info = $this->User_Model->get_info('company_id', $company_id2, 'law_company');
                       foreach ($branch_info as $branch_info1) {
                        $branch_name = $branch_info1->branch_name;
@@ -412,7 +419,7 @@ $page = "party_list";
         }
       });
     });
-    
+
     $('#branch_id').on('change',function(){
       var branch_id = $(this).val();
       $.ajax({
@@ -428,7 +435,7 @@ $page = "party_list";
         }
       });
     });
-    
+
     $('#rc_id').on('change',function(){
         var rc_id = $(this).val();
         if(rc_id != ''){
@@ -436,7 +443,7 @@ $page = "party_list";
             $('#tc_id').attr('disabled',true);
         }
     });
-    
+
     $('#tc_id').on('change',function(){
         var tc_id = $(this).val();
         if(tc_id != ''){
@@ -444,7 +451,7 @@ $page = "party_list";
             $('#rc_id').attr('disabled',true);
         }
     });
-    
+
     function printDiv()
     {
       var divToPrint=document.getElementById('print_invoice');

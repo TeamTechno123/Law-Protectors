@@ -60,6 +60,7 @@ class User extends CI_Controller{
           $user_id = $login['user_id'];
           $user_name = $login['user_name'].' '.$login['user_lastname'];
           $email = $login['user_email'];
+          $roll_id2 = $login['roll_id'];
         }
 
         $otp = mt_rand(100000, 999999);
@@ -94,7 +95,12 @@ class User extends CI_Controller{
   			 Login Attempt Date and Time : '.$date.' '.$time.'
   			 </p>
   		 ';
-  		$recipient = "lawprotectors.rm@gmail.com,md.lawprotectors@gmail.com";
+      if($roll_id2 == 1){
+        $recipient = "lawprotectors.rm@gmail.com,md.lawprotectors@gmail.com";
+      } else{
+        $recipient = "lawprotectors.login@gmail.com";
+      }
+
   		$subject = 'Login Attemt By.'.$user_name;
   		$headers  = 'MIME-Version: 1.0' . "\r\n";
   		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -146,7 +152,7 @@ class User extends CI_Controller{
     $user_id = $this->session->userdata('law_user_id');
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
-    if($company_id){
+    if($company_id && $user_id && ($roll_id == 1 || $roll_id == 5)){
       $key = '';
       $data['branch_count'] = $this->User_Model->get_count2('branch_id',$key,'law_branch');
       $data['comp_count'] = $this->User_Model->get_count2('company_id',$key,'law_company');
@@ -169,8 +175,32 @@ class User extends CI_Controller{
       $this->load->view('Include/navbar', $data);
       $this->load->view('User/dashboard', $data);
       $this->load->view('Include/footer', $data);
-    } else{
-      header('location:'.base_url().'User');
+    } elseif ($company_id && $user_id && ($roll_id == 2 || $roll_id == 3 || $roll_id == 4)) {
+      $key = '';
+      $data['branch_count'] = $this->User_Model->get_count2('branch_id',$key,'law_branch');
+      $data['comp_count'] = $this->User_Model->get_count2('company_id',$key,'law_company');
+      $data['user_count'] = $this->User_Model->get_count2('user_id',$key,'law_user');
+      $data['service_count'] = $this->User_Model->get_count2('service_id',$key,'law_service');
+      $data['open_count'] = $this->User_Model->get_count2('application_id','Open','law_application');
+      $data['pro_count'] = $this->User_Model->get_count2('application_id','In Process','law_application');
+      $data['ready_count'] = $this->User_Model->get_count2('application_id','Ready To File','law_application');
+      $data['filled_count'] = $this->User_Model->get_count2('application_id','Filed Application','law_application');
+      $data['closed_count'] = $this->User_Model->get_count2('application_id','Application Closed','law_application');
+      $data['invoice_count'] = $this->User_Model->get_count2('invoice_id',$key,'law_invoice');
+
+      $data['service_count_list'] = $this->User_Model->service_list_count();
+      $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
+      $data['page'] = 'dashboard';
+
+      // $data['status_list'] = $this->User_Model->status_list_count();
+      // echo print_r($data['service_list']);
+      $this->load->view('Include/head', $data);
+      $this->load->view('Include/navbar', $data);
+      $this->load->view('User/user_dashboard', $data);
+      $this->load->view('Include/footer', $data);
+    }
+    else{
+      // header('location:'.base_url().'User');
     }
   }
 

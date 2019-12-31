@@ -2,10 +2,13 @@
 <html>
 <?php
 $page = "party_list";
+$user_roll = $this->session->userdata('roll_id');
+$law_user_id = $this->session->userdata('law_user_id');
+$user_info = $this->User_Model->get_info_arr('user_id', $law_user_id, 'law_user');
+$roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
 ?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -40,9 +43,13 @@ $page = "party_list";
                   <div class="form-group col-md-8 offset-md-2 drop-sm">
                     <select class="form-control select2 form-control-sm"  data-placeholder="Select Manager" title="Select Manager" name="manager_id" id="manager_id">
                       <option selected="selected" value="" >Select Manager </option>
-                      <?php foreach ($manager_list as $list) { ?>
+                      <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){
+                      foreach ($manager_list as $list) { ?>
                       <option value="<?php echo $list->user_id; ?>"><?php echo $list->user_name; ?></option>
-                      <?php } ?>
+                    <?php } } else{ ?>
+                      <option value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
+                    <?php } ?>
+
                     </select>
                   </div>
                   <div class="form-group col-md-8 offset-md-2 drop-sm">
@@ -53,21 +60,21 @@ $page = "party_list";
                       <?php } ?> -->
                     </select>
                   </div>
-                  
+
                   <div class="form-group col-md-4 offset-md-2">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select RC" title="Select RC" name="rc_id" id="rc_id">
                       <option selected="selected"  value="">Select RC</option>
-                      
+
                     </select>
                   </div>
 
                   <div class="form-group col-md-4">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select TC" title="Select TC" name="tc_id" id="tc_id">
                       <option selected="selected"  value="">Select TC</option>
-                      
+
                     </select>
                   </div>
-                  
+
                   <div class="form-group col-md-4 offset-md-2 drop-sm">
                     <select class="form-control select2 form-control-sm" title="Select Service / Product" name="service_id" id="service_id">
                       <option selected="selected"  value="">Select Service / Product</option>
@@ -253,7 +260,7 @@ $page = "party_list";
         }
       });
     });
-    
+
     $('#branch_id').on('change',function(){
       var branch_id = $(this).val();
       $.ajax({
@@ -269,7 +276,7 @@ $page = "party_list";
         }
       });
     });
-    
+
     $('#rc_id').on('change',function(){
         var rc_id = $(this).val();
         if(rc_id != ''){
@@ -277,7 +284,7 @@ $page = "party_list";
             $('#tc_id').attr('disabled',true);
         }
     });
-    
+
     $('#tc_id').on('change',function(){
         var tc_id = $(this).val();
         if(tc_id != ''){

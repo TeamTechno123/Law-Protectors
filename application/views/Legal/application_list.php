@@ -14,7 +14,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1">
-            <h4>VIEW ALL APPLICATION INFORMATION</h4>
+            <h4><?php if(isset($title)){ echo $title; } ?></h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->

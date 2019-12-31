@@ -196,13 +196,15 @@ $page = "step_1";
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="FIRMADDRESS" id="FIRMADDRESS" value="<?php if(isset($FIRMADDRESS)){ echo $FIRMADDRESS; } ?>" title="Firm Address" placeholder="Firm Address">
                   </div>
-                  <div class="form-group col-md-6">
+                  <div class="form-group col-md-4">
                     <input type="text" class="form-control form-control-sm" name="STATE" id="STATE" value="<?php if(isset($STATE)){ echo $STATE; } ?>" title="State" placeholder="State">
                   </div>
-                  <div class="form-group col-md-6">
+                  <div class="form-group col-md-4">
                     <input type="number" min="5" class="form-control form-control-sm" name="AGE" id="AGE" value="<?php if(isset($AGE)){ echo $AGE; } ?>" title="Age" placeholder="Age">
                   </div>
-
+                  <div class="form-group col-md-4">
+                    <input type="email" class="form-control form-control-sm" name="EMAIL" id="EMAIL" value="<?php if(isset($EMAIL)){ echo $EMAIL; } ?>" title="Email" placeholder="Email">
+                  </div>
 
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="BRAND" id="BRAND" value="<?php if(isset($BRAND)){ echo $BRAND; } ?>" title="Mark Brand Name To Be Registered" placeholder="Mark Brand Name To Be Registered">

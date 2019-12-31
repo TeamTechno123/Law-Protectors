@@ -232,6 +232,29 @@ class User_Model extends CI_Model{
     return $result;
   }
 
+  public function get_legal_count($user_id,$id_type,$key,$tbl_name){
+    $this->db->select($id_type);
+    if($key != ''){
+      $this->db->where('application_status', $key);
+    }
+    $this->db->where('legal_user', $user_id);
+    $this->db->from($tbl_name);
+    $query =  $this->db->get();
+    $result = $query->num_rows();
+    return $result;
+  }
+
+  public function legal_user_list(){
+    $this->db->select('*');
+    $this->db->from('law_user');
+    $this->db->where('roll_id',6);
+    $this->db->where('user_status','active');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
+
   // public function target_details3($target_no){
   //   $this->db->select('law_target_details.*');
   //   $this->db->from('law_target_details');

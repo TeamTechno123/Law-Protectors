@@ -71,7 +71,7 @@
             <p>Dashboard</p>
           </a>
         </li>
-        <?php //if(isset($$user_roll) && $user_roll == 1){ ?>
+        <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link head">
               <i class="nav-icon fas fa-chart-pie"></i>
@@ -89,47 +89,36 @@
               <li class="nav-item">
                 <a href="<?php echo base_url(); ?>User/branch_information_list" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>
-                    Branch Information
-                  </p>
+                  <p> Branch Information </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo base_url(); ?>User/service_information_list" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>
-                    Service Information
-                  </p>
+                  <p> Service Information </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo base_url(); ?>User/user_information_list" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>
-                    User Information
-                  </p>
+                  <p> User Information </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo base_url(); ?>User/target_range_list" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>
-                    Target Range
-                  </p>
+                  <p> Target Range </p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<?php echo base_url(); ?>User/target_list" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>
-                    Target Information
-                    <!-- set_target -->
-                  </p>
+                  <p> Target Information </p>
                 </a>
               </li>
             </ul>
           </li>
-        <?php //} ?>
+        <?php } ?>
 
 
     <li class="nav-item has-treeview">
@@ -141,46 +130,40 @@
           </p>
         </a>
         <ul class="nav nav-treeview" style="display: none;">
+          <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
           <li class="nav-item">
             <a href="<?php echo base_url(); ?>Transaction/application_information" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
-              <p>
-                Application Information
-              </p>
+              <p>Application Information</p>
             </a>
           </li>
+        <?php } ?>
           <li class="nav-item">
             <a href="<?php echo base_url(); ?>Transaction/application_list" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
-              <p>
-                Application List
-              </p>
+              <p>Application List</p>
             </a>
           </li>
           <li class="nav-item">
             <a href="<?php echo base_url(); ?>Transaction/work_details_list" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
-              <p>
-                Add Work Details
-              </p>
+              <p>Add Work Details</p>
             </a>
           </li>
+          <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
           <li class="nav-item">
             <a href="<?php echo base_url(); ?>Transaction/sale_invoice_list" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
-              <p>
-                Invoice List
-              </p>
+              <p>Invoice List</p>
             </a>
           </li>
           <li class="nav-item">
             <a href="<?php echo base_url(); ?>Transaction/receipt_list" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
-              <p>
-                Receipt
-              </p>
+              <p>Receipt</p>
             </a>
           </li>
+        <?php } ?>
         </ul>
       </li>
       <li class="nav-item has-treeview">
@@ -195,35 +178,35 @@
         <li class="nav-item">
           <a href="<?php echo base_url(); ?>Report/application_report" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>
-              Application Report
-            </p>
+            <p>Application Report</p>
           </a>
         </li>
         <li class="nav-item">
           <a href="<?php echo base_url(); ?>Report/collection_report" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>
-              Collection Report
-            </p>
+            <p>Collection Report</p>
           </a>
         </li>
         <li class="nav-item">
           <a href="<?php echo base_url(); ?>Report/outstanding_report" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>
-            Outstanding Report
-            </p>
+            <p>Outstanding Report</p>
           </a>
         </li>
+        <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
         <li class="nav-item">
           <a href="<?php echo base_url(); ?>Report/invoice_report" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>
-              Invoice Report
-            </p>
+            <p>Invoice Report</p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="<?php echo base_url(); ?>Report/legal_assistant_report" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Legal Report</p>
+          </a>
+        </li>
+      <?php } ?>
       </ul>
       </li>
       <li class="nav-item">

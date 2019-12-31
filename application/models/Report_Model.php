@@ -6,18 +6,18 @@ class Report_Model extends CI_Model{
     if($manager_id != ''){
       $this->db->select('law_appl_user_rel.*,application.*,branch.*,service.*,law_organization.*,trade.*,copy.*,other.*');
       $this->db->from('law_appl_user_rel');
-      
+
       if($rc_id == '' && $tc_id == ''){
       $this->db->where('law_appl_user_rel.user_id',$manager_id);
       }
       if($rc_id != ''){
-        $this->db->where('law_appl_user_rel.user_id',$rc_id);  
+        $this->db->where('law_appl_user_rel.user_id',$rc_id);
       }
       if($tc_id != ''){
-        $this->db->where('law_appl_user_rel.user_id',$tc_id);  
+        $this->db->where('law_appl_user_rel.user_id',$tc_id);
       }
-      
-      
+
+
     } else{
       $this->db->select('application.*,branch.*,service.*,law_organization.*,trade.*,copy.*,other.*');
       $this->db->from('law_application as application');
@@ -81,9 +81,6 @@ class Report_Model extends CI_Model{
       $this->db->select('application.*,branch.*,service.*,SUM(payment.GSTAMOUNT) as GSTAMOUNT,SUM(payment.TOTALAMOUNT) as CONTRACTAMOUNT,SUM(payment.RECEVIEDAMOUNT) as RECEVIEDAMOUNT,SUM(payment.LP_AMOUNT) as LP_AMOUNT,SUM(payment.GOVT_FEES) as GOVT_FEES,SUM(payment.B2B) as B2B,SUM(payment.TDS) as TDS');
       $this->db->from('law_application as application');
     }
-
-
-
 
     // $this->db->where('application.company_id',$company_id);
     if($branch_id != ''){
@@ -218,6 +215,29 @@ class Report_Model extends CI_Model{
     $query = $this->db->get();
     $result = $query->result();
     $q = $this->db->last_query();
+    return $result;
+  }
+
+
+  // Legal Assistant Report...
+  public function legal_report_list($from_date,$to_date,$legal_user,$status){
+    $this->db->select('application.*,application.application_id as appl_id,branch.*,service.*,trade.*,copy.*,other.*,org.*');
+    $this->db->from('law_application as application');
+    if($status){
+      $this->db->where('application.application_status',$status);
+    }
+    $this->db->where('application.legal_user',$legal_user);
+    $this->db->where('application.is_delete',0);
+    $this->db->order_by('application.application_id','DESC');
+    $this->db->where("str_to_date(application.application_date,'%d-%m-%Y') BETWEEN str_to_date('$from_date','%d-%m-%Y') AND str_to_date('$to_date','%d-%m-%Y')");
+    $this->db->join('law_branch as branch','application.branch_id = branch.branch_id','LEFT');
+    $this->db->join('law_service as service','application.service_id = service.service_id','LEFT');
+    $this->db->join('law_trademark as trade','application.application_id = trade.application_id','LEFT');
+    $this->db->join('law_copyright as copy','application.application_id = copy.application_id','LEFT');
+    $this->db->join('law_otherservice as other','application.application_id = other.application_id','LEFT');
+    $this->db->join('law_organization as org','application.organization_id = org.organization_id','LEFT');
+    $query = $this->db->get();
+    $result = $query->result();
     return $result;
   }
 }
