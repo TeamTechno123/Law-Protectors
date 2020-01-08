@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
+<?php
+  $user_roll = $this->session->userdata('roll_id');
+  $law_user_id = $this->session->userdata('law_user_id');
+  // $user_info = $this->User_Model->get_info_arr('user_id', $law_user_id, 'law_user');
+  // $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
+?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
@@ -19,132 +25,10 @@
     <section class="content">
       <div class="container-fluid">
         <hr>
-        <h4 class="mb-3">Master Summary</h4>
+        <h4 class="mb-3">Summary</h4>
         <div class="row">
-          <!-- left column -->
-          <!-- <div class="col-md-3 col-6">
-            <div class="small-box bg-red">
-              <div class="inner">
-                <h3><?php echo $comp_count; ?></h3>
-                <p>Company Information</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="<?php echo base_url() ?>User/company_information_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <div class="col-md-3 col-6">
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3><?php echo $branch_count; ?></h3>
-                <p>Branch Information</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="<?php echo base_url() ?>User/branch_information_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <div class="col-md-3 col-6">
-            <div class="small-box bg-yellow">
-              <div class="inner">
-                <h3><?php echo $service_count; ?></h3>
-                <p>Service Information</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="<?php echo base_url() ?>User/service_information_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <div class="col-md-3 col-6">
-            <div class="small-box bg-green">
-              <div class="inner">
-                <h3><?php echo $user_count; ?></h3>
-                <p> User Information</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="<?php echo base_url() ?>User/user_information_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div> -->
         </div>
         <div class="row">
-          <!-- left column -->
-          <!-- <div class="col-md-2 col-6">
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3><?php echo $open_count; ?></h3>
-                <p>Open  </p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="<?php echo base_url() ?>Transaction/application_list2/1" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <div class="col-md-2 col-6">
-            <div class="small-box bg-yellow">
-              <div class="inner">
-                <h3><?php echo $pro_count; ?></h3>
-                <p>In Process  </p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="<?php echo base_url() ?>Transaction/application_list2/2" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <div class="col-md-2 col-6">
-            <div class="small-box bg-red">
-              <div class="inner">
-                <h3><?php echo $ready_count; ?></h3>
-                <p>Ready To File </p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="<?php echo base_url() ?>Transaction/application_list2/3" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <div class="col-md-2 col-6">
-            <div class="small-box bg-green">
-              <div class="inner">
-                <h3><?php echo $filled_count; ?></h3>
-                <p> Filled </p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="<?php echo base_url() ?>Transaction/application_list2/4" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <div class="col-md-2 col-6">
-            <div class="small-box bg-blue">
-              <div class="inner">
-                <h3><?php echo $closed_count; ?></h3>
-                <p>Closed </p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="<?php echo base_url() ?>Transaction/application_list2/5" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <div class="col-md-2 col-6">
-            <div class="small-box bg-red">
-              <div class="inner">
-                <h3><?php echo $invoice_count; ?></h3>
-                <p>Invoice </p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="<?php echo base_url() ?>Transaction/sale_invoice_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div> -->
         </div>
 
         <div class="row">
@@ -195,7 +79,7 @@
                               <td>
                                 <?php
                                   $service_id = $service_list->service_id;
-                                  echo $this->User_Model->count_service_status($service_id,'Open');
+                                  echo $this->User_Model->count_service_status_user($user_roll,$law_user_id,$service_id,'Open');
                                 ?>
                               </td>
                             </tr>
@@ -204,7 +88,8 @@
                               <td>
                                 <?php
                                   $service_id = $service_list->service_id;
-                                  echo $this->User_Model->count_service_status($service_id,'In Process');
+
+                                  echo $this->User_Model->count_service_status_user($user_roll,$law_user_id,$service_id,'In Process');
                                 ?>
                               </td>
                             </tr>
@@ -213,7 +98,7 @@
                               <td>
                                 <?php
                                   $service_id = $service_list->service_id;
-                                  echo $this->User_Model->count_service_status($service_id,'Ready To File');
+                                  echo $this->User_Model->count_service_status_user($user_roll,$law_user_id,$service_id,'Ready To File');
                                 ?>
                               </td>
                             </tr>
@@ -222,7 +107,7 @@
                               <td>
                                 <?php
                                   $service_id = $service_list->service_id;
-                                  echo $this->User_Model->count_service_status($service_id,'Filed Application');
+                                  echo $this->User_Model->count_service_status_user($user_roll,$law_user_id,$service_id,'Filed Application');
                                 ?>
                               </td>
                             </tr>
@@ -231,7 +116,7 @@
                               <td>
                                 <?php
                                   $service_id = $service_list->service_id;
-                                  echo $this->User_Model->count_service_status($service_id,'Application Closed');
+                                  echo $this->User_Model->count_service_status_user($user_roll,$law_user_id,$service_id,'Application Closed');
                                 ?>
                               </td>
                             </tr>

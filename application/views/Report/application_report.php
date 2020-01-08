@@ -40,38 +40,42 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                     <input type="text" class="form-control form-control-sm" name="to_date" id="date2" data-target="#date2" data-toggle="datetimepicker" title="To Date"  placeholder="To Date" required>
                     <label class="text-red"> <?php echo form_error('to_date'); ?> </label>
                   </div>
+
+                <?php if(isset($user_roll) && ($user_roll != 3 && $user_roll != 4)){ ?>
                   <div class="form-group col-md-8 offset-md-2 drop-sm">
                     <select class="form-control select2 form-control-sm"  data-placeholder="Select Manager" title="Select Manager" name="manager_id" id="manager_id">
                       <option selected="selected" value="" >Select Manager </option>
                       <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){
                       foreach ($manager_list as $list) { ?>
                       <option value="<?php echo $list->user_id; ?>"><?php echo $list->user_name; ?></option>
-                    <?php } } else{ ?>
-                      <option value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
-                    <?php } ?>
-
-                    </select>
+                      <?php } } elseif ($user_roll == 2){ ?>
+                        <option selected value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
+                      <?php } ?>
+                   </select>
                   </div>
                   <div class="form-group col-md-8 offset-md-2 drop-sm">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select Branch" title="Select Branch" name="branch_id" id="branch_id">
-                      <option selected="selected"  value="">Select Branch</option>
-                      <!-- <?php foreach ($branch_list as $list) { ?>
-                      <option value="<?php echo $list->branch_id; ?>"><?php echo $list->branch_name; ?></option>
-                      <?php } ?> -->
+                      <option selected="selected"  value="">Select Branch</option>                      
                     </select>
                   </div>
+                <?php } ?>
+
 
                   <div class="form-group col-md-4 offset-md-2">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select RC" title="Select RC" name="rc_id" id="rc_id">
                       <option selected="selected"  value="">Select RC</option>
-
+                      <?php  if ($user_roll == 3){ ?>
+                        <option selected value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
+                      <?php } ?>
                     </select>
                   </div>
 
                   <div class="form-group col-md-4">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select TC" title="Select TC" name="tc_id" id="tc_id">
                       <option selected="selected"  value="">Select TC</option>
-
+                      <?php  if ($user_roll == 4){ ?>
+                        <option selected value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
+                      <?php } ?>
                     </select>
                   </div>
 
@@ -247,7 +251,21 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
     //     }
     //   });
     // })
+    //Branch List By Manager... On Page Load...
+    $(document).ready(function(){
+      var manager_id =  $('#manager_id').find("option:selected").val();
+      $.ajax({
+        url:'<?php echo base_url(); ?>Transaction/get_branch_by_manager',
+        type: 'POST',
+        data: {"manager_id":manager_id},
+        context: this,
+        success: function(result){
+          $('#branch_id').html(result);
+        }
+      });
+    });
 
+    // Branch List on select Manager..
     $('#manager_id').on('change',function(){
       var manager_id = $(this).val();
       $.ajax({

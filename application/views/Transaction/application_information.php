@@ -61,7 +61,8 @@ $page = "application_information";
 
                   <div class="form-group col-md-12">
                     <select class="form-control select2 form-control-sm"  data-placeholder="Select Manager" multiple="multiple" name="manager_id[]" title="Select Manager" id="manager_id" style="width: 100%;" required>
-                      <?php foreach ($user_list as $list) { ?>
+                      <?php foreach ($user_list as $list) {
+                        if($list->roll_id == 2){ ?>
                       <option value="<?php echo $list->user_id; ?>"
                         <?php if(isset($manager_id)) {
                           $str_arr = explode (",", $manager_id);
@@ -71,13 +72,14 @@ $page = "application_information";
                         } ?>
                          ><?php echo $list->user_name.' '.$list->user_lastname; ?>
                        </option>
-                      <?php } ?>
+                     <?php } } ?>
                     </select>
                   </div>
 
                   <div class="form-group col-md-6">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select TC" multiple="multiple" name="tc_id[]" title="Select TC" id="tc_id" style="width: 100%;">
-                      <?php foreach ($user_list as $list) { ?>
+                      <?php foreach ($user_list as $list) {
+                        if($list->roll_id == 4){ ?>
                       <option value="<?php echo $list->user_id; ?>"
                         <?php if(isset($tc_id)) {
                           $str_arr = explode (",", $tc_id);
@@ -87,13 +89,14 @@ $page = "application_information";
                         } ?>
                          ><?php echo $list->user_name.' '.$list->user_lastname; ?>
                        </option>
-                      <?php } ?>
+                     <?php } } ?>
                     </select>
                   </div>
 
                   <div class="form-group col-md-6">
                     <select class="form-control select2 form-control-sm"  data-placeholder="Select RC" multiple="multiple" name="rc_id[]" title="Select RC" id="rc_id" style="width: 100%;">
-                      <?php foreach ($user_list as $list) { ?>
+                      <?php foreach ($user_list as $list) {
+                        if($list->roll_id == 3){ ?>
                       <option value="<?php echo $list->user_id; ?>"
                         <?php if(isset($rc_id)) {
                           $str_arr = explode (",", $rc_id);
@@ -103,7 +106,7 @@ $page = "application_information";
                         } ?>
                          ><?php echo $list->user_name.' '.$list->user_lastname; ?>
                        </option>
-                      <?php } ?>
+                     <?php } } ?>
                     </select>
                   </div>
 

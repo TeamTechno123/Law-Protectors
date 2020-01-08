@@ -255,6 +255,46 @@ class User_Model extends CI_Model{
   }
 
 
+  public function count_service_status_user($roll_id,$user_id,$service_id,$status){
+    $this->db->select('COUNT(application_id) as count');
+    $this->db->from('law_application');
+    $this->db->where('service_id',$service_id);
+    $this->db->where('application_status',$status);
+
+    if($roll_id == 2){
+      $this->db->where("manager_id LIKE '%$user_id%'");
+    }
+    if($roll_id == 3){
+      $this->db->where("rc_id LIKE '%$user_id%'");
+    }
+    if($roll_id == 4){
+      $this->db->where("tc_id LIKE '%$user_id%'");
+    }
+
+    $query = $this->db->get();
+    $result = $query->result_array();
+    return $result[0]['count'];
+  }
+
+  public function service_list_count_user($roll_id,$user_id){
+    $this->db->select('COUNT(law_application.application_id) as count,law_service.service_name');
+    $this->db->from('law_application');
+    if($roll_id == 2){
+      $this->db->where("manager_id LIKE '%$user_id%'");
+    }
+    if($roll_id == 3){
+      $this->db->where("rc_id LIKE '%$user_id%'");
+    }
+    if($roll_id == 4){
+      $this->db->where("tc_id LIKE '%$user_id%'");
+    }
+    $this->db->group_by('law_application.service_id');
+    $this->db->join('law_service','law_application.service_id = law_service.service_id','LEFT');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
   // public function target_details3($target_no){
   //   $this->db->select('law_target_details.*');
   //   $this->db->from('law_target_details');

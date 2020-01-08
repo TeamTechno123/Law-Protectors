@@ -206,7 +206,10 @@
       <td style="text-align:center;" > <?php echo $list->gst_per; ?></td>
       <td style="text-align:center;"><?php echo $list->qty; ?></td>
       <td style="text-align:center;"><?php echo $list->rate; ?></td>
-      <td style="text-align:center;"><?php echo $list->total; ?></td>
+      <?php   $qty=$list->qty;
+                $rate=$list->rate;
+      $total = $qty*$rate; ?>
+      <td style="text-align:center;"><?php echo $total; ?></td>
     </tr>
   <?php } ?>
   <?php

@@ -3,7 +3,7 @@ class Report_Model extends CI_Model{
 
   public function application_report_list($from_date,$to_date,$company_id2,$manager_id,$branch_id,$service_id,$status_name,$rc_id,$tc_id){
 
-    if($manager_id != ''){
+    if($manager_id != '' || $rc_id != '' || $tc_id != ''){
       $this->db->select('law_appl_user_rel.*,application.*,branch.*,service.*,law_organization.*,trade.*,copy.*,other.*');
       $this->db->from('law_appl_user_rel');
 
@@ -16,7 +16,6 @@ class Report_Model extends CI_Model{
       if($tc_id != ''){
         $this->db->where('law_appl_user_rel.user_id',$tc_id);
       }
-
 
     } else{
       $this->db->select('application.*,branch.*,service.*,law_organization.*,trade.*,copy.*,other.*');
@@ -35,7 +34,7 @@ class Report_Model extends CI_Model{
     }
     $this->db->where("str_to_date(application.application_date,'%d-%m-%Y') BETWEEN str_to_date('$from_date','%d-%m-%Y') AND str_to_date('$to_date','%d-%m-%Y')");
 
-    if($manager_id != ''){
+    if($manager_id != '' || $rc_id != '' || $tc_id != ''){
       $this->db->join('law_application as application','application.application_id = law_appl_user_rel.application_id','LEFT');
     }
 
@@ -178,7 +177,9 @@ class Report_Model extends CI_Model{
   public function get_user_target_list2($branch_id,$target_id,$rc_id,$tc_id){
     $this->db->select('law_user.*,law_target_details.*,law_roll.*');
     $this->db->from('law_target_details');
+    if($branch_id != ''){
     $this->db->where('law_target_details.branch_id',$branch_id);
+    }
     $this->db->where('law_target_details.target_id',$target_id);
     $this->db->where('law_user.roll_id !=',5);
     if($rc_id != ''){

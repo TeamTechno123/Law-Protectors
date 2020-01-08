@@ -48,15 +48,15 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                       <?php } ?>
                     </select>
                   </div> -->
-
+                  <?php if(isset($user_roll) && ($user_roll != 3 && $user_roll != 4)){ ?>
                   <div class="form-group col-md-4 offset-md-2">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select Manager" title="Select Manager" name="manager_id" id="manager_id">
                       <option selected="selected"  value="">Select Manager</option>
                       <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){
                         foreach ($manager_list as $list) { ?>
                         <option value="<?php echo $list->user_id; ?>"><?php echo $list->user_name; ?></option>
-                      <?php } } else{ ?>
-                        <option value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
+                      <?php } } elseif ($user_roll == 2){ ?>
+                        <option selected value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -69,22 +69,23 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                       <?php } ?> -->
                     </select>
                   </div>
+                  <?php } ?>
 
                   <div class="form-group col-md-4 offset-md-2">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select RC" title="Select RC" name="rc_id" id="rc_id">
                       <option selected="selected"  value="">Select RC</option>
-                      <!-- <?php foreach ($manager_list as $list) { ?>
-                      <option value="<?php echo $list->user_id; ?>" ><?php echo $list->user_name.' '.$list->user_lastname; ?></option>
-                      <?php } ?> -->
+                      <?php  if ($user_roll == 3){ ?>
+                        <option selected value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
+                      <?php } ?>
                     </select>
                   </div>
 
                   <div class="form-group col-md-4">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select TC" title="Select TC" name="tc_id" id="tc_id">
                       <option selected="selected"  value="">Select TC</option>
-                      <!-- <?php foreach ($branch_list as $list) { ?>
-                      <option value="<?php echo $list->branch_id; ?>"><?php echo $list->branch_name; ?></option>
-                      <?php } ?> -->
+                      <?php  if ($user_roll == 4){ ?>
+                        <option selected value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
+                      <?php } ?>
                     </select>
                   </div>
 
@@ -256,10 +257,11 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                                </td>
                               </tr>
                             <?php } ?>
-
+                            <?php if($branch_details){  ?>
                             <tr>
                               <th colspan="10"><p style="text-align:center"> Branch Name : <?php echo $branch_name; ?> </p> </th>
                             </tr>
+                            <?php } ?>
                             <?php if($report_type == 'service'){
                               $service_details = $this->User_Model->get_info('service_id', $service_id, 'law_service');
                               foreach ($service_details as $service_details1) {
@@ -373,6 +375,18 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
     //     }
     //   });
     // });
+    $(document).ready(function(){
+      var manager_id =  $('#manager_id').find("option:selected").val();
+      $.ajax({
+        url:'<?php echo base_url(); ?>Transaction/get_branch_by_manager',
+        type: 'POST',
+        data: {"manager_id":manager_id},
+        context: this,
+        success: function(result){
+          $('#branch_id').html(result);
+        }
+      });
+    });
 
     $('#manager_id').on('change',function(){
       var manager_id = $(this).val();

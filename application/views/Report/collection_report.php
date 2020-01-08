@@ -42,47 +42,40 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                       <?php } ?>
                     </select>
                   </div>
-                  <!-- <div class="form-group col-md-8 offset-md-2">
-                    <select class="form-control select2 form-control-sm" data-placeholder="Select Company Name" title="Select Company" name="company_id" id="company_id">
-                      <option selected="selected" value="" >Select Company Name </option>
-                      <?php foreach ($company_list as $list) { ?>
-                      <option value="<?php echo $list->company_id; ?>" ><?php echo $list->company_name; ?></option>
-                      <?php } ?>
-                    </select>
-                  </div> -->
-                  <div class="form-group col-md-4 offset-md-2">
-                    <select class="form-control select2 form-control-sm" data-placeholder="Select Manager" title="Select Manager" name="manager_id" id="manager_id">
-                      <option selected="selected" value="" >Select Manager </option>
-                      <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){
-                        foreach ($manager_list as $list) { ?>
-                        <option value="<?php echo $list->user_id; ?>"><?php echo $list->user_name; ?></option>
-                      <?php } } else{ ?>
-                        <option value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
-                      <?php } ?>
-                    </select>
-                  </div>
-
-                  <div class="form-group col-md-4">
-                    <select class="form-control select2 form-control-sm" data-placeholder="Select Branch" title="Select Branch" name="branch_id" id="branch_id">
-                      <option selected="selected"  value="">Select Branch</option>
-                      <!-- <?php foreach ($branch_list as $list) { ?>
-                      <option value="<?php echo $list->branch_id; ?>"><?php echo $list->branch_name; ?></option>
-                      <?php } ?> -->
-                    </select>
-                  </div>
-
+                  <?php //if(isset($user_roll) && ($user_roll != 3 && $user_roll != 4)){ ?>
+                    <div class="form-group col-md-4 offset-md-2">
+                      <select class="form-control select2 form-control-sm" data-placeholder="Select Manager" title="Select Manager" name="manager_id" id="manager_id">
+                        <option selected="selected" value="" >Select Manager </option>
+                        <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){
+                          foreach ($manager_list as $list) { ?>
+                          <option value="<?php echo $list->user_id; ?>"><?php echo $list->user_name; ?></option>
+                        <?php } } elseif ($user_roll == 2){ ?>
+                          <option selected value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <select class="form-control select2 form-control-sm" data-placeholder="Select Branch" title="Select Branch" name="branch_id" id="branch_id">
+                        <option selected="selected"  value="">Select Branch</option>
+                      </select>
+                    </div>
+                  <?php //} ?>
 
                   <div class="form-group col-md-4 offset-md-2">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select RC" title="Select RC" name="rc_id" id="rc_id">
                       <option selected="selected"  value="">Select RC</option>
-
+                      <?php  if ($user_roll == 3){ ?>
+                        <option selected value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
+                      <?php } ?>
                     </select>
                   </div>
 
                   <div class="form-group col-md-4">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select TC" title="Select TC" name="tc_id" id="tc_id">
                       <option selected="selected"  value="">Select TC</option>
-
+                      <?php  if ($user_roll == 4){ ?>
+                        <option selected value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
+                      <?php } ?>
                     </select>
                   </div>
 
@@ -253,15 +246,9 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                     <?php  } ?>
 
                     <?php if(isset($report_type) && $report_type == 'userwise'){
-
-
-
                       $user_list = $this->Report_Model->get_user_target_list2($branch_id,$target_id,$rc_id,$tc_id);
                       $branch_info = $this->User_Model->get_info('branch_id', $branch_id, 'law_branch');
-
-                    //   echo print_r($user_list).'<br><br>';
-
-
+                      // echo print_r($user_list).'<br><br>';
                       // $company_info = $this->User_Model->get_info('company_id', $company_id2, 'law_company');
                       foreach ($branch_info as $branch_info1) {
                        $branch_name = $branch_info1->branch_name;
@@ -278,9 +265,11 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                         <!-- <tr>
                           <th colspan="11"><p style="text-align:center"> Company Name : <?php echo $company_name; ?> </p> </th>
                         </tr> -->
+                        <?php if($branch_info){ ?>
                         <tr>
                           <th colspan="11"><p style="text-align:center"> Branch Name : <?php echo $branch_name; ?> </p> </th>
                         </tr>
+                        <?php } ?>
                         <tr>
                           <th> <p style="text-align:center">Sr. No.</p> </th>
                           <th> <p style="text-align:center">Role Name </p> </th>
@@ -307,6 +296,7 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                         $tot_B2B = 0;
                         $tot_TDS = 0;
                         foreach ($user_list as $user_list1) {
+                          //if(isset($user_roll) && $user_roll == 2 && )
                           $i++;
                           $user_id = $user_list1->user_id;
                           $roll_id = $user_list1->roll_id;
@@ -359,8 +349,8 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                           <td> <p style="text-align:center"><?php echo $GSTAMOUNT; ?></p></td>
                           <td> <p style="text-align:center"><?php echo $B2B; ?></p></td>
                           <td> <p style="text-align:center"><?php echo $TDS; ?></p></td>
-
                         </tr>
+
                       <?php } ?>
                         <tr>
                           <td colspan="3"> <p style="text-align:center"> <b>Total</b> </p></td>
@@ -406,6 +396,19 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
 
   <script src="<?php echo base_url(); ?>assets/js/table2excel.js"></script>
   <script type="text/javascript">
+  //Branch List By Manager... On Page Load...
+  $(document).ready(function(){
+    var manager_id =  $('#manager_id').find("option:selected").val();
+    $.ajax({
+      url:'<?php echo base_url(); ?>Transaction/get_branch_by_manager',
+      type: 'POST',
+      data: {"manager_id":manager_id},
+      context: this,
+      success: function(result){
+        $('#branch_id').html(result);
+      }
+    });
+  });
     // Get Item Info on Select...
     $('#manager_id').on('change',function(){
       var manager_id = $(this).val();

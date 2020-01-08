@@ -397,6 +397,14 @@ class Report extends CI_Controller{
       if($branch_id != ''){
         $data['report_type'] = 'userwise';
       }
+      if($branch_id == '' && $rc_id != ''){
+        $data['report_type'] = 'userwise';
+        $data['branch_id'] = '';
+      }
+      if($branch_id == '' && $tc_id != ''){
+        $data['report_type'] = 'userwise';
+        $data['branch_id'] = '';
+      }
       //$data['manager_report_list'] = $this->Report_Model->manager_report_list($from_date,$to_date,$company_id2,$branch_id,$manager_id);
     }
 
@@ -451,6 +459,15 @@ class Report extends CI_Controller{
         $data['report_type'] = 'service';
         $data['outstanding_service_wise_report'] = $this->Report_Model->outstanding_service_wise_report_list($from_date,$to_date,$company_id2,$branch_id,$rc_id,$tc_id,$service_id);
       }
+      if(($rc_id != '' || $tc_id != '') && $service_id == ''){
+        $data['report_type'] = 'servicewise';
+        $data['outstanding_service_wise_report'] = $this->Report_Model->outstanding_service_wise_report_list($from_date,$to_date,$company_id2,$branch_id,$rc_id,$tc_id,$service_id);
+      }
+      if(($rc_id != '' || $tc_id != '') && $service_id != ''){
+        $data['report_type'] = 'service';
+        $data['outstanding_service_wise_report'] = $this->Report_Model->outstanding_service_wise_report_list($from_date,$to_date,$company_id2,$branch_id,$rc_id,$tc_id,$service_id);
+      }
+
       //$data['outstanding_report_list'] = $this->Report_Model->outstanding_report_list($from_date,$to_date,$company_id,$branch_id,$service_id);
     }
     $this->load->view('Include/head',$data);
@@ -503,6 +520,19 @@ class Report extends CI_Controller{
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
     $this->load->view('Report/legal_assistant_report',$data);
+    $this->load->view('Include/footer',$data);
+  }
+
+  public function application_outstanding(){    
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id == null){ header('location:'.base_url().'User'); }
+    $status = '';
+    $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'DESC');
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('Report/application_outstanding',$data);
     $this->load->view('Include/footer',$data);
   }
 

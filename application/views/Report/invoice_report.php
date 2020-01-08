@@ -133,6 +133,7 @@ $page = "party_list";
                             <td> <p style="text-align:center"><?php echo $details->invoice_no; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $details->invoice_date; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $details->party; ?></p></td>
+                            <td> <p style="text-align:center"><?php echo $details->party_address; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $details->GSTNUMBER; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $details->net_amt; ?></p></td>
                             <td> <p style="text-align:center"><?php echo 'Sales'; ?></p></td>
@@ -154,7 +155,7 @@ $page = "party_list";
                           </tr>
                         <?php } ?>
                           <tr>
-                            <td colspan="5"> <p style="text-align:center"> <b>Total : </b> </p></td>
+                            <td colspan="6"> <p style="text-align:center"> <b>Total : </b> </p></td>
                             <td colspan="3"> <p style="text-align:left"><?php echo $tot_bill_amt; ?></p></td>
                             <td colspan="2"> <p style="text-align:left"><?php echo $tot_txbl_amt; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $tot_cgst; ?></p></td>

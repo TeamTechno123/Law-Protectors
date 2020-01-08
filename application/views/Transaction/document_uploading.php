@@ -113,9 +113,11 @@
                       display: none;
                     }
                   </style>
-                <?php } ?>
+                <?php }
+                // echo $user_roll;
+                ?>
                     <div class="form-group col-md-6 ">
-                      <select class="form-control select2 form-control-sm" data-placeholder="Select Status" name="application_status" id="application_status" title="Select Status" style="width: 100%;" required <?php if(isset($user_roll) && ($user_roll != 1 || $user_roll != 5)){ echo 'disabled'; }?>>
+                      <select class="form-control select2 form-control-sm" data-placeholder="Select Status" name="application_status" id="application_status" title="Select Status" style="width: 100%;" required <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ echo ''; } else{ echo 'disabled'; }?>>
                         <option value="" >Select Status </option>
                         <option <?php if(isset($application_status) && $application_status == 'In Process'){ echo 'selected '; } ?> >In Process</option>
                         <option <?php if(isset($application_status) && $application_status == 'Ready To File'){ echo 'selected '; } ?> >Ready To File</option>
@@ -138,8 +140,6 @@
                         </select>
                       </div>
                     </div>
-
-
                     <div class="form-group col-md-4">
                       <input type="number" min="0" class="form-control form-control-sm" name="alert_days" id="alert_days" value="<?php if(isset($alert_days)){ echo $alert_days; } ?>" title="Enter No. Of Days" placeholder="Enter No. Of Days" <?php if(isset($change_status)){ echo 'readonly'; } ?> <?php if(isset($user_roll) && ($user_roll != 1 || $user_roll != 5)){ echo 'disabled'; }?> >
                     </div>
@@ -155,6 +155,9 @@
                         Application Closed
                       </div>
                     <?php } ?>
+                    <div class="form-group col-md-12">
+                      <textarea class="form-control form-control-sm" name="name" rows="4" disabled ><?php echo $comment; ?></textarea>
+                    </div>
                   <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
                   <div class="col-md-6 offset-md-4">
                     <button type="submit" class="btn btn-primary  mr-3">Add</button>

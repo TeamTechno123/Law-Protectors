@@ -4,6 +4,17 @@
   $user_info = $this->User_Model->get_info_arr('user_id', $law_user_id, 'law_user');
   $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
 ?>
+<style media="screen">
+.blink_me {
+animation: blinker 3s linear infinite;
+}
+
+@keyframes blinker {
+50% {
+  opacity: 0;
+}
+}
+</style>
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
   <!-- Left navbar links -->
   <ul class="navbar-nav">
@@ -144,13 +155,13 @@
               <p>Application List</p>
             </a>
           </li>
+          <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
           <li class="nav-item">
             <a href="<?php echo base_url(); ?>Transaction/work_details_list" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
               <p>Add Work Details</p>
             </a>
           </li>
-          <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
           <li class="nav-item">
             <a href="<?php echo base_url(); ?>Transaction/sale_invoice_list" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
@@ -161,6 +172,12 @@
             <a href="<?php echo base_url(); ?>Transaction/receipt_list" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
               <p>Receipt</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>Transaction/payment_status_list" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Payment Status</p>
             </a>
           </li>
         <?php } ?>
@@ -206,9 +223,16 @@
             <p>Legal Report</p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="<?php echo base_url(); ?>Report/application_outstanding" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Application Outstanding</p>
+          </a>
+        </li>
       <?php } ?>
       </ul>
       </li>
+      <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
       <li class="nav-item">
         <a href="<?php echo base_url(); ?>Transaction/printing_list" class="nav-link">
           <i class="nav-icon fas fa-th"></i>
@@ -217,7 +241,13 @@
           </p>
         </a>
       </li>
-
+      <?php } ?>
+      <li class="nav-item blink_me">
+        <a href="<?php echo base_url(); ?>Transaction/pending_doc_list" class="nav-link">
+          <i class="nav-icon fas fa-copy"></i>
+          <p class="">Pending Document</p>
+        </a>
+      </li>
     </nav>
     <!-- /.sidebar-menu -->
   </div>

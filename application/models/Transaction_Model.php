@@ -64,7 +64,7 @@ class Transaction_Model extends CI_Model{
     return $result;
   }
 
-  //
+  // Get User List by roll and branch. used in add and edit application..
   public function get_users_by_branch_rel($roll_id,$branch_id){
     $this->db->select('law_user_branch_rel.*,user.user_id,user.roll_id,user.user_name,user.user_lastname,user.user_mobile,law_roll.roll_name');
     $this->db->from('law_user_branch_rel');
@@ -229,6 +229,16 @@ class Transaction_Model extends CI_Model{
     $result = $query->result();
     return $result;
   }
+  // Used in application_outstanding_list...
+  public function get_payment_info2($application_id){
+    $this->db->select('*');
+    $this->db->from('law_payment');
+    $this->db->where('application_id',$application_id);
+    $this->db->where('is_master',1);
+    $query = $this->db->get();
+    $result = $query->result_array();
+    return $result;
+  }
 
   public function get_payment_info_list($application_id){
     $this->db->select('*');
@@ -343,5 +353,32 @@ class Transaction_Model extends CI_Model{
   }
 
 
+  // Application List of User.. For User Login...
+  public function application_list_user($user_id){
+    $this->db->select('law_appl_user_rel.*,application.*,application.application_id as appl_id,branch.*,service.*,law_organization.*,trade.*,copy.*,other.*');
+    $this->db->from('law_appl_user_rel');
+    $this->db->where('law_appl_user_rel.user_id',$user_id);
+
+    $this->db->join('law_application as application','application.application_id = law_appl_user_rel.application_id','LEFT');
+    $this->db->join('law_branch as branch','application.branch_id = branch.branch_id','LEFT');
+    $this->db->join('law_organization','application.organization_id = law_organization.organization_id','LEFT');
+    $this->db->join('law_service as service','application.service_id = service.service_id','LEFT');
+    $this->db->join('law_trademark as trade','application.application_id = trade.application_id','LEFT');
+    $this->db->join('law_copyright as copy','application.application_id = copy.application_id','LEFT');
+    $this->db->join('law_otherservice as other','application.application_id = other.application_id','LEFT');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
+  public function get_pending_docs($application_id){
+    $this->db->select('*');
+    $this->db->where('application_id', $application_id);
+    $this->db->where('doc_status', 0);
+    $this->db->from('law_doc_upload');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
 }
 ?>

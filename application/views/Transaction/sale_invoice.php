@@ -36,17 +36,17 @@ $page = "add_user";
                 <div class="card-body row">
                   <div class="form-group col-md-8 offset-md-2 drop-sm">
                     <input type="text" class="form-control form-control-sm" name="" value="<?php echo $company_name; ?>" readonly>
-                    <input type="hidden" name="company_id" value="<?php echo $company_id; ?>">
+                    <input type="hidden" name="company_id2" value="<?php echo $company_id2; ?>">
                   </div>
                   <div class="form-group col-md-8 offset-md-2 drop-sm">
                     <input type="text" class="form-control form-control-sm" name="" value="<?php echo $branch_name; ?>" readonly>
                     <input type="hidden" name="branch_id" value="<?php echo $branch_id; ?>">
                   </div>
                   <div class="form-group col-md-4 offset-md-2">
-                    <input type="text" class="form-control form-control-sm" name="invoice_no" id="invoice_no" value="<?php if(isset($invoice_no)){ echo $invoice_no; } ?>" title="Invoice No."  placeholder="Invoice No." readonly>
+                    <input type="text" class="form-control form-control-sm" name="invoice_no" id="invoice_no" value="<?php if(isset($invoice_no)){ echo $invoice_no; } ?>" title="Invoice No."  placeholder="Invoice No." required>
                   </div>
                   <div class="form-group col-md-4">
-                    <input type="text" class="form-control form-control-sm" name="invoice_date" id="date1" value="<?php if(isset($invoice_no)){ echo $invoice_no; } ?>"  data-target="#date1" data-toggle="datetimepicker" value="" title="Date" placeholder=" Date" required>
+                    <input type="text" class="form-control form-control-sm" name="invoice_date" id="date1" value="<?php if(isset($invoice_date)){ echo $invoice_date; }else{ echo date('d-m-Y'); } ?>"  data-target="#date1" data-toggle="datetimepicker"  title="Date" placeholder=" Date" required>
                   </div>
                   <div class="form-group col-md-8 offset-md-2 drop-sm">
                     <input type="text" class="form-control form-control-sm" name="party" id="party" value="<?php if(isset($party)) echo $party; ?>" placeholder="Party Name" title="Party Name" required>
@@ -63,7 +63,7 @@ $page = "add_user";
                     <input type="text" class="form-control form-control-sm" name="po_no" id="po_no" value="<?php if(isset($po_no)){ echo $po_no; } ?>" title="PO No."  placeholder="PO No.">
                   </div>
                   <div class="form-group col-md-4">
-                    <input type="text" class="form-control form-control-sm" name="po_date" value="<?php if(isset($po_date)){ echo $po_date; } ?>" id="date2" data-target="#date2" data-toggle="datetimepicker" value="" title="Date" placeholder=" Date" required>
+                    <input type="text" class="form-control form-control-sm" name="po_date" value="<?php if(isset($po_date)){ echo $po_date; } ?>" id="date2" data-target="#date2" data-toggle="datetimepicker"  title="Date" placeholder=" Date" >
                   </div>
                 </div>
               <!-- </form> -->
@@ -110,7 +110,7 @@ $page = "add_user";
                         <input type="number" min="0" class="form-control form-control-sm qty" name="input[<?php echo $i; ?>][qty]" value="<?php echo $details->qty; ?>" placeholder="">
                       </td>
                       <td class="td_w">
-                        <input type="number" min="1.00" step="0.01" class="form-control form-control-sm gov_fees" name="input[<?php echo $i; ?>][gov_fees]" value="<?php echo $details->gov_fees; ?>" placeholder="">
+                        <input type="number" min="0" step="0.01" class="form-control form-control-sm gov_fees" name="input[<?php echo $i; ?>][gov_fees]" value="<?php echo $details->gov_fees; ?>" placeholder="">
                       </td>
                       <td class="td_w">
                         <input type="number" min="1.00" step="0.01" class="form-control form-control-sm rate" name="input[<?php echo $i; ?>][rate]" value="<?php echo $details->rate; ?>" placeholder="">
@@ -131,7 +131,7 @@ $page = "add_user";
                       </td>
                       <td class="td_w">
                         <input type="number" min="0" class="form-control form-control-sm gst_per" name="input[0][gst_per]" value="" placeholder="">
-                        <input type="hidden" class="form-control form-control-sm gst_amount" name="input[0][gst_amount]" value="" placeholder="">
+                        <!--<input type="hidden" class="form-control form-control-sm gst_amount" name="input[0][gst_amount]" value="" placeholder="">-->
                       </td>
                       <td class="td_w">
                         <input type="text" class="form-control form-control-sm " name="input[0][hsn]" value="" placeholder="">
@@ -246,7 +246,7 @@ $page = "add_user";
       '</td>'+
       '<td class="td_w">'+
         '<input type="number" min="0" class="form-control form-control-sm gst_per" name="input['+j+'][gst_per]" value="" placeholder="">'+
-        '<input type="hidden" class="form-control form-control-sm gst_amount" name="input['+j+'][gst_amount]" value="" placeholder="">'+
+        // '<input type="hidden" class="form-control form-control-sm gst_amount" name="input['+j+'][gst_amount]" value="" placeholder="">'+
       '</td>'+
       '<td class="td_w">'+
         '<input type="text" class="form-control form-control-sm " name="input['+j+'][hsn]" value="" placeholder="">'+
@@ -255,7 +255,7 @@ $page = "add_user";
         '<input type="number" min="0" class="form-control form-control-sm qty" name="input['+j+'][qty]" value="" placeholder="">'+
       '</td>'+
       '<td class="td_w">'+
-        '<input type="number" min="1.00" step="0.01" class="form-control form-control-sm gov_fees" name="input['+j+'][gov_fees]" value="" placeholder="">'+
+        '<input type="number" min="0" step="0.01" class="form-control form-control-sm gov_fees" name="input['+j+'][gov_fees]" value="" placeholder="">'+
       '</td>'+
       '<td class="td_w">'+
         '<input type="number" min="1.00" step="0.01" class="form-control form-control-sm rate" name="input['+j+'][rate]" value="" placeholder="">'+
@@ -278,75 +278,78 @@ $page = "add_user";
 
 
     // Calculate Amount... Check Valid Quantity..
-  // $('#myTable').on('change', 'input.gst_per,input.qty, input.rate', function () {
-  //   var gst =   $(this).closest('tr').find('.gst_per').val();
-  //   var qty =   $(this).closest('tr').find('.qty').val();
-  //   var rate =   $(this).closest('tr').find('.rate').val();
-  //   if(gst == ''){
-  //     gst = 0;
-  //   }
-  //   if(qty == ''){
-  //     qty = 0;
-  //   }
-  //   if(rate == ''){
-  //     rate = 0;
-  //   }
-  //   var gst = parseInt(gst);
-  //   var qty = parseInt(qty);
-  //   var rate = parseFloat(rate);
-  //   var amount_without_gst = qty * rate;
-  //   var gst_amount = (gst/100) * amount_without_gst;
-  //   var amount_with_gst = amount_without_gst + gst_amount;
-  //
-  //   $(this).closest('tr').find('.total').val(amount_without_gst.toFixed(2));
-  //   $(this).closest('tr').find('.gst_amount').val(gst_amount.toFixed(2));
-  //
-  //   var basic_amount = 0;
-  //   $(".total").each(function() {
-  //       var total = $(this).val();
-  //       if(!isNaN(total) && total.length != 0) {
-  //           basic_amount += parseFloat(total);
-  //       }
-  //   });
-  //   $('#basic_amt').val(basic_amount.toFixed(2));
-  //   var gst_val = 0;
-  //   $(".gst_amount").each(function() {
-  //       var gst_amt = $(this).val();
-  //       if(!isNaN(gst_amt) && gst_amt.length != 0) {
-  //           gst_val += parseFloat(gst_amt);
-  //       }
-  //   });
-  //   $('#gst_amt').val(gst_val.toFixed(2));
-  //   var total_amount = basic_amount + gst_val;
-  //   $('#net_amt').val(total_amount.toFixed(0));
-  //   var adv_amt =   $('#adv_amt').val();
-  //   var net_amt =   $('#net_amt').val();
-  //   if(adv_amt == ''){
-  //     adv_amt = 0;
-  //   }
-  //   if(net_amt == ''){
-  //     net_amt = 0;
-  //   }
-  //   var adv_amt = parseInt(adv_amt);
-  //   var net_amt = parseInt(net_amt);
-  //   var bal_amt = net_amt - adv_amt;
-  //   $('#bal_amt').val(bal_amt.toFixed(2));
-  // });
+   $('#myTable').on('change', 'input.gst_per,input.qty, input.rate, input.gst_amount, input.gov_fees', function () {
+     var gst =   $(this).closest('tr').find('.gst_per').val();
+     var qty =   $(this).closest('tr').find('.qty').val();
+     var rate =   $(this).closest('tr').find('.rate').val();
+     var gst_amount =   $(this).closest('tr').find('.gst_amount').val();
+     var gov_fees =   $(this).closest('tr').find('.gov_fees').val();
+     if(gst == ''){ gst = 0; }
+     if(qty == ''){ qty = 0; }
+     if(rate == ''){ rate = 0; }
+     if(gov_fees == ''){ gov_fees = 0; }
+     if(gst_amount == ''){ gst_amount = 0; }
+     var gst = parseInt(gst);
+     var qty = parseInt(qty);
+     var rate = parseFloat(rate);
+     var gov_fees = parseFloat(gov_fees);
+     var gst_amount = parseFloat(gst_amount);
+     var amount_without_gst = qty * rate;
 
-  // $('#adv_amt').change(function(){
-  //   var adv_amt =   $('#adv_amt').val();
-  //   var net_amt =   $('#net_amt').val();
-  //   if(adv_amt == ''){
-  //     adv_amt = 0;
-  //   }
-  //   if(net_amt == ''){
-  //     net_amt = 0;
-  //   }
-  //   var adv_amt = parseInt(adv_amt);
-  //   var net_amt = parseInt(net_amt);
-  //   var bal_amt = net_amt - adv_amt;
-  //   $('#bal_amt').val(bal_amt.toFixed(2));
-  // });
+     var amount_with_gst = amount_without_gst + gst_amount;
+
+     $(this).closest('tr').find('.total').val(amount_without_gst.toFixed(2));
+     // $(this).closest('tr').find('.gst_amount').val(gst_amount.toFixed(2));
+
+     var basic_amount = 0;
+     $(".total").each(function() {
+         var total = $(this).val();
+         if(!isNaN(total) && total.length != 0) {
+             basic_amount += parseFloat(total);
+         }
+     });
+     $('#basic_amt').val(basic_amount.toFixed(2));
+
+     var gst_val = 0;
+     $(".gst_amount").each(function() {
+         var gst_amt = $(this).val();
+         if(!isNaN(gst_amt) && gst_amt.length != 0) {
+             gst_val += parseFloat(gst_amt);
+         }
+     });
+     $('#gst_amt').val(gst_val.toFixed(2));
+
+     var gov_fees_amt = 0;
+     $(".gov_fees").each(function() {
+         var gov_fees = $(this).val();
+         if(!isNaN(gov_fees) && gov_fees.length != 0) {
+             gov_fees_amt += parseFloat(gov_fees);
+         }
+     });
+     $('#gov_fees_amt').val(gov_fees_amt.toFixed(2));
+
+     var total_amount = basic_amount + gst_val;
+     // $('#net_amt').val(total_amount.toFixed(0));
+     var adv_amt =   $('#adv_amt').val();
+     var net_amt =   $('#net_amt').val();
+     if(adv_amt == ''){ adv_amt = 0; }
+     if(net_amt == ''){ net_amt = 0; }
+     var adv_amt = parseInt(adv_amt);
+     var net_amt = parseInt(net_amt);
+     var bal_amt = net_amt - adv_amt;
+     // $('#bal_amt').val(bal_amt.toFixed(2));
+   });
+
+   $('#adv_amt').change(function(){
+     var adv_amt =   $('#adv_amt').val();
+     var net_amt =   $('#net_amt').val();
+     if(adv_amt == ''){ adv_amt = 0; }
+     if(net_amt == ''){ net_amt = 0; }
+     var adv_amt = parseInt(adv_amt);
+     var net_amt = parseInt(net_amt);
+     var bal_amt = net_amt - adv_amt;
+     $('#bal_amt').val(bal_amt.toFixed(2));
+   });
   </script>
 </body>
 </html>

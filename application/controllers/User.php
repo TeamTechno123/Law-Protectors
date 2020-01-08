@@ -188,7 +188,9 @@ class User extends CI_Controller{
       $data['closed_count'] = $this->User_Model->get_count2('application_id','Application Closed','law_application');
       $data['invoice_count'] = $this->User_Model->get_count2('invoice_id',$key,'law_invoice');
 
-      $data['service_count_list'] = $this->User_Model->service_list_count();
+
+      $data['service_count_list'] = $this->User_Model->service_list_count_user($roll_id,$user_id);
+
       $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
       $data['page'] = 'dashboard';
 
