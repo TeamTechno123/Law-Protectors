@@ -9,7 +9,6 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
 ?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -48,7 +47,7 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                         <option selected="selected" value="" >Select Manager </option>
                         <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){
                           foreach ($manager_list as $list) { ?>
-                          <option value="<?php echo $list->user_id; ?>"><?php echo $list->user_name; ?></option>
+                          <option value="<?php echo $list->user_id; ?>"><?php echo $list->user_name.' '.$list->user_lastname; ?></option>
                         <?php } } elseif ($user_roll == 2){ ?>
                           <option selected value="<?php echo $user_info[0]['user_id']; ?>"><?php echo $user_info[0]['user_name'].' '.$user_info[0]['user_lastname']; ?></option>
                         <?php } ?>
@@ -78,18 +77,6 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                       <?php } ?>
                     </select>
                   </div>
-
-                  <!-- <div class="form-group col-md-4 offset-md-2">
-                    <select class="form-control select2 form-control-sm" data-placeholder="Select RC" title="Select RC" name="rc_id" id="rc_id">
-                      <option selected="selected"  value="">Select RC</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-md-4 ">
-                    <select class="form-control select2 form-control-sm" data-placeholder="Select TC" title="Select TC" name="tc_id" id="tc_id">
-                      <option selected="selected"  value="">Select TC</option>
-                    </select>
-                  </div> -->
-
                   <div class="col-md-10 w-100 text-center mb-3">
                       <button type="submit" class="btn btn-success btn-sm">View</button>
                       <button type="submit" class="btn btn-default btn-sm ml-4">Cancel</button>
@@ -140,20 +127,19 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                         $branch_list = $this->User_Model->get_list2('branch_id','ASC','law_branch');
                       }
 
-
-                      // $company_info = $this->User_Model->get_info('company_id', $company_id2, 'law_company');
-                      //
-                      // foreach ($company_info as $company_info1) {
-                      //  $company_name = $company_info1->company_name;
-                      // }
                       ?>
                       <table class="table table-botttom" id="exp_tbl" width="100%">
                         <thead>
-                          <!-- <tr>
-                            <th colspan="10"><p style="text-align:center"> Company Name : <?php echo $company_name; ?> </p> </th>
-                          </tr> -->
+                          <?php if(isset($manager_id) && $manager_id != ''){
+                            $manager_info = $this->User_Model->get_info_arr('user_id', $manager_id, 'law_user');
+
+                            ?>
                           <tr>
-                            <th colspan="10"><p style="text-align:center">Target Range  : <?php echo $from_date; ?> To <?php echo $to_date; ?></p> </th>
+                            <th colspan="11"><p style="text-align:center"> Manager Name : <?php echo $manager_info[0]['user_name'].' '.$manager_info[0]['user_lastname']; ?> </p> </th>
+                          </tr>
+                        <?php } ?>
+                          <tr>
+                            <th colspan="11"><p style="text-align:center">Target Range  : <?php echo $from_date; ?> To <?php echo $to_date; ?></p> </th>
                           </tr>
 
                           <tr>
@@ -161,7 +147,10 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                             <th> <p style="text-align:center">Branch Name </p> </th>
                             <th> <p style="text-align:center">Target</p> </th>
                             <th> <p style="text-align:center">Contract Total</p> </th>
-                            <th> <p style="text-align:center">Total Collection</p> </th>
+
+                            <th> <p style="text-align:center">Total Clear</p> </th>
+                            <th> <p style="text-align:center">Total Unclear</p> </th>
+
                             <th> <p style="text-align:center">Total LP</p> </th>
                             <th> <p style="text-align:center">Total Govt.</p> </th>
                             <th> <p style="text-align:center">Total GST</p> </th>
@@ -181,6 +170,8 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                           $tot_B2B = 0;
                           $tot_TDS = 0;
                           $sr_no = 0;
+                          $tot_unclear_amt = 0;
+                          $tot_clear_amt = 0;
                           foreach ($branch_list as $branch_list1) {
                             $sr_no++;
                             $branch_id2 = $branch_list1->branch_id;
@@ -188,10 +179,22 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                             if($target_amount){ $target_amt = $target_amount[0]['target_amount']; }
                             else{ $target_amt = 0; }
                             $payments = $this->Report_Model->get_target_report_amt($branch_id2,$from_date,$to_date);
+                            $payments_clear = $this->Report_Model->get_target_report_amt_clear($branch_id2,$from_date,$to_date);
+                            $payments_unclear = $this->Report_Model->get_target_report_amt_unclear($branch_id2,$from_date,$to_date);
+
                             if($payments){
-                              foreach ($payments as $payments1) {
-                                $CONTRACTAMOUNT = $payments1->CONTRACTAMOUNT;
-                                $RECEVIEDAMOUNT = $payments1->RECEVIEDAMOUNT;
+                              foreach ($payments as $payments0) {
+                                $CONTRACTAMOUNT = $payments0->CONTRACTAMOUNT;
+                              }
+                            }
+                            else{
+                              $CONTRACTAMOUNT = 0;
+                            }
+
+                            if($payments_clear){
+                              foreach ($payments_clear as $payments1) {
+
+                                $clear_amt = $payments1->RECEVIEDAMOUNT;
                                 $GSTAMOUNT = $payments1->GSTAMOUNT;
                                 $LP_AMOUNT = $payments1->LP_AMOUNT;
                                 $GOVT_FEES = $payments1->GOVT_FEES;
@@ -201,8 +204,7 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                               }
                             }
                             else{
-                              $CONTRACTAMOUNT = 0;
-                              $RECEVIEDAMOUNT = 0;
+                              $clear_amt = 0;
                               $GSTAMOUNT = 0;
                               $LP_AMOUNT = 0;
                               $GOVT_FEES = 0;
@@ -210,21 +212,35 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                               $B2B = 0;
                               $TDS = 0;
                             }
+
+                            if($payments_unclear){
+                              foreach ($payments_unclear as $payments2) {
+                                $unclear_amt = $payments2->RECEVIEDAMOUNT;
+                              }
+                            }
+                            else{
+                              $unclear_amt = 0;
+                            }
+
                             $tot_target = $tot_target + $target_amt;
                             $tot_CONTRACTAMOUNT = $tot_CONTRACTAMOUNT + $CONTRACTAMOUNT;
-                            $tot_RECEVIEDAMOUNT = $tot_RECEVIEDAMOUNT + $RECEVIEDAMOUNT;
+                            $tot_clear_amt = $tot_clear_amt + $clear_amt;
                             $tot_LP_AMOUNT = $tot_LP_AMOUNT + $LP_AMOUNT;
                             $tot_GOVT_FEES = $tot_GOVT_FEES + $GOVT_FEES;
                             $tot_GSTAMOUNT = $tot_GSTAMOUNT + $GSTAMOUNT;
                             $tot_B2B = $tot_B2B + $B2B;
                             $tot_TDS = $tot_TDS + $TDS;
+                            $tot_unclear_amt = $tot_unclear_amt + $unclear_amt;
                           ?>
                           <tr>
                             <td> <p style="text-align:center"><?php echo $sr_no; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $branch_list1->branch_name; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $target_amt; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $CONTRACTAMOUNT; ?></p></td>
-                            <td> <p style="text-align:center"><?php echo $RECEVIEDAMOUNT; ?></p></td>
+
+                            <td> <p style="text-align:center"><?php echo $clear_amt; ?></p></td>
+                            <td> <p style="text-align:center"><?php echo $unclear_amt; ?></p></td>
+
                             <td> <p style="text-align:center"><?php echo $LP_AMOUNT; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $GOVT_FEES; ?></p></td>
                             <td> <p style="text-align:center"><?php echo $GSTAMOUNT; ?></p></td>
@@ -235,7 +251,10 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                           <td colspan="2"> <p style="text-align:center"> <b>Total</b> </p></td>
                           <td> <p style="text-align:center"><?php echo $tot_target; ?></p></td>
                           <td> <p style="text-align:center"><?php echo $tot_CONTRACTAMOUNT; ?></p></td>
-                          <td> <p style="text-align:center"><?php echo $tot_RECEVIEDAMOUNT; ?></p></td>
+
+                          <td> <p style="text-align:center"><?php echo $tot_clear_amt; ?></p></td>
+                          <td> <p style="text-align:center"><?php echo $tot_unclear_amt; ?></p></td>
+
                           <td> <p style="text-align:center"><?php echo $tot_LP_AMOUNT; ?></p></td>
                           <td> <p style="text-align:center"><?php echo $tot_GOVT_FEES; ?></p></td>
                           <td> <p style="text-align:center"><?php echo $tot_GSTAMOUNT; ?></p></td>
@@ -260,14 +279,14 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                     <table class="table table-botttom" id="exp_tbl" width="100%">
                       <tbody>
                         <tr>
-                          <th colspan="11"><p style="text-align:center">Target Range  : <?php echo $from_date; ?> To <?php echo $to_date; ?></p> </th>
+                          <th colspan="12"><p style="text-align:center">Target Range  : <?php echo $from_date; ?> To <?php echo $to_date; ?></p> </th>
                         </tr>
                         <!-- <tr>
                           <th colspan="11"><p style="text-align:center"> Company Name : <?php echo $company_name; ?> </p> </th>
                         </tr> -->
                         <?php if($branch_info){ ?>
                         <tr>
-                          <th colspan="11"><p style="text-align:center"> Branch Name : <?php echo $branch_name; ?> </p> </th>
+                          <th colspan="12"><p style="text-align:center"> Branch Name : <?php echo $branch_name; ?> </p> </th>
                         </tr>
                         <?php } ?>
                         <tr>
@@ -276,7 +295,10 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                           <th> <p style="text-align:center">Name Of Employee </p> </th>
                           <th> <p style="text-align:center">Target</p> </th>
                           <th> <p style="text-align:center">Contract Total</p> </th>
-                          <th> <p style="text-align:center">Total Collection</p> </th>
+
+                          <th> <p style="text-align:center">Total Clear</p> </th>
+                          <th> <p style="text-align:center">Total Unclear</p> </th>
+
                           <th> <p style="text-align:center">Total LP</p> </th>
                           <th> <p style="text-align:center">Total Govt.</p> </th>
                           <th> <p style="text-align:center">Total GST</p> </th>
@@ -288,7 +310,8 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                         $i=0;
                         $tot_target = 0;
                         $tot_CONTRACTAMOUNT = 0;
-                        $tot_RECEVIEDAMOUNT = 0;
+                        $tot_clear_amount = 0;
+                        $tot_unclear_amount = 0;
                         $tot_GSTAMOUNT = 0;
                         $tot_LP_AMOUNT = 0;
                         $tot_GOVT_FEES = 0;
@@ -302,11 +325,21 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                           $roll_id = $user_list1->roll_id;
                           $target_amount = $user_list1->target_amount;
                           $user_amount = $this->Report_Model->get_target_report_by_user_amt($user_id,$from_date,$to_date,$roll_id);
+                          $user_amount_clear = $this->Report_Model->get_target_report_by_user_amt_clear($user_id,$from_date,$to_date,$roll_id);
+                          $user_amount_unclear = $this->Report_Model->get_target_report_by_user_amt_unclear($user_id,$from_date,$to_date,$roll_id);
 
                           if($user_amount){
-                            foreach ($user_amount as $user_amount1) {
-                              $CONTRACTAMOUNT = $user_amount1->CONTRACTAMOUNT;
-                              $RECEVIEDAMOUNT = $user_amount1->RECEVIEDAMOUNT;
+                            foreach ($user_amount as $user_amount0) {
+                              $CONTRACTAMOUNT = $user_amount0->CONTRACTAMOUNT;
+                            }
+                          } else{
+                            $CONTRACTAMOUNT = 0;
+                          }
+
+
+                          if($user_amount_clear){
+                            foreach ($user_amount_clear as $user_amount1) {
+                              $clear_amount = $user_amount1->RECEVIEDAMOUNT;
                               $GSTAMOUNT = $user_amount1->GSTAMOUNT;
                               $LP_AMOUNT = $user_amount1->LP_AMOUNT;
                               $GOVT_FEES = $user_amount1->GOVT_FEES;
@@ -316,8 +349,7 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                             }
                           }
                           else{
-                            $CONTRACTAMOUNT = 0;
-                            $RECEVIEDAMOUNT = 0;
+                            $clear_amount = 0;
                             $GSTAMOUNT = 0;
                             $LP_AMOUNT = 0;
                             $GOVT_FEES = 0;
@@ -325,9 +357,20 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                             $B2B = 0;
                             $TDS = 0;
                           }
+
+                          if($user_amount_unclear){
+                            foreach ($user_amount_unclear as $user_amount2) {
+                              $unclear_amount = $user_amount2->RECEVIEDAMOUNT;
+                            }
+                          } else {
+                            $unclear_amount = 0;
+                          }
+
+
                           $tot_target = $tot_target + $target_amount;
                           $tot_CONTRACTAMOUNT = $tot_CONTRACTAMOUNT + $CONTRACTAMOUNT;
-                          $tot_RECEVIEDAMOUNT = $tot_RECEVIEDAMOUNT + $RECEVIEDAMOUNT;
+                          $tot_clear_amount = $tot_clear_amount + $clear_amount;
+                          $tot_unclear_amount = $tot_unclear_amount + $unclear_amount;
                           $tot_GSTAMOUNT = $tot_GSTAMOUNT + $GSTAMOUNT;
                           $tot_LP_AMOUNT = $tot_LP_AMOUNT + $LP_AMOUNT;
                           $tot_GOVT_FEES = $tot_GOVT_FEES + $GOVT_FEES;
@@ -341,9 +384,11 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                           <td> <p style="text-align:center"><?php echo $user_list1->roll_name; ?></p></td>
                           <td> <p style="text-align:center"><?php echo $user_list1->user_name.' '.$user_list1->user_lastname; ?></p></td>
                           <td> <p style="text-align:center"><?php echo $user_list1->target_amount; ?></p></td>
-
                           <td> <p style="text-align:center"><?php echo $CONTRACTAMOUNT; ?></p></td>
-                          <td> <p style="text-align:center"><?php echo $RECEVIEDAMOUNT; ?></p></td>
+
+                          <td> <p style="text-align:center"><?php echo $clear_amount; ?></p></td>
+                          <td> <p style="text-align:center"><?php echo $unclear_amount; ?></p></td>
+
                           <td> <p style="text-align:center"><?php echo $LP_AMOUNT; ?></p></td>
                           <td> <p style="text-align:center"><?php echo $GOVT_FEES; ?></p></td>
                           <td> <p style="text-align:center"><?php echo $GSTAMOUNT; ?></p></td>
@@ -356,7 +401,10 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                           <td colspan="3"> <p style="text-align:center"> <b>Total</b> </p></td>
                           <td> <p style="text-align:center"><?php echo $tot_target; ?></p></td>
                           <td> <p style="text-align:center"><?php echo $tot_CONTRACTAMOUNT; ?></p></td>
-                          <td> <p style="text-align:center"><?php echo $tot_RECEVIEDAMOUNT; ?></p></td>
+
+                          <td> <p style="text-align:center"><?php echo $tot_clear_amount; ?></p></td>
+                          <td> <p style="text-align:center"><?php echo $tot_unclear_amount; ?></p></td>
+
                           <td> <p style="text-align:center"><?php echo $tot_LP_AMOUNT; ?></p></td>
                           <td> <p style="text-align:center"><?php echo $tot_GOVT_FEES; ?></p></td>
                           <td> <p style="text-align:center"><?php echo $tot_GSTAMOUNT; ?></p></td>

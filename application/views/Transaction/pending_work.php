@@ -55,7 +55,7 @@ $page = "application_list";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1">
-            <h4>VIEW ALL APPLICATION INFORMATION</h4>
+            <h4>Pending Work</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -87,15 +87,13 @@ $page = "application_list";
                       <th>Service</th>
                       <th>Org. Name</th>
                       <th>Status</th>
-                      <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
+                      <th>Work Status</th>
                       <th >Legal Upload</th>
-                    <?php } ?>
                       <th class="sr_no">Application Upload</th>
-                      <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
                       <th class="sr_no">Invoice</th>
                       <th class="sr_no">Change Status</th>
                       <th class="sr_no">Action</th>
-                    <?php } ?>
+
                     </tr>
                   </thead>
                   <tbody>
@@ -127,27 +125,24 @@ $page = "application_list";
                     <?php } else{ ?>
                       <td><?php echo $list->appl_org_name; ?></td>
                     <?php } ?>
+                    <td><?php echo $list->application_status; ?></td>
                     <td>
-                      <?php echo $list->application_status;
-                      $application_status = $list->application_status;
-                      if($application_status == 'Legal In Process' || $application_status == 'Pending for Legal' || $application_status == 'Legal Completed' ){
-                        $legal_user = $this->User_Model->get_info_arr('user_id', $list->legal_user, 'law_user');
-                        if($legal_user){
-                          echo '<br>('.$legal_user[0]['user_name'].' '.$legal_user[0]['user_lastname'].')';
-                        }
-                      }
-                      ?>
+                      <?php if($list->application_status_progress == 'Pending'){ ?>
+                        <a href="#" class="pay_status" id="<?php echo $list->appl_id; ?>" name="<?php echo $list->application_status_progress; ?>"  data-toggle="modal" data-target="#modal-default">
+                          <small class="badge badge-danger"><?php echo $list->application_status_progress; ?></small>
+                        </a>
+                      <?php } else{ ?>
+                        <a href="#" class="pay_status" id="<?php echo $list->appl_id; ?>" name="<?php echo $list->application_status_progress; ?>" data-toggle="modal" data-target="#modal-default">
+                          <small class="badge badge-success"><?php echo $list->application_status_progress; ?></small>
+                        </a>
+                      <?php } ?>
                     </td>
-                    <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
                     <td >
                       <a href="<?php echo base_url(); ?>Transaction/legal_doc_view/<?php echo $list->appl_id; ?>"> <i class="fa fa-eye"></i> </a>
                     </td>
-                  <?php } ?>
-
                     <td class="sr_no">
                       <a href="<?php echo base_url(); ?>Transaction/document_uploading_form/<?php echo $list->appl_id; ?>"> <i class="fa fa-upload"></i> </a>
                     </td>
-                    <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
                     <td class="sr_no">
                       <a href="<?php echo base_url(); ?>Transaction/sale_invoice/<?php echo $list->appl_id; ?>"> <i class="fa fa-plus"></i> </a>
                     </td>
@@ -160,31 +155,57 @@ $page = "application_list";
                         <a href="<?php echo base_url(); ?>Transaction/delete_application/<?php echo $list->appl_id; ?>" onclick="return confirm('Delete this Application');" class="ml-4"> <i class="fa fa-trash"></i> </a>
                       <?php } ?>
                     </td>
-                    <?php } ?>
                   </tr>
                   <?php } ?>
                   <tbody>
                 </table>
               </div>
-
-
-
-
-              <!-- <div class="w-100" style="overflow-x:auto;" id="div1">
-                <div class="" id="div1_sub">
-                </div>
-              </div>
-              <div class="" style="overflow-x:auto;" id="div2">
-
-              </div> -->
-
-
             </div>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
           </div>
         </div>
+
+        <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Change Status</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="" method="POST" accept-charset="utf-8">
+                <div class="box-body">
+                  <div class="form-group">
+                    <input type="hidden" class="application_id" name="application_id" id="application_id" value="">
+                  </div>
+                  <div class="row w-100 m-0">
+                    <div class="form-group col-md-12 ">
+                      <select class="form-control form-control-sm" data-placeholder="Select Status" name="application_status_progress" id="application_status_progress">
+
+                        <option value="Pending">Pending</option>
+                        <option value="Complete">Complete</option>
+                      </select>
+                    </div>
+                    <label class="text-red" id="error_name">  </label>
+                  </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" id="save_status" class="btn btn-primary">Save changes</button>
+            </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+  <!-- /.modal -->
+
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
@@ -207,6 +228,36 @@ $page = "application_list";
         });
       });
     });
+
+    $(".pay_status").click(function(){
+      var application_id = $(this).attr('id');
+      var application_status_progress = $(this).attr('name');
+
+      $(".application_id").val(application_id);
+      $("#application_status_progress").val(application_status_progress);
+    });
+
+    $("#save_status").click(function(){
+    var application_id = $("#application_id").val();
+    var application_status_progress = $("#application_status_progress").val();
+    if(application_status_progress == ''){
+      $('#error_name').show();
+      $('#error_name').html("Select Status");
+    } else {
+      $('#error_name').hide();
+
+      $.ajax({
+        url: '<?php echo base_url(); ?>Transaction/update_work_status',
+        type: "POST",
+        data: { "application_id":application_id,
+                "application_status_progress":application_status_progress,
+               },
+        success: function (result) {
+            window.location.href = "<?php echo base_url().'Transaction/pending_work'; ?>";
+        }
+      });
+    }
+  });
   </script>
   <script type="text/javascript">
     $(document).ready(function(){

@@ -48,7 +48,14 @@ $page = "step_1";
                 <div class="col-md-12 text-center mt-0">
                   <label><b>Payment Information</b></label>
                 </div>
+
                 <div class="card-body row">
+                  <div class="form-group col-md-6 ">
+                    <input type="text" class="form-control form-control-sm" name="payment_no" id="payment_no" value="<?php if(isset($payment_no) ){ echo $payment_no;} ?>" title="Payment Reciept No." placeholder="Payment Reciept No." readonly required>
+                  </div>
+                  <div class="form-group col-md-6 ">
+                    <input type="text" class="form-control form-control-sm" name="payment_date" value="<?php if(isset($payment_date)){ echo $payment_date;} else{ echo date('d-m-Y'); } ?>"  id="date5" data-target="#date5" data-toggle="datetimepicker"  title="Reciept Date" placeholder="Reciept Date">
+                  </div>
                   <div class=" col-md-6 ">
                     <label for="" class="">Basic Amount :</label>
                   </div>
@@ -158,6 +165,25 @@ $page = "step_1";
 
                   <div class="col-md-12 text-center mt-0 mb-3">
                     <label><b><?php echo $title; ?> Information</b></label>
+                  </div>
+
+                  <div class="form-group col-md-3">
+                    <input class="" type="checkbox" name="is_exist" id="is_exist" value="existing_bussiness"> Existing Business
+                  </div>
+                  <div class="form-group col-md-9" id="exist_div" style="display:none;">
+                    <select class="form-control select2" name="existing_appl_id" id="existing_appl_id" data-placeholder="Select Existing Business" title="Select Existing Business">
+                      <option value="">Select Existing Business</option>
+                      <?php foreach ($trade_appl_list as $appl_list) {
+                        $organization_id = $appl_list->organization_id;
+                        if($organization_id == 1){
+                          $org_name = $appl_list->NAME;
+                        } else{
+                          $org_name = $appl_list->ORGANIZATION;
+                        }
+                      ?>
+                        <option value="<?php echo $appl_list->application_id; ?>"><?php echo $appl_list->application_id.'. '.$appl_list->BRAND.' - ['.$org_name.']'; ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
 
                   <div class="form-group col-md-12">
@@ -293,15 +319,11 @@ $page = "step_1";
                   </div>
                 </div>
               </form>
-
             </div>
-            <!-- /.card-body -->
           </div>
-          <!-- /.card -->
           </div>
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
+      </div>
     </section>
   </div>
   <script type="text/javascript">
@@ -314,6 +336,39 @@ $page = "step_1";
   });
   </script>
 <script type="text/javascript">
+  // Display Select Exist Div...
+  $('#is_exist').on('change',function() {
+    if(this.checked) {
+      $('#exist_div').css('display','block');
+    } else{
+      $('#exist_div').css('display','none');
+    }
+  });
+
+  $('#existing_appl_id').on('change',function() {
+    var existing_appl_id = $(this).val();
+    $.ajax({
+      url:'<?php echo base_url(); ?>Transaction/trademark_details',
+      type:'post',
+      data:{'application_id':existing_appl_id},
+      context: this,
+      success: function(result){
+        var data = JSON.parse(result);
+        $('#NAME').val(data[0]['NAME']);
+        $('#NATIONALITY').val(data[0]['NATIONALITY']);
+        $('#MOBILE').val(data[0]['MOBILE']);
+        $('#SIGN_AUTH').val(data[0]['SIGN_AUTH']);
+        $('#ORGANIZATION').val(data[0]['ORGANIZATION']);
+        $('#FIRMADDRESS').val(data[0]['FIRMADDRESS']);
+        $('#STATE').val(data[0]['STATE']);
+        $('#AGE').val(data[0]['AGE']);
+        $('#EMAIL').val(data[0]['EMAIL']);
+      }
+    });
+    // alert(existing_appl_id);
+  });
+
+  // Display Proposed Date...
   $('#PROPOSED_TO_BE').on('change',function() {
     if(this.checked) {
       $('#date2').attr('readonly', true);
@@ -321,6 +376,8 @@ $page = "step_1";
       $('#date2').attr('readonly', false);
     }
   });
+
+  // Auto fill Trade...
   $('#TM').on('change',function() {
     var tm = parseInt($('#TM').val());
     if(tm > 0 && tm <= 34){

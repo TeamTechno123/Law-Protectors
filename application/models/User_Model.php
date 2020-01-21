@@ -122,6 +122,8 @@ class User_Model extends CI_Model{
   public function update_info($id_type, $id, $tbl_name, $data){
     $this->db->where($id_type, $id)
     ->update($tbl_name, $data);
+    $q = $this->db->last_query();
+    // return $q;
   }
 
   public function delete_info($id_type, $id, $tbl_name){
@@ -290,6 +292,15 @@ class User_Model extends CI_Model{
     }
     $this->db->group_by('law_application.service_id');
     $this->db->join('law_service','law_application.service_id = law_service.service_id','LEFT');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
+  public function get_status_list($service_id){
+    $this->db->select('*');
+    $this->db->from('law_service_status');
+    $this->db->where('service_id',$service_id);
     $query = $this->db->get();
     $result = $query->result();
     return $result;

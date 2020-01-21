@@ -36,7 +36,7 @@ $page = "application_list";
             <!-- /.card-header -->
             <div class="card-body">
               <div class="" style="overflow-x:auto;" id="div2">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="application_list" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Application No.</th>
@@ -60,11 +60,25 @@ $page = "application_list";
                     $NAME = $list->NAME;
                     $PROPOSED_TO_BE = $list->PROPOSED_TO_BE;
                     $single_name = explode(',', $NAME);
+                    $service_id = $list->service_id;
+                    $organization_id = $list->organization_id;
                   ?>
                   <tr>
                     <td><?php echo $list->application_no; ?></td>
                     <td><?php echo $list->application_date; ?></td>
-                    <td><?php echo $list->ORGANIZATION ?></td>
+                    <?php if($service_id == 1){
+                      if($organization_id == 1){
+                      ?>
+
+                      <td><?php echo $list->NAME; ?></td>
+                    <?php } else{ ?>
+                      <td><?php echo $list->ORGANIZATION; ?></td>
+                    <?php }
+                     } elseif ($service_id == 2) { ?>
+                      <td><?php echo $list->org_name; ?></td>
+                    <?php } else{ ?>
+                      <td><?php echo $list->appl_org_name; ?></td>
+                    <?php } ?>
                     <td><?php echo $list->BRAND; ?></td>
                     <td><?php echo $list->TM; ?></td>
                     <td><?php echo $list->application_status; ?></td>

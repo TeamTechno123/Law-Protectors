@@ -55,7 +55,7 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                   </div>
                   <div class="form-group col-md-8 offset-md-2 drop-sm">
                     <select class="form-control select2 form-control-sm" data-placeholder="Select Branch" title="Select Branch" name="branch_id" id="branch_id">
-                      <option selected="selected"  value="">Select Branch</option>                      
+                      <option selected="selected"  value="">Select Branch</option>
                     </select>
                   </div>
                 <?php } ?>
@@ -97,6 +97,14 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                       <option >Application Closed</option>
                     </select>
                   </div>
+
+                  <div class="form-group col-md-4 offset-md-2">
+                    <select class="form-control select2 form-control-sm" data-placeholder="Select Report Type" title="Select Report Type" name="report_type" id="report_type">
+                      <option selected="selected">Application Report</option>
+                      <option >Application Collection Report</option>
+                    </select>
+                  </div>
+
                   <div class="col-md-12 w-100 text-center">
                       <button type="submit" class="btn btn-success btn-sm">View</button>
                       <a href="" class="btn btn-default btn-sm ml-4">Cancel</a>
@@ -108,6 +116,8 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                 <section style="width:100%;" class="invoice" id="print_invoice">
                   <div class="row">
                     <div class="col-12 table-responsive" id="result_tbl">
+
+                      <?php if($report_type == 'Application Report'){ ?>
                       <table class="table table-botttom" id="exp_tbl" width="100%">
                         <style media="print">
                         #result_tbl table {
@@ -213,6 +223,200 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                       <?php } ?>
                       </tbody>
                     </table>
+                  <?php } else{ ?>
+                    <table class="table table-botttom" id="exp_tbl" width="100%">
+                      <style media="print">
+                      #result_tbl table {
+                        border-collapse: collapse!important;
+                        Width:100%!important;
+                      }
+                      #result_tbl table, #result_tbl tr, #result_tbl td, #result_tbl th{
+                        border: 1px solid #000;
+                        margin-left: auto;
+                        margin-right: auto;
+                        padding: 5px;
+                      }
+                    </style>
+                    <style media="screen">
+                      #result_tbl table {
+                        border-collapse: collapse!important;
+                        Width:100%!important;
+                        margin-bottom: 0px!important;
+                      }
+                      #result_tbl .table thead th{
+                          border: 1px solid #000;
+                      }
+                      #result_tbl table, #result_tbl tr, #result_tbl td, #result_tbl th{
+                        border: 1px solid #000;
+                        margin-left: auto;
+                        margin-right: auto;
+                        padding: 5px;
+                      }
+                    </style>
+                    <thead>
+                      <tr>
+                        <td colspan="12">From : <?php echo $from_date2; ?> To : <?php echo $to_date2; ?> </td>
+                      </tr>
+                      <?php if(isset($manager_id2) && $manager_id2 != ''){ ?>
+                        <tr>
+                          <td colspan="6">Manager :
+                            <?php foreach ($manager_list as $list) {
+                              if($manager_id2 == $list->user_id){
+                                echo $list->user_name.' '.$list->user_lastname;
+                              }
+                            } ?>
+                         </td>
+                         <td colspan="6">Branch :
+                           <?php foreach ($branch_list as $list) {
+                             if($branch_id2 == $list->branch_id){
+                               echo $list->branch_name;
+                             }
+                           } ?>
+                        </td>
+                        </tr>
+                      <?php } ?>
+                      <?php if(isset($service_id2) && $service_id2 != ''){ ?>
+                        <tr>
+                          <td colspan="6">Service :
+                            <?php foreach ($service_list as $list) {
+                              if($service_id2 == $list->service_id){
+                                echo $list->service_name;
+                              }
+                            } ?>
+                         </td>
+                         <td colspan="6">Status :
+                           <?php echo $status_name2; ?>
+                        </td>
+                        </tr>
+                      <?php } ?>
+
+                      <th> <p style="text-align:center">Sr. No.</p> </th>
+                      <th> <p style="text-align:center">Appl<sup>n</sup> No. </p> </th>
+                      <th> <p style="text-align:center">Appl<sup>n</sup> date</p> </th>
+                      <th> <p style="text-align:center">Org<sup>n</sup> Name</p> </th>
+                      <th> <p style="text-align:center">Appl<sup>nt</sup> Name</p> </th>
+
+                      <th> <p style="text-align:center">Total Clear</p> </th>
+                      <th> <p style="text-align:center">Total Unclear</p> </th>
+
+                      <th> <p style="text-align:center">Total LP</p> </th>
+                      <th> <p style="text-align:center">Total Govt.</p> </th>
+                      <th> <p style="text-align:center">Total GST</p> </th>
+                      <th> <p style="text-align:center">Total B2B</p> </th>
+                      <th> <p style="text-align:center">Total TDS</p> </th>
+                    </thead>
+                    <tbody>
+                      <?php $i = 0;
+                      $tot_CONTRACTAMOUNT = 0;
+                      $tot_RECEVIEDAMOUNT = 0;
+                      $tot_GSTAMOUNT = 0;
+                      $tot_LP_AMOUNT = 0;
+                      $tot_GOVT_FEES = 0;
+                      $tot_GSTAMOUNT = 0;
+                      $tot_B2B = 0;
+                      $tot_TDS = 0;
+                      $tot_bal = 0;
+                      $tot_clear_amt = 0;
+                      $tot_unclear_amt = 0;
+                      foreach ($application_report_list as $details) {
+                        $i++;
+                        $service_id = $details->service_id;
+                        $appl_id = $details->appl_id;
+
+                        $payments = $this->Report_Model->get_application_report_amt($appl_id,$from_date2,$to_date2);
+
+                        $payments_clear = $this->Report_Model->get_application_report_amt_clear($appl_id,$from_date2,$to_date2);
+
+                        $payments_unclear = $this->Report_Model->get_application_report_amt_unclear($appl_id,$from_date2,$to_date2);
+
+
+
+
+                        if($payments_clear){
+                          foreach ($payments_clear as $payments1) {
+
+                            $clear_amt = $payments1->RECEVIEDAMOUNT;
+                            $GSTAMOUNT = $payments1->GSTAMOUNT;
+                            $LP_AMOUNT = $payments1->LP_AMOUNT;
+                            $GOVT_FEES = $payments1->GOVT_FEES;
+                            $GSTAMOUNT = $payments1->GSTAMOUNT;
+                            $B2B = $payments1->B2B;
+                            $TDS = $payments1->TDS;
+                          }
+                        }
+                        else{
+                          $clear_amt = 0;
+                          $GSTAMOUNT = 0;
+                          $LP_AMOUNT = 0;
+                          $GOVT_FEES = 0;
+                          $GSTAMOUNT = 0;
+                          $B2B = 0;
+                          $TDS = 0;
+                        }
+
+                        if($payments_unclear){
+                          foreach ($payments_unclear as $payments2) {
+                            $unclear_amt = $payments2->RECEVIEDAMOUNT;
+                          }
+                        }
+                        else{
+                          $unclear_amt = 0;
+                        }
+
+                        $tot_clear_amt = $tot_clear_amt + $clear_amt;
+                        $tot_LP_AMOUNT = $tot_LP_AMOUNT + $LP_AMOUNT;
+                        $tot_GOVT_FEES = $tot_GOVT_FEES + $GOVT_FEES;
+                        $tot_GSTAMOUNT = $tot_GSTAMOUNT + $GSTAMOUNT;
+                        $tot_B2B = $tot_B2B + $B2B;
+                        $tot_TDS = $tot_TDS + $TDS;
+                        $tot_unclear_amt = $tot_unclear_amt + $unclear_amt;
+                        ?>
+                      <tr>
+                        <?php //echo print_r($details).'<br><br>'; ?>
+                        <td> <p style="text-align:center"><?php echo $i; ?> <?php //echo $appl_id; ?></p></td>
+                        <td> <p style="text-align:center"><?php echo $details->application_no; ?></p></td>
+                        <td> <p style="text-align:center"><?php echo $details->application_date; ?></p></td>
+                        <?php if($service_id == 1){ ?>
+                          <td> <p style="text-align:center"><?php echo $details->ORGANIZATION; ?></p></td>
+                          <td> <p style="text-align:center"><?php echo $details->NAME; ?></p></td>
+                        <?php } elseif ($service_id == 2) { ?>
+                          <td> <p style="text-align:center"><?php echo $details->org_name; ?></p></td>
+                          <td> <p style="text-align:center"><?php echo $details->appl_name; ?></p></td>
+                        <?php } else{ ?>
+                          <td> <p style="text-align:center"><?php echo $details->appl_org_name; ?></p></td>
+                          <td> <p style="text-align:center"><?php echo $details->appl_org_name; ?></p></td>
+                        <?php } ?>
+
+                        <td> <p style="text-align:center"><?php echo $clear_amt; ?></p></td>
+                        <td> <p style="text-align:center"><?php echo $unclear_amt; ?></p></td>
+
+                        <td> <p style="text-align:center"><?php echo $LP_AMOUNT; ?></p></td>
+                        <td> <p style="text-align:center"><?php echo $GOVT_FEES; ?></p></td>
+                        <td> <p style="text-align:center"><?php echo $GSTAMOUNT; ?></p></td>
+                        <td> <p style="text-align:center"><?php echo $B2B; ?></p></td>
+                        <td> <p style="text-align:center"><?php echo $TDS; ?></p></td>
+
+                      </tr>
+                    <?php } ?>
+                    <tr>
+                      <?php //echo print_r($details).'<br><br>'; ?>
+                      <td colspan="5"> <p style="text-align:center"> Total </p></td>
+
+
+                      <td> <p style="text-align:center"><?php echo $tot_clear_amt; ?></p></td>
+                      <td> <p style="text-align:center"><?php echo $tot_unclear_amt; ?></p></td>
+
+                      <td> <p style="text-align:center"><?php echo $tot_LP_AMOUNT; ?></p></td>
+                      <td> <p style="text-align:center"><?php echo $tot_GOVT_FEES; ?></p></td>
+                      <td> <p style="text-align:center"><?php echo $tot_GSTAMOUNT; ?></p></td>
+                      <td> <p style="text-align:center"><?php echo $tot_B2B; ?></p></td>
+                      <td> <p style="text-align:center"><?php echo $tot_TDS; ?></p></td>
+
+                    </tr>
+                    </tbody>
+                  </table>
+                <?php } ?>
+
                     <!-- this row will not appear when printing -->
                   </div>
             <!-- /.card-body -->

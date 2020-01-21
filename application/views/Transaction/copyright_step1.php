@@ -48,6 +48,12 @@
                   <label><b>Payment Information</b></label>
                 </div>
                 <div class="card-body row">
+                  <div class="form-group col-md-6 ">
+                    <input type="text" class="form-control form-control-sm" name="payment_no" id="payment_no" value="<?php if(isset($payment_no) ){ echo $payment_no;} ?>" title="Payment Reciept No." placeholder="Payment Reciept No." readonly required>
+                  </div>
+                  <div class="form-group col-md-6 ">
+                    <input type="text" class="form-control form-control-sm" name="payment_date" value="<?php if(isset($payment_date)){ echo $payment_date;} else{ echo date('d-m-Y'); } ?>"  id="date5" data-target="#date5" data-toggle="datetimepicker"  title="Reciept Date" placeholder="Reciept Date">
+                  </div>
                   <div class=" col-md-6 ">
                     <label for="" class="">Basic Amount :</label>
                   </div>
@@ -159,6 +165,20 @@
                     <label><b><?php echo $title; ?> Information</b></label>
                   </div>
 
+
+                  <div class="form-group col-md-3">
+                    <input class="" type="checkbox" name="is_exist" id="is_exist" value="existing_bussiness"> Existing Business
+                  </div>
+                  <?php //print_r($copy_appl_list); ?>
+                  <div class="form-group col-md-9" id="exist_div" style="display:none;">
+                    <select class="form-control select2" name="existing_appl_id" id="existing_appl_id" data-placeholder="Select Existing Business" title="Select Existing Business">
+                      <option value="">Select Existing Business</option>
+                      <?php foreach ($copy_appl_list as $appl_list) { ?>
+                        <option value="<?php echo $appl_list->application_id; ?>"><?php echo $appl_list->application_id.'. '.$appl_list->org_name.' - ['.$appl_list->appl_name.']'; ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="copy_title" id="copy_title" value="<?php if(isset($copy_title)){ echo $copy_title; } ?>" title="Title Of Copyright" placeholder="Title Of Copyright" required>
                   </div>
@@ -174,8 +194,11 @@
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="appl_name" id="appl_name" value="<?php if(isset($appl_name)){ echo $appl_name; } ?>" title="Full Name Of Propritor / Applicant " placeholder="Full Name Of Propritor / Applicant ">
                   </div>
-                  <div class="form-group col-md-12">
+                  <div class="form-group col-md-6">
                     <input type="text" class="form-control form-control-sm" name="nationality" id="nationality" value="<?php if(isset($nationality)){ echo $nationality; } ?>" title="Nationality Of Authorised Signatory " placeholder="Nationality Of Authorised Signatory ">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <input type="email" class="form-control form-control-sm" name="appl_email" id="appl_email" value="<?php if(isset($appl_email)){ echo $appl_email; } ?>" title="Email" placeholder="Email">
                   </div>
                   <div class=" form-group col-md-4">
                     <div class="checkbox " >
@@ -243,18 +266,12 @@
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control form-control-sm" name="place" id="place" value="<?php if(isset($place)){ echo $place; } ?>" title="Place" placeholder="Place">
                   </div>
-
                   <div class="col-md-6 offset-md-4">
                     <button type="submit" class="btn btn-primary  mr-3">Save</button>
                     <button type="submit" class="btn btn-default ">Cancel</button>
                   </div>
                 </div>
               </form>
-
-
-
-
-
             </div>
             <!-- /.card-body -->
           </div>
@@ -267,6 +284,37 @@
   </div>
   <!-- /.content-wrapper -->
 
+  <script type="text/javascript">
+    // Display Select Exist Div...
+    $('#is_exist').on('change',function() {
+      if(this.checked) {
+        $('#exist_div').css('display','block');
+      } else{
+        $('#exist_div').css('display','none');
+      }
+    });
 
+    $('#existing_appl_id').on('change',function() {
+      var existing_appl_id = $(this).val();
+      // alert(existing_appl_id);
+      $.ajax({
+        url:'<?php echo base_url(); ?>Transaction/copyright_details',
+        type:'post',
+        data:{'application_id':existing_appl_id},
+        context: this,
+        success: function(result){
+          var data = JSON.parse(result);
+          $('#copy_title').val(data[0]['copy_title']);
+          $('#org_name').val(data[0]['org_name']);
+          $('#org_address').val(data[0]['org_address']);
+          $('#appl_address').val(data[0]['appl_address']);
+          $('#appl_name').val(data[0]['appl_name']);
+          $('#nationality').val(data[0]['nationality']);
+          $('#appl_email').val(data[0]['appl_email']);
+        }
+      });
+      // alert(existing_appl_id);
+    });
+  </script>
 </body>
 </html>

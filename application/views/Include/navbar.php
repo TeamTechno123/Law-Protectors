@@ -21,6 +21,35 @@ animation: blinker 3s linear infinite;
     <li class="nav-item">
       <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
     </li>
+    <li class="nav-item d-none d-sm-inline-block">
+        <a href="<?php echo base_url(); ?>User/dashboard" class="nav-link">Dashboard</a>
+      </li>
+      <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
+      <li class="nav-item d-none d-sm-inline-block">
+        <?php
+        $today = date('d-m-Y');
+        $status = '';
+        $pending_application_list = $this->Transaction_Model->pending_work_appln_list('',$status,'DESC',$today);
+        $i = 0;
+        foreach ($pending_application_list as $pending_application_list) {
+          $i++;
+        }
+         ?>
+        <a href="<?php echo base_url(); ?>Transaction/pending_work" class="blink_me nav-link text-bold text-danger">Pending Work Details (<?php echo $i; ?>)</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <?php
+          $today = date('d-m-Y');
+          $status = '';
+          $completed_application_list = $this->Transaction_Model->completed_work_appln_list('',$status,'DESC',$today);
+          $j = 0;
+          foreach ($completed_application_list as $completed_application_list) {
+            $j++;
+          }
+        ?>
+        <a href="<?php echo base_url(); ?>Transaction/completed_work" class="blink_me nav-link text-bold text-success">Completed Work Details (<?php echo $j; ?>)</a>
+      </li>
+    <?php } ?>
   </ul>
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto">
@@ -127,6 +156,12 @@ animation: blinker 3s linear infinite;
                   <p> Target Information </p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url(); ?>User/service_status_list" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p> Service Status </p>
+                </a>
+              </li>
             </ul>
           </li>
         <?php } ?>
@@ -223,13 +258,13 @@ animation: blinker 3s linear infinite;
             <p>Legal Report</p>
           </a>
         </li>
+      <?php } ?>
         <li class="nav-item">
           <a href="<?php echo base_url(); ?>Report/application_outstanding" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>Application Outstanding</p>
           </a>
         </li>
-      <?php } ?>
       </ul>
       </li>
       <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>

@@ -17,12 +17,11 @@ $page = "make_information_list";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12 mt-1">
-            <h4>VIEW ALL BRANCH INFORMATION</h4>
+            <h4>Service Status List</h4>
           </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -31,9 +30,9 @@ $page = "make_information_list";
             <!-- general form elements -->
             <div class="card">
             <div class="card-header">
-              <h3 class="card-title"><i class="fa fa-list"></i> List Branch Information</h3>
+              <h3 class="card-title"><i class="fa fa-list"></i> List Service Status</h3>
               <div class="card-tools">
-                <a href="<?php echo base_url(); ?>User/branch_information" class="btn btn-sm btn-block btn-primary">Add Branch</a>
+                <!-- <a href="<?php echo base_url(); ?>User/service_status" class="btn btn-sm btn-block btn-primary">Add Product</a> -->
               </div>
             </div>
             <!-- /.card-header -->
@@ -42,29 +41,25 @@ $page = "make_information_list";
                 <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>Branch Name</th>
-                  <th>Email</th>
+                  <th>Service Name</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php
-                $i=0;
-                foreach ($branch_list as $list) {
-                  $i++;
-                ?>
-                <tr>
-                  <td><?php echo $i; ?></td>
-                  <td><?php echo $list->branch_name; ?></td>
-                  <td><?php echo $list->branch_email; ?></td>
-                  <td>
-                    <a href="<?php echo base_url(); ?>User/edit_branch/<?php echo $list->branch_id; ?>"> <i class="fa fa-edit"></i> </a>
-                    <?php if($user_roll == 1){ ?>
-                    <a href="<?php echo base_url(); ?>User/delete_branch/<?php echo $list->branch_id; ?>" onclick="return confirm('Delete this Company');" class="ml-4"> <i class="fa fa-trash"></i> </a>
-                    <?php } ?>
-                  </td>
-                </tr>
-              <?php } ?>
+                  <?php
+                  $i=0;
+                  foreach ($service_list as $list) {
+                    $i++;
+                  ?>
+                  <tr>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $list->service_name; ?></td>
+                    <td>
+                      <a href="<?php echo base_url(); ?>User/service_status/<?php echo $list->service_id; ?>"> <i class="fa fa-edit"></i> </a>
+                    </td>
+                  </tr>
+                <?php } ?>
+                </tbody>
               </table>
             </div>
             <!-- /.card-body -->

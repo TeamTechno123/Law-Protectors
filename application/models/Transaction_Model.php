@@ -139,7 +139,8 @@ class Transaction_Model extends CI_Model{
     return $result;
   }
 
-  public function trade_mark_print_list($company_id,$status,$order){
+  // Trde Mark List... User In - 1. Transaction/printing_list, 2. Transaction/trade_mark_step_one,
+  public function trade_mark_print_list($company_id, $status, $order){
     $this->db->select('application.*,branch.*,service.*,trade.*');
     $this->db->from('law_application as application');
     // $this->db->where('application.company_id',$company_id);
@@ -147,7 +148,7 @@ class Transaction_Model extends CI_Model{
       $this->db->where('application.application_status',$status);
     }
     $this->db->where('application.service_id',1);
-    $this->db->order_by('application.application_id','DESC');
+    $this->db->order_by('application.application_id',$order);
     $this->db->join('law_branch as branch','application.branch_id = branch.branch_id','LEFT');
     $this->db->join('law_service as service','application.service_id = service.service_id','LEFT');
     $this->db->join('law_trademark as trade','application.application_id = trade.application_id','LEFT');
@@ -173,6 +174,57 @@ class Transaction_Model extends CI_Model{
     $result = $query->result();
     return $result;
   }
+
+
+  // Copyright List... User In - 1. Transaction/,
+  public function copyright_appln_list($company_id, $status, $order, $application_id){
+    $this->db->select('application.*,branch.*,service.*,copyright.*');
+    $this->db->from('law_application as application');
+    // $this->db->where('application.company_id',$company_id);
+    if($status){
+      $this->db->where('application.application_status',$status);
+    }
+    if($application_id){
+      $this->db->where('application.application_id',$application_id);
+    }
+
+    $this->db->order_by('application.application_id',$order);
+    $this->db->where('application.service_id',2);
+    $this->db->join('law_branch as branch','application.branch_id = branch.branch_id','LEFT');
+    $this->db->join('law_service as service','application.service_id = service.service_id','LEFT');
+    $this->db->join('law_copyright as copyright','application.application_id = copyright.application_id','LEFT');
+    $query = $this->db->get();
+    // $q = $this->db->last_query();
+    $result = $query->result();
+    return $result;
+    // return $q;
+  }
+
+  // Other Application List... User In - 1. Transaction/,
+  public function other_appln_list($company_id, $status, $order, $application_id){
+    $this->db->select('application.*,branch.*,service.*,otherservice.*');
+    $this->db->from('law_application as application');
+    // $this->db->where('application.company_id',$company_id);
+    if($status){
+      $this->db->where('application.application_status',$status);
+    }
+    if($application_id){
+      $this->db->where('application.application_id',$application_id);
+    }
+
+    $this->db->order_by('application.application_id',$order);
+    $this->db->where('application.service_id != ',1);
+    $this->db->where('application.service_id != ',2);
+    $this->db->join('law_branch as branch','application.branch_id = branch.branch_id','LEFT');
+    $this->db->join('law_service as service','application.service_id = service.service_id','LEFT');
+    $this->db->join('law_otherservice as otherservice','application.application_id = otherservice.application_id','LEFT');
+    $query = $this->db->get();
+    // $q = $this->db->last_query();
+    $result = $query->result();
+    return $result;
+    // return $q;
+  }
+
   // Application Details...
   public function application_details($application_id){
     $query = $this->db->select('application.*,company.company_name,company.company_id as com_id,branch.*,service.*,organization.*,user_man.user_name as man_name,user_man.user_lastname as man_lname,user_tc.user_name as tc_name,user_tc.user_lastname as tc_lname,user_rc.user_name as rc_name,user_rc.user_lastname as rc_lname,')
@@ -260,7 +312,7 @@ class Transaction_Model extends CI_Model{
   }
 
   public function receipt_list(){
-    $this->db->select('law_payment.*,application.*,application.application_id as appl_id,trade.*,copy.*,other.*');
+    $this->db->select('law_payment.*,law_payment.payment_status as pay_status,law_payment.pay_rec_by as pay_rec,application.*,application.application_id as appl_id,trade.*,copy.*,other.*');
     $this->db->from('law_payment');
     $this->db->order_by('law_payment.payment_id','DESC');
     $this->db->where('law_payment.is_master',0);
@@ -376,6 +428,70 @@ class Transaction_Model extends CI_Model{
     $this->db->where('application_id', $application_id);
     $this->db->where('doc_status', 0);
     $this->db->from('law_doc_upload');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
+  // Update status of master in payment table.. Used in - 1. Transaction - update_pay_status,
+  public function update_pay_status($application_id,$data){
+    $this->db->where('application_id', $application_id);
+    $this->db->where('is_master', 1);
+    $this->db->update('law_payment', $data);
+  }
+
+  public function get_alert_days($application_status,$service_id){
+    $this->db->select('*');
+    $this->db->where('service_id', $service_id);
+    $this->db->where('status_name', $application_status);
+    $this->db->from('law_service_status');
+    $query = $this->db->get();
+    $result = $query->result_array();
+    return $result;
+  }
+
+  /***********************************************************************/
+  // Application List...
+  public function pending_work_appln_list($company_id,$status,$order,$today){
+
+    $this->db->select('application.*,application.application_id as appl_id,branch.*,service.*,trade.*,copy.*,other.*,org.*');
+    $this->db->from('law_application as application');
+    if($status){
+      $this->db->where('application.application_status',$status);
+    }
+    $this->db->where('application.application_status_progress','Pending');
+    $this->db->where("str_to_date(application.application_status_due_date,'%d-%m-%Y') <= str_to_date('$today','%d-%m-%Y')");
+
+    $this->db->order_by('application.application_id',$order);
+    $this->db->join('law_branch as branch','application.branch_id = branch.branch_id','LEFT');
+    $this->db->join('law_service as service','application.service_id = service.service_id','LEFT');
+    $this->db->join('law_trademark as trade','application.application_id = trade.application_id','LEFT');
+    $this->db->join('law_copyright as copy','application.application_id = copy.application_id','LEFT');
+    $this->db->join('law_otherservice as other','application.application_id = other.application_id','LEFT');
+    $this->db->join('law_organization as org','application.organization_id = org.organization_id','LEFT');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;
+  }
+
+  // Application List...
+  public function completed_work_appln_list($company_id,$status,$order,$today){
+
+    $this->db->select('application.*,application.application_id as appl_id,branch.*,service.*,trade.*,copy.*,other.*,org.*');
+    $this->db->from('law_application as application');
+    if($status){
+      $this->db->where('application.application_status',$status);
+    }
+    $this->db->where('application.application_status_progress','Complete');
+    // $this->db->where("str_to_date(application.application_status_due_date,'%d-%m-%Y') <= str_to_date('$today','%d-%m-%Y')");
+
+    $this->db->order_by('application.application_id',$order);
+    $this->db->join('law_branch as branch','application.branch_id = branch.branch_id','LEFT');
+    $this->db->join('law_service as service','application.service_id = service.service_id','LEFT');
+    $this->db->join('law_trademark as trade','application.application_id = trade.application_id','LEFT');
+    $this->db->join('law_copyright as copy','application.application_id = copy.application_id','LEFT');
+    $this->db->join('law_otherservice as other','application.application_id = other.application_id','LEFT');
+    $this->db->join('law_organization as org','application.organization_id = org.organization_id','LEFT');
     $query = $this->db->get();
     $result = $query->result();
     return $result;

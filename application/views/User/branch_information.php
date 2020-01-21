@@ -22,7 +22,7 @@
       <div class="container-fluid">
         <div class="row">
           <!-- left column -->
-          <div class="col-md-10 offset-md-1">
+          <div class="col-md-8 offset-md-2">
             <!-- general form elements -->
             <div class="card card-default">
               <div class="card-header">
@@ -48,7 +48,9 @@
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="branch_name" id="branch_name" value="<?php if(isset($branch_name)){ echo $branch_name; } ?>" placeholder="Enter Branch Name" required>
                   </div>
-
+                  <div class="form-group col-md-12">
+                    <input type="email" class="form-control form-control-sm" name="branch_email" id="branch_email" value="<?php if(isset($branch_email)){ echo $branch_email; } ?>" placeholder="Enter Branch Email" required>
+                  </div>
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control form-control-sm" name="branch_bank" id="branch_bank" value="<?php if(isset($branch_bank)){ echo $branch_bank; } ?>" placeholder="Enter Bank Name" required>
                   </div>

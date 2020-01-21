@@ -43,6 +43,7 @@
               <?php } else{ ?>
                 <form role="form" action="<?php echo base_url(); ?>/Transaction/save_document_upload" method="post" enctype="multipart/form-data">
               <?php } ?>
+                <input type="hidden" name="service_id" id="service_id" value="<?php if(isset($service_id)){ echo $service_id; } ?>">
                 <div class="card-body row">
                   <div class="form-group col-md-6">
                     <input type="text" class="form-control form-control-sm" name="application_id" id="application_id" value="<?php if(isset($application_id)){ echo $application_id; } ?>" title="Application Reference No." placeholder="Application Reference No." readonly>
@@ -98,13 +99,11 @@
                         <input type="file" class="form-control form-control-sm" name="doc_name[]" id="" title="" placeholder="">
                         <input type="hidden" name="doc_type[]" value="<?php echo $str_arr[$i]; ?>">
                       <?php } ?>
-
                       </div>
                   <?php  }
                     ?>
                   <?php } }
                 }
-                  //echo $application_status;
                   ?>
 
                   <?php if(isset($application_status) && ($application_status != 'Filed Application' && $application_status != 'Application Closed')){ ?>
@@ -126,11 +125,16 @@
                         <option <?php if(isset($application_status) && $application_status == 'Legal Completed'){ echo 'selected '; }?> disabled>Legal Completed</option>
                         <option <?php if(isset($application_status) && $application_status == 'Filed Application'){ echo 'selected '; } if(!isset($change_status)){ echo ' disabled'; } ?>>Filed Application</option>
                         <option <?php if(isset($application_status) && $application_status == 'Application Closed'){ echo 'selected '; } if(!isset($change_status)){ echo ' disabled'; } ?> >Application Closed</option>
+
+                        <?php foreach ($status_list as $status_list1) { ?>
+                          <option <?php if(isset($application_status) && $application_status == $status_list1->status_name){ echo 'selected '; } if(!isset($change_status)){ echo ' disabled'; } ?>><?php echo $status_list1->status_name; ?></option>
+                        <?php } ?>
                       </select>
                     </div>
+
                     <div class="form-group col-md-6 ">
                       <div class="legal_user">
-                        <select class="form-control select2 form-control-sm" data-placeholder="Select Legal Assistant" name="legal_user" id="legal_user" title="Select Legal Assistant" <?php if(isset($user_roll) && ($user_roll != 1 || $user_roll != 5)){ echo 'disabled'; }?>>
+                        <select class="form-control select2 form-control-sm" data-placeholder="Select Legal Assistant" name="legal_user" id="legal_user" title="Select Legal Assistant" <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ echo ''; } else{ echo 'disabled'; }?>>
                           <option value="" >Select Legal Assistant </option>
                           <?php if(isset($legal_user_list)){
                             foreach ($legal_user_list as $legal_user_list) { ?>
@@ -141,13 +145,13 @@
                       </div>
                     </div>
                     <div class="form-group col-md-4">
-                      <input type="number" min="0" class="form-control form-control-sm" name="alert_days" id="alert_days" value="<?php if(isset($alert_days)){ echo $alert_days; } ?>" title="Enter No. Of Days" placeholder="Enter No. Of Days" <?php if(isset($change_status)){ echo 'readonly'; } ?> <?php if(isset($user_roll) && ($user_roll != 1 || $user_roll != 5)){ echo 'disabled'; }?> >
+                      <input type="number" min="0" class="form-control form-control-sm" name="alert_days" id="alert_days" value="<?php if(isset($alert_days)){ echo $alert_days; } ?>" title="Enter No. Of Days" placeholder="Enter No. Of Days" <?php //if(isset($change_status)){ echo 'readonly'; } ?> <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ echo ''; } else{ echo 'disabled'; }?> >
                     </div>
                     <div class="form-group col-md-4 prn dis-no">
-                      <input type="text" class="form-control form-control-sm" name="prn_no" id="prn_no" value="<?php if(isset($prn_no)){ echo $prn_no; } ?>" title="PRN No." placeholder="PRN No." <?php if(isset($change_status)){ echo 'readonly'; } ?> <?php if(isset($user_roll) && ($user_roll != 1 || $user_roll != 5)){ echo 'disabled'; }?>>
+                      <input type="text" class="form-control form-control-sm" name="prn_no" id="prn_no" value="<?php if(isset($prn_no)){ echo $prn_no; } ?>" title="PRN No." placeholder="PRN No." <?php //if(isset($change_status)){ echo 'readonly'; } ?> <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ echo ''; } else{ echo 'disabled'; }?>>
                     </div>
                     <div class="form-group col-md-4 prn dis-no">
-                      <input type="text" class="form-control form-control-sm" name="prn_date" id="date2" data-target="#date2" data-toggle="datetimepicker" value="<?php if(isset($prn_date)){ echo $prn_date; } ?>" title="PRN Date" placeholder="PRN Date" <?php if(isset($change_status)){ echo 'readonly'; } ?> <?php if(isset($user_roll) && ($user_roll != 1 || $user_roll != 5)){ echo 'disabled'; }?>>
+                      <input type="text" class="form-control form-control-sm" name="prn_date" id="date2" data-target="#date2" data-toggle="datetimepicker" value="<?php if(isset($prn_date)){ echo $prn_date; } ?>" title="PRN Date" placeholder="PRN Date" <?php //if(isset($change_status)){ echo 'readonly'; } ?> <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ echo ''; } else{ echo 'disabled'; }?>>
                     </div>
                     <?php if(isset($change_status)){ ?>
                       <div class="form-group col-md-6 prn dis-no d-none">
@@ -156,7 +160,7 @@
                       </div>
                     <?php } ?>
                     <div class="form-group col-md-12">
-                      <textarea class="form-control form-control-sm" name="name" rows="4" disabled ><?php echo $comment; ?></textarea>
+                      <textarea class="form-control form-control-sm" name="name" rows="4" disabled placeholder="User Comment"><?php echo $comment; ?></textarea>
                     </div>
                   <?php if(isset($user_roll) && ($user_roll == 1 || $user_roll == 5)){ ?>
                   <div class="col-md-6 offset-md-4">
@@ -180,25 +184,23 @@
   <script type="text/javascript">
   $(document).ready(function(){
     var application_status = $('#application_status').find("option:selected").val();
-    // alert(application_status);
     if(application_status != 'Open' || application_status != 'In Process' || application_status != 'Ready To File'){
       $('.legal_user').css("display","block");
     } else{
       $('.legal_user').css("display","none");
     }
-
     if(application_status != 'Legal In Process'){
       $('#legal_user').attr('disabled',true);
     }
-
   });
+
   $('#add_row').click(function(){
     var row = '<tr><td width="100%"><div class="custom-file"><input type="file" class="custom-file-input" id="customFile" title="Browse Logo" placeholder="Logo"><label class="custom-file-label" for="customFile">Browse Logo</label></div></td></tr><br>';
       $('#myTable').append(row);
   });
+
   $('#application_status').change(function(){
     var a = $(this).val();
-    // alert();
     if(a == 'Filed Application'){
       $('.prn').css("display", "block");
     }
@@ -211,6 +213,19 @@
     } else{
       $('.legal_user').css("display","none");
     }
+
+    var application_status = $(this).val();
+    var service_id = $('#service_id').val();
+    $.ajax({
+      url:'<?php echo base_url(); ?>Transaction/get_alert_days',
+      type: 'POST',
+      data: {"application_status":application_status,
+             "service_id":service_id,},
+      context: this,
+      success: function(result){
+        $('#alert_days').val(result);
+      }
+    });
   });
 
   $('.del_doc').click(function(e){
@@ -229,8 +244,15 @@
 
   // $('#application_status').on('change',function(){
   //   var application_status = $('#application_status').find("option:selected").text();
-  //
-  //
+  //   $.ajax({
+  //     url:'<?php echo base_url(); ?>Transaction/get_purchase_by_party',
+  //     type: 'POST',
+  //     data: {"application_status":application_status},
+  //     context: this,
+  //     success: function(result){
+  //       $('#purchase_no').html(result);
+  //     }
+  //   });
   // });
   </script>
 

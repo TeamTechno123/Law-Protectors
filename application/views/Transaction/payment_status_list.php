@@ -99,6 +99,7 @@ $page = "application_list";
                     <?php } else{ ?>
                       <td><?php echo $list->appl_org_name; ?></td>
                     <?php } ?>
+
                     <td>
                       <?php if($list->payment_status == 'Uncleared'){ ?>
                         <a href="#" class="pay_status" id="<?php echo $list->appl_id; ?>" name="<?php echo $list->payment_status; ?>" received="<?php echo $list->pay_rec_by; ?>" data-toggle="modal" data-target="#modal-default">
@@ -110,6 +111,7 @@ $page = "application_list";
                         </a>
                       <?php } ?>
                     </td>
+
                   </tr>
                   <?php } ?>
                   <tbody>

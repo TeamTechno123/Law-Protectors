@@ -6,6 +6,7 @@ class Admin extends CI_Controller{
     parent::__construct();
     $this->load->model('Admin_Model');
   }
+
   public function logout(){
     $this->session->sess_destroy();
     header('location:'.base_url().'Admin');
@@ -151,7 +152,7 @@ class Admin extends CI_Controller{
           'company_city' => $this->input->post('company_city'),
           'company_state' => $this->input->post('company_state'),
           'company_district' => $this->input->post('company_district'),
-          'company_statecode' => $this->input->post('company_statecode'),
+          'company_pincode' => $this->input->post('company_pincode'),
           'company_mob1' => $this->input->post('company_mob1'),
           'company_mob2' => $this->input->post('company_mob2'),
           'company_email' => $this->input->post('company_email'),

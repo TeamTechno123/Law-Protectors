@@ -165,8 +165,6 @@ $roll_info = $this->User_Model->get_info_arr('roll_id', $user_roll, 'law_roll');
                       <br>
                       <table class="table table-botttom" id="exp_tbl" width="100%" >
                         <thead>
-
-
                           <tr>
                             <th colspan="10"><p style="text-align:center"> Branch Name : <?php echo $branch_list1->branch_name; ?> </p> </th>
                           </tr>

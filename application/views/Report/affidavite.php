@@ -112,11 +112,20 @@
 
         <?php
         $PROPOSED_DATE = strtotime($PROPOSED);
-        $curr_month = date('m',$PROPOSED_DATE);
-        $curr_year = date('Y');
-        $next_year = $curr_year+1;
+        $proposed_month = date('m',$PROPOSED_DATE);
+
+        $appln_date = strtotime($application_date);
+        $appln_month = date('m',$appln_date);
+        $appln_year = date('Y');
+        if($appln_month < 4){
+          $next_year = $appln_year - 1;
+        } else{
+          $next_year = $appln_year;
+        }
+
+
         $k=0;
-        if($curr_month < 4){
+        if($proposed_month < 4){
           $PROPOSED_year = date('Y',$PROPOSED_DATE) - 1;
         } else{
           $PROPOSED_year = date('Y',$PROPOSED_DATE);
@@ -154,11 +163,19 @@
 
         <?php
         $PROPOSED_DATE = strtotime($PROPOSED);
-        $curr_month = date('m',$PROPOSED_DATE);
-        $curr_year = date('Y');
-        $next_year = $curr_year+1;
+        $proposed_month = date('m',$PROPOSED_DATE);
+
+        $appln_date = strtotime($application_date);
+        $appln_month = date('m',$appln_date);
+        $appln_year = date('Y');
+        if($appln_month < 4){
+          $next_year = $appln_year - 1;
+        } else{
+          $next_year = $appln_year;
+        }
+        
         $k=0;
-        if($curr_month < 4){
+        if($proposed_month < 4){
           $PROPOSED_year = date('Y',$PROPOSED_DATE) - 1;
         } else{
           $PROPOSED_year = date('Y',$PROPOSED_DATE);

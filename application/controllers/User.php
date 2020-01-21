@@ -334,6 +334,7 @@ class User extends CI_Controller{
       $data = array(
         'company_id' => $this->input->post('company_id'),
         'branch_name' => $this->input->post('branch_name'),
+        'branch_email' => $this->input->post('branch_email'),
         'branch_bank' => $this->input->post('branch_bank'),
         'branch_b_branch' => $this->input->post('branch_b_branch'),
         'branch_acc_no' => $this->input->post('branch_acc_no'),
@@ -360,6 +361,7 @@ class User extends CI_Controller{
           $data['branch_id'] = $info->branch_id;
           $data['company_id'] = $info->company_id;
           $data['branch_name'] = $info->branch_name;
+          $data['branch_email'] = $info->branch_email;
           $data['branch_bank'] = $info->branch_bank;
           $data['branch_b_branch'] = $info->branch_b_branch;
           $data['branch_acc_no'] = $info->branch_acc_no;
@@ -385,6 +387,7 @@ class User extends CI_Controller{
       $data = array(
         'company_id' => $this->input->post('company_id'),
         'branch_name' => $this->input->post('branch_name'),
+        'branch_email' => $this->input->post('branch_email'),
         'branch_bank' => $this->input->post('branch_bank'),
         'branch_b_branch' => $this->input->post('branch_b_branch'),
         'branch_acc_no' => $this->input->post('branch_acc_no'),
@@ -881,6 +884,57 @@ public function delete_target_range($target_id){
    $this->User_Model->delete_info('target_no', $target_no, 'law_target_details');
    header('location:'.base_url().'User/target_list');
  }
+
+/**************************** Service Status **********************************/
+  // Service List...
+  public function service_status_list(){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id){
+      $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
+      $this->load->view('Include/head',$data);
+      $this->load->view('Include/navbar',$data);
+      $this->load->view('User/service_status_list',$data);
+      $this->load->view('Include/footer',$data);
+    } else{
+      header('location:'.base_url().'User');
+    }
+  }
+
+  // Add Service Status...
+  public function service_status($service_id){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if(!$user_id){ header('location:'.base_url().'User'); }
+    $this->form_validation->set_rules('service_id', 'Id', 'trim|required');
+    if($this->form_validation->run() != FALSE){
+      $this->User_Model->delete_info('service_id', $service_id, 'law_service_status');
+      foreach($_POST['input'] as $user){
+        $user['service_id'] = $service_id;
+        $user['status_name'] = trim($user['status_name']);
+        $this->User_Model->save_data('law_service_status', $user);
+      }
+      header('location:'.base_url().'User/service_status_list');
+    }
+    $data['service_list'] = $this->User_Model->get_list2('service_id','ASC','law_service');
+    $data['status_list'] = $this->User_Model->get_status_list($service_id);
+    $service_info = $this->User_Model->get_info_arr('service_id', $service_id, 'law_service');
+    if(!$service_info){ header('location:'.base_url().'User/service_status_list'); }
+    $data['update'] = 'update';
+    $data['service_id'] = $service_id;
+    $data['service_name'] = $service_info[0]['service_name'];
+    $this->load->view('Include/head',$data);
+    $this->load->view('Include/navbar',$data);
+    $this->load->view('User/service_status',$data);
+    $this->load->view('Include/footer',$data);
+  }
+
+
+
+
+ /***************************************************************************/
 
  public function get_user_list_by_branch(){
    $user_id = $this->session->userdata('law_user_id');

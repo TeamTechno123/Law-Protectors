@@ -46,6 +46,12 @@
                   <label><b>Payment Information</b></label>
                 </div>
                 <div class="card-body row">
+                  <div class="form-group col-md-6 ">
+                    <input type="text" class="form-control form-control-sm" name="payment_no" id="payment_no" value="<?php if(isset($payment_no) ){ echo $payment_no;} ?>" title="Payment Reciept No." placeholder="Payment Reciept No." readonly required>
+                  </div>
+                  <div class="form-group col-md-6 ">
+                    <input type="text" class="form-control form-control-sm" name="payment_date" value="<?php if(isset($payment_date)){ echo $payment_date;} else{ echo date('d-m-Y'); } ?>"  id="date5" data-target="#date5" data-toggle="datetimepicker"  title="Reciept Date" placeholder="Reciept Date">
+                  </div>
                   <div class=" col-md-6 ">
                     <label for="" class="">Basic Amount :</label>
                   </div>
@@ -157,6 +163,19 @@
                     <label><b><?php echo $title; ?> Information</b></label>
                   </div>
 
+                  <div class="form-group col-md-3">
+                    <input class="" type="checkbox" name="is_exist" id="is_exist" value="existing_bussiness"> Existing Business
+                  </div>
+                  <?php //print_r($copy_appl_list); ?>
+                  <div class="form-group col-md-9" id="exist_div" style="display:none;">
+                    <select class="form-control select2" name="existing_appl_id" id="existing_appl_id" data-placeholder="Select Existing Business" title="Select Existing Business">
+                      <option value="">Select Existing Business</option>
+                      <?php foreach ($other_appl_list as $appl_list) { ?>
+                        <option value="<?php echo $appl_list->application_id; ?>"><?php echo $appl_list->application_id.'. '.$appl_list->appl_org_name.' - ['.$appl_list->title_of_work.']'; ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+
                   <div class="form-group col-md-12">
                     <input type="text" class="form-control form-control-sm" name="appl_org_name" id="appl_org_name" value="<?php if(isset($appl_org_name)){ echo $appl_org_name; } ?>" title="Name Of Organizatiom / Applicant" placeholder="Name Of Organizatiom / Applicant" required>
                   </div>
@@ -185,19 +204,12 @@
                   <input type="text" class="form-control form-control-sm" name="other_place" id="other_place" value="<?php if(isset($other_place)){ echo $other_place; } ?>" title="Place" placeholder="Place">
                 </div>
               </div>
-
-
                 <div class="col-md-6 offset-md-4">
                     <button type="submit" class="btn btn-primary  mr-3">Save & Next</button>
                     <button type="submit" class="btn btn-default ">Cancel</button>
                   </div>
                 </div>
               </form>
-
-
-
-
-
             </div>
             <!-- /.card-body -->
           </div>
@@ -210,6 +222,35 @@
   </div>
   <!-- /.content-wrapper -->
 
+  <script type="text/javascript">
+    // Display Select Exist Div...
+    $('#is_exist').on('change',function() {
+      if(this.checked) {
+        $('#exist_div').css('display','block');
+      } else{
+        $('#exist_div').css('display','none');
+      }
+    });
 
+    $('#existing_appl_id').on('change',function() {
+      var existing_appl_id = $(this).val();
+      // alert(existing_appl_id);
+      $.ajax({
+        url:'<?php echo base_url(); ?>Transaction/otherservice_details',
+        type:'post',
+        data:{'application_id':existing_appl_id},
+        context: this,
+        success: function(result){
+          var data = JSON.parse(result);
+          $('#appl_org_name').val(data[0]['appl_org_name']);
+          $('#org_address').val(data[0]['org_address']);
+          $('#appl_address').val(data[0]['appl_address']);
+          $('#appl_conatct').val(data[0]['appl_conatct']);
+          $('#appl_email').val(data[0]['appl_email']);
+        }
+      });
+      // alert(existing_appl_id);
+    });
+  </script>
 </body>
 </html>

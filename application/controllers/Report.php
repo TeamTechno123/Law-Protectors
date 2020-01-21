@@ -341,6 +341,7 @@ class Report extends CI_Controller{
       $status_name = $this->input->post('status_name');
       $rc_id = $this->input->post('rc_id');
       $tc_id = $this->input->post('tc_id');
+      $report_type = $this->input->post('report_type');
 
       $data['from_date2'] = $from_date;
       $data['to_date2'] = $to_date;
@@ -350,9 +351,14 @@ class Report extends CI_Controller{
       $data['status_name2'] = $status_name;
       $data['rc_id'] = $rc_id;
       $data['tc_id'] = $tc_id;
+      $data['report_type'] = $report_type;
 
       $data['application_report'] = 'load';
-      $data['application_report_list'] = $this->Report_Model->application_report_list($from_date,$to_date,$company_id2,$manager_id,$branch_id,$service_id,$status_name,$rc_id,$tc_id);
+      if($report_type == 'Application Report'){
+        $data['application_report_list'] = $this->Report_Model->application_report_list($from_date,$to_date,$company_id2,$manager_id,$branch_id,$service_id,$status_name,$rc_id,$tc_id);
+      } else{
+        $data['application_report_list'] = $this->Report_Model->application_report_list($from_date,$to_date,$company_id2,$manager_id,$branch_id,$service_id,$status_name,$rc_id,$tc_id);
+      }
     }
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
@@ -523,13 +529,18 @@ class Report extends CI_Controller{
     $this->load->view('Include/footer',$data);
   }
 
-  public function application_outstanding(){    
+  public function application_outstanding(){
     $user_id = $this->session->userdata('law_user_id');
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null){ header('location:'.base_url().'User'); }
     $status = '';
-    $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'DESC');
+    if(isset($roll_id) && ($roll_id == 1 || $roll_id == 5)){
+      $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'DESC');
+    } else{
+      $data['application_list'] = $this->Transaction_Model->application_list_legal($user_id,$company_id,$status,'DESC');
+    }
+
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
     $this->load->view('Report/application_outstanding',$data);

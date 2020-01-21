@@ -171,6 +171,8 @@ class Transaction extends CI_Controller{
       $row['application_id'] = $application_id;
       $row2['is_master'] = 1;
       $row2['application_id'] = $application_id;
+      $row2['payment_no'] = $this->Transaction_Model->get_count_no('payment_no', 'law_payment');
+
       if($service_id == 1){
         $this->User_Model->save_data('law_trademark', $row);
         $this->User_Model->save_data('law_payment', $row2);
@@ -405,8 +407,9 @@ class Transaction extends CI_Controller{
       $organization_id = $this->session->userdata('organization_id');
       $application_id = $this->session->userdata('application_id');
 
+      $appl_details = $this->User_Model->get_info_arr('application_id', $application_id, 'law_application');
+      $data['EMAIL'] = $appl_details[0]['email'];
       $form_details = $this->User_Model->get_info('application_id', $application_id, 'law_trademark');
-
       if($form_details){
         foreach ($form_details as $info) {
           $data['application_id'] = $application_id;
@@ -414,7 +417,7 @@ class Transaction extends CI_Controller{
           $data['NAME'] = $info->NAME;
           $data['ADDRESS'] = $info->ADDRESS;
           $data['MOBILE'] = $info->MOBILE;
-          $data['EMAIL'] = $info->EMAIL;
+          // $data['EMAIL'] = $info->EMAIL;
           $data['SIGN_AUTH'] = $info->SIGN_AUTH;
           $data['AFF_DATE'] = $info->AFF_DATE;
           $data['COV_DATE'] = $info->COV_DATE;
@@ -455,6 +458,8 @@ class Transaction extends CI_Controller{
           $data['organization_id'] = $organization_id;
 
           $data['payment_id'] = $info->payment_id;
+          $data['payment_no'] = $info->payment_no;
+          $data['payment_date'] = $info->payment_date;
           $data['CONTRACTAMOUNT'] = $info->CONTRACTAMOUNT;
           $data['GSTAMOUNT'] = $info->GSTAMOUNT;
           $data['TOTALAMOUNT'] = $info->TOTALAMOUNT;
@@ -534,6 +539,9 @@ class Transaction extends CI_Controller{
           $data['pl_father'] = 'Father School Name of Partener';
           $data['pl_res_addr'] = 'Residential Address of Partener';
         }
+
+        $data['trade_appl_list'] = $this->Transaction_Model->trade_mark_print_list($company_id,'','ASC');
+
         $this->load->view('Include/head', $data);
         $this->load->view('Include/navbar', $data);
         $this->load->view('Transaction/applicant_form_step1', $data);
@@ -555,6 +563,10 @@ class Transaction extends CI_Controller{
     if($company_id){
       $application_id = $this->input->post('application_id');
       $organization_id = $this->input->post('organization_id');
+
+      $up_appl['email'] = $this->input->post('EMAIL');
+      $this->User_Model->update_info('application_id', $application_id, 'law_application', $up_appl);
+
       $MARK_0 = $this->input->post('MARK_0');
       $MARK_1 = $this->input->post('MARK_1');
       $MARK_2 = $this->input->post('MARK_2');
@@ -664,7 +676,7 @@ class Transaction extends CI_Controller{
       $uodate_data2['BANKNAME'] = $this->input->post('BANKNAME');
       $uodate_data2['CHEQUEAMOUNT'] = $this->input->post('CHEQUEAMOUNT');
       $uodate_data2['GROUNDOFCONTRACT'] = $this->input->post('GROUNDOFCONTRACT');
-      $uodate_data2['payment_date'] = date('d-m-Y');
+      $uodate_data2['payment_date'] = $this->input->post('payment_date');
       $uodate_data2['is_master'] = 1;
 
       $this->User_Model->update_info('payment_id', $payment_id, 'law_payment', $uodate_data2);
@@ -677,6 +689,15 @@ class Transaction extends CI_Controller{
     }
   }
 
+
+  public function trademark_details(){
+    $application_id = $this->input->post('application_id');
+    $trademark_details = $this->Transaction_Model->trademark_details($application_id);
+    // print_r($trademark_details);
+    // echo $application_id;
+    echo json_encode($trademark_details);
+  }
+
 /***************************** Copyright *******************/
   public function copyright_step_one(){
     $user_id = $this->session->userdata('law_user_id');
@@ -686,6 +707,10 @@ class Transaction extends CI_Controller{
 
       $organization_id = $this->session->userdata('organization_id');
       $application_id = $this->session->userdata('application_id');
+
+      $appln_details = $this->User_Model->get_info_arr('application_id', $application_id, 'law_application');
+      $data['appl_email'] = $appln_details[0]['email'];
+
       $application_details = $this->Transaction_Model->application_details($application_id);
       foreach ($application_details as $appl_details) {  }
       $service_name = $appl_details->service_name;
@@ -730,6 +755,7 @@ class Transaction extends CI_Controller{
         $data['organization_id'] = $organization_id;
 
         $data['payment_id'] = $info->payment_id;
+        $data['payment_no'] = $info->payment_no;
         $data['CONTRACTAMOUNT'] = $info->CONTRACTAMOUNT;
         $data['GSTAMOUNT'] = $info->GSTAMOUNT;
         $data['TOTALAMOUNT'] = $info->TOTALAMOUNT;
@@ -748,7 +774,8 @@ class Transaction extends CI_Controller{
         $data['CHEQUEAMOUNT'] = $info->CHEQUEAMOUNT;
         $data['GROUNDOFCONTRACT'] = $info->GROUNDOFCONTRACT;
       }
-
+      $data['copy_appl_list'] = $this->Transaction_Model->copyright_appln_list('', '', 'ASC', '');
+      // print_r($data['copy_appl_list']);
       $this->load->view('Include/head', $data);
       $this->load->view('Include/navbar', $data);
       $this->load->view('Transaction/copyright_step1', $data);
@@ -764,6 +791,9 @@ class Transaction extends CI_Controller{
     if($user_id == null ){ header('location:'.base_url().'User'); }
     $organization_id = $this->session->userdata('organization_id');
     $application_id = $this->session->userdata('application_id');
+
+    $up_appl['email'] = $this->input->post('appl_email');
+    $this->User_Model->update_info('application_id', $application_id, 'law_application', $up_appl);
 
     $work1 = $this->input->post('work1');
     $work2 = $this->input->post('work2');
@@ -844,7 +874,7 @@ class Transaction extends CI_Controller{
     $uodate_data2['BANKNAME'] = $this->input->post('BANKNAME');
     $uodate_data2['CHEQUEAMOUNT'] = $this->input->post('CHEQUEAMOUNT');
     $uodate_data2['GROUNDOFCONTRACT'] = $this->input->post('GROUNDOFCONTRACT');
-    $uodate_data2['payment_date'] = date('d-m-Y');
+    $uodate_data2['payment_date'] = $this->input->post('payment_date');
     $uodate_data2['is_master'] = 1;
 
     $this->User_Model->update_info('payment_id', $payment_id, 'law_payment', $uodate_data2);
@@ -854,6 +884,154 @@ class Transaction extends CI_Controller{
     header('location:'.base_url().'Transaction/application_list');
   }
 
+  public function copyright_details(){
+    $application_id = $this->input->post('application_id');
+    $copyright_details = $this->Transaction_Model->copyright_appln_list('', '', 'ASC', $application_id);
+    echo json_encode($copyright_details);
+  }
+  /**************************** Othjer Services ****************************/
+    public function other_service_step_one(){
+      $user_id = $this->session->userdata('law_user_id');
+      $company_id = $this->session->userdata('law_company_id');
+      $roll_id = $this->session->userdata('roll_id');
+      if($user_id == null ){ header('location:'.base_url().'User'); }
+
+      $organization_id = $this->session->userdata('organization_id');
+      $application_id = $this->session->userdata('application_id');
+
+      $appln_details = $this->User_Model->get_info_arr('application_id', $application_id, 'law_application');
+      $data['appl_email'] = $appln_details[0]['email'];
+
+      $application_details = $this->Transaction_Model->application_details($application_id);
+      foreach ($application_details as $appl_details) {  }
+      $service_name = $appl_details->service_name;
+
+      $form_details = $this->User_Model->get_info('application_id', $application_id, 'law_otherservice');
+
+      if(!$form_details){ header('location:'.base_url().'Transaction/application_list'); }
+        foreach ($form_details as $info) {
+          $data['application_id'] = $application_id;
+          $data['organization_id'] = $organization_id;
+          $data['title'] = $service_name;
+
+          $data['appl_org_name'] = $info->appl_org_name;
+          $data['org_address'] = $info->org_address;
+          $data['appl_address'] = $info->appl_address;
+          $data['appl_conatct'] = $info->appl_conatct;
+          // $data['appl_email'] = $info->appl_email;
+          $data['title_of_work'] = $info->title_of_work;
+          $data['req_details'] = $info->req_details;
+          $data['other_date'] = $info->other_date;
+          $data['other_place'] = $info->other_place;
+        }
+
+        $payment_details = $this->Transaction_Model->get_payment_info($application_id);
+        if(!$payment_details){ header('location:'.base_url().'Transaction/application_list');  }
+        foreach ($payment_details as $info) {
+          $data['application_id'] = $application_id;
+          $data['organization_id'] = $organization_id;
+
+          $data['payment_id'] = $info->payment_id;
+          $data['payment_no'] = $info->payment_no;
+          $data['CONTRACTAMOUNT'] = $info->CONTRACTAMOUNT;
+          $data['GSTAMOUNT'] = $info->GSTAMOUNT;
+          $data['TOTALAMOUNT'] = $info->TOTALAMOUNT;
+          $data['RECEVIEDAMOUNT'] = $info->RECEVIEDAMOUNT;
+          $data['BALANCEAMOUNT'] = $info->BALANCEAMOUNT;
+          $data['GSTNUMBER'] = $info->GSTNUMBER;
+          $data['LP_AMOUNT'] = $info->LP_AMOUNT;
+          $data['GOVT_FEES'] = $info->GOVT_FEES;
+          $data['TDS'] = $info->TDS;
+          $data['B2B'] = $info->B2B;
+          $data['PAYMENTMODE_0'] = $info->PAYMENTMODE_0;
+          $data['PAYMENTMODE_1'] = $info->PAYMENTMODE_1;
+          $data['CHEQUENUMBER'] = $info->CHEQUENUMBER;
+          $data['CHQDATE'] = $info->CHQDATE;
+          $data['BANKNAME'] = $info->BANKNAME;
+          $data['CHEQUEAMOUNT'] = $info->CHEQUEAMOUNT;
+          $data['GROUNDOFCONTRACT'] = $info->GROUNDOFCONTRACT;
+        }
+      $data['other_appl_list'] = $this->Transaction_Model->other_appln_list('', '', 'ASC', '');
+      $this->load->view('Include/head',$data);
+      $this->load->view('Include/navbar',$data);
+      $this->load->view('Transaction/other_service_step1',$data);
+      $this->load->view('Include/footer',$data);
+    }
+
+    // Save Other Services... Update Row...
+    public function save_other_service(){
+      $user_id = $this->session->userdata('law_user_id');
+      $company_id = $this->session->userdata('law_company_id');
+      $roll_id = $this->session->userdata('roll_id');
+      if($user_id == null ){ header('location:'.base_url().'User'); }
+
+      $organization_id = $this->session->userdata('organization_id');
+      $application_id = $this->session->userdata('application_id');
+
+      $up_appl['email'] = $this->input->post('appl_email');
+      $this->User_Model->update_info('application_id', $application_id, 'law_application', $up_appl);
+
+      $update_data = array(
+        'appl_org_name' => $this->input->post('appl_org_name'),
+        'org_address' => $this->input->post('org_address'),
+        'appl_address' => $this->input->post('appl_address'),
+        'appl_conatct' => $this->input->post('appl_conatct'),
+        'appl_email' => $this->input->post('appl_email'),
+        'title_of_work' => $this->input->post('title_of_work'),
+        'req_details' => $this->input->post('req_details'),
+        'other_date' => $this->input->post('other_date'),
+        'other_place' => $this->input->post('other_place'),
+      );
+      $this->User_Model->update_info('application_id', $application_id, 'law_otherservice', $update_data);
+
+      // Save Payment....
+      $payment_id = $this->input->post('payment_id');
+      $application_details = $this->Transaction_Model->application_details($application_id);
+      foreach ($application_details as $appl_details) {  }
+      $service_name = $appl_details->service_name;
+      $service_id = $appl_details->service_id;
+
+      $PAYMENTMODE_0 = $this->input->post('PAYMENTMODE_0');
+      $PAYMENTMODE_1 = $this->input->post('PAYMENTMODE_1');
+
+      if(!isset($PAYMENTMODE_0))( $PAYMENTMODE_0 = '');
+      if(!isset($PAYMENTMODE_1))( $PAYMENTMODE_1 = '');
+
+      $uodate_data2['CONTRACTAMOUNT'] = $this->input->post('CONTRACTAMOUNT');
+      $uodate_data2['GSTAMOUNT'] = $this->input->post('GSTAMOUNT');
+      $uodate_data2['TOTALAMOUNT'] = $this->input->post('TOTALAMOUNT');
+      $uodate_data2['RECEVIEDAMOUNT'] = $this->input->post('RECEVIEDAMOUNT');
+      $uodate_data2['BALANCEAMOUNT'] = $this->input->post('BALANCEAMOUNT');
+      $uodate_data2['LP_AMOUNT'] = $this->input->post('LP_AMOUNT');
+      $uodate_data2['GOVT_FEES'] = $this->input->post('GOVT_FEES');
+      $uodate_data2['TDS'] = $this->input->post('TDS');
+      $uodate_data2['B2B'] = $this->input->post('B2B');
+      $uodate_data2['GSTNUMBER'] = $this->input->post('GSTNUMBER');
+      $uodate_data2['PAYMENTMODE_0'] = $PAYMENTMODE_0;
+      $uodate_data2['PAYMENTMODE_1'] = $PAYMENTMODE_1;
+      $uodate_data2['CHEQUENUMBER'] = $this->input->post('CHEQUENUMBER');
+      $uodate_data2['CHQDATE'] = $this->input->post('CHQDATE');
+      $uodate_data2['BANKNAME'] = $this->input->post('BANKNAME');
+      $uodate_data2['CHEQUEAMOUNT'] = $this->input->post('CHEQUEAMOUNT');
+      $uodate_data2['GROUNDOFCONTRACT'] = $this->input->post('GROUNDOFCONTRACT');
+      $uodate_data2['payment_date'] = $this->input->post('payment_date');
+      $uodate_data2['is_master'] = 1;
+
+      $this->User_Model->update_info('payment_id', $payment_id, 'law_payment', $uodate_data2);
+      $app_data['application_status'] = 'In Process';
+      $this->User_Model->update_info('application_id', $application_id, 'law_application', $app_data);
+
+      header('location:'.base_url().'Transaction/application_list');
+      // header('location:'.base_url().'Transaction/process_step_two');
+    }
+
+    public function otherservice_details(){
+      $application_id = $this->input->post('application_id');
+      $otherservice_details = $this->Transaction_Model->other_appln_list('', '', 'ASC', $application_id);
+      echo json_encode($otherservice_details);
+    }
+
+/************************************** Step Two - Payment *******************************************/
   public function process_step_two(){
     $user_id = $this->session->userdata('law_user_id');
     $company_id = $this->session->userdata('law_company_id');
@@ -956,133 +1134,7 @@ class Transaction extends CI_Controller{
       // header('location:'.base_url().'Transaction/sale_invoice_list');
   }
 
-/**************************** Othjer Services ****************************/
-  public function other_service_step_one(){
-    $user_id = $this->session->userdata('law_user_id');
-    $company_id = $this->session->userdata('law_company_id');
-    $roll_id = $this->session->userdata('roll_id');
-    if($user_id == null ){ header('location:'.base_url().'User'); }
 
-    $organization_id = $this->session->userdata('organization_id');
-    $application_id = $this->session->userdata('application_id');
-    $application_details = $this->Transaction_Model->application_details($application_id);
-    foreach ($application_details as $appl_details) {  }
-    $service_name = $appl_details->service_name;
-
-    $form_details = $this->User_Model->get_info('application_id', $application_id, 'law_otherservice');
-
-    if(!$form_details){ header('location:'.base_url().'Transaction/application_list'); }
-      foreach ($form_details as $info) {
-        $data['application_id'] = $application_id;
-        $data['organization_id'] = $organization_id;
-        $data['title'] = $service_name;
-
-        $data['appl_org_name'] = $info->appl_org_name;
-        $data['org_address'] = $info->org_address;
-        $data['appl_address'] = $info->appl_address;
-        $data['appl_conatct'] = $info->appl_conatct;
-        $data['appl_email'] = $info->appl_email;
-        $data['title_of_work'] = $info->title_of_work;
-        $data['req_details'] = $info->req_details;
-        $data['other_date'] = $info->other_date;
-        $data['other_place'] = $info->other_place;
-      }
-
-      $payment_details = $this->Transaction_Model->get_payment_info($application_id);
-      if(!$payment_details){ header('location:'.base_url().'Transaction/application_list');  }
-      foreach ($payment_details as $info) {
-        $data['application_id'] = $application_id;
-        $data['organization_id'] = $organization_id;
-
-        $data['payment_id'] = $info->payment_id;
-        $data['CONTRACTAMOUNT'] = $info->CONTRACTAMOUNT;
-        $data['GSTAMOUNT'] = $info->GSTAMOUNT;
-        $data['TOTALAMOUNT'] = $info->TOTALAMOUNT;
-        $data['RECEVIEDAMOUNT'] = $info->RECEVIEDAMOUNT;
-        $data['BALANCEAMOUNT'] = $info->BALANCEAMOUNT;
-        $data['GSTNUMBER'] = $info->GSTNUMBER;
-        $data['LP_AMOUNT'] = $info->LP_AMOUNT;
-        $data['GOVT_FEES'] = $info->GOVT_FEES;
-        $data['TDS'] = $info->TDS;
-        $data['B2B'] = $info->B2B;
-        $data['PAYMENTMODE_0'] = $info->PAYMENTMODE_0;
-        $data['PAYMENTMODE_1'] = $info->PAYMENTMODE_1;
-        $data['CHEQUENUMBER'] = $info->CHEQUENUMBER;
-        $data['CHQDATE'] = $info->CHQDATE;
-        $data['BANKNAME'] = $info->BANKNAME;
-        $data['CHEQUEAMOUNT'] = $info->CHEQUEAMOUNT;
-        $data['GROUNDOFCONTRACT'] = $info->GROUNDOFCONTRACT;
-      }
-
-
-    $this->load->view('Include/head',$data);
-    $this->load->view('Include/navbar',$data);
-    $this->load->view('Transaction/other_service_step1',$data);
-    $this->load->view('Include/footer',$data);
-  }
-
-  // Save Other Services... Update Row...
-  public function save_other_service(){
-    $user_id = $this->session->userdata('law_user_id');
-    $company_id = $this->session->userdata('law_company_id');
-    $roll_id = $this->session->userdata('roll_id');
-    if($user_id == null ){ header('location:'.base_url().'User'); }
-
-    $organization_id = $this->session->userdata('organization_id');
-    $application_id = $this->session->userdata('application_id');
-    $update_data = array(
-      'appl_org_name' => $this->input->post('appl_org_name'),
-      'org_address' => $this->input->post('org_address'),
-      'appl_address' => $this->input->post('appl_address'),
-      'appl_conatct' => $this->input->post('appl_conatct'),
-      'appl_email' => $this->input->post('appl_email'),
-      'title_of_work' => $this->input->post('title_of_work'),
-      'req_details' => $this->input->post('req_details'),
-      'other_date' => $this->input->post('other_date'),
-      'other_place' => $this->input->post('other_place'),
-    );
-    $this->User_Model->update_info('application_id', $application_id, 'law_otherservice', $update_data);
-
-    // Save Payment....
-    $payment_id = $this->input->post('payment_id');
-    $application_details = $this->Transaction_Model->application_details($application_id);
-    foreach ($application_details as $appl_details) {  }
-    $service_name = $appl_details->service_name;
-    $service_id = $appl_details->service_id;
-
-    $PAYMENTMODE_0 = $this->input->post('PAYMENTMODE_0');
-    $PAYMENTMODE_1 = $this->input->post('PAYMENTMODE_1');
-
-    if(!isset($PAYMENTMODE_0))( $PAYMENTMODE_0 = '');
-    if(!isset($PAYMENTMODE_1))( $PAYMENTMODE_1 = '');
-
-    $uodate_data2['CONTRACTAMOUNT'] = $this->input->post('CONTRACTAMOUNT');
-    $uodate_data2['GSTAMOUNT'] = $this->input->post('GSTAMOUNT');
-    $uodate_data2['TOTALAMOUNT'] = $this->input->post('TOTALAMOUNT');
-    $uodate_data2['RECEVIEDAMOUNT'] = $this->input->post('RECEVIEDAMOUNT');
-    $uodate_data2['BALANCEAMOUNT'] = $this->input->post('BALANCEAMOUNT');
-    $uodate_data2['LP_AMOUNT'] = $this->input->post('LP_AMOUNT');
-    $uodate_data2['GOVT_FEES'] = $this->input->post('GOVT_FEES');
-    $uodate_data2['TDS'] = $this->input->post('TDS');
-    $uodate_data2['B2B'] = $this->input->post('B2B');
-    $uodate_data2['GSTNUMBER'] = $this->input->post('GSTNUMBER');
-    $uodate_data2['PAYMENTMODE_0'] = $PAYMENTMODE_0;
-    $uodate_data2['PAYMENTMODE_1'] = $PAYMENTMODE_1;
-    $uodate_data2['CHEQUENUMBER'] = $this->input->post('CHEQUENUMBER');
-    $uodate_data2['CHQDATE'] = $this->input->post('CHQDATE');
-    $uodate_data2['BANKNAME'] = $this->input->post('BANKNAME');
-    $uodate_data2['CHEQUEAMOUNT'] = $this->input->post('CHEQUEAMOUNT');
-    $uodate_data2['GROUNDOFCONTRACT'] = $this->input->post('GROUNDOFCONTRACT');
-    $uodate_data2['payment_date'] = date('d-m-Y');
-    $uodate_data2['is_master'] = 1;
-
-    $this->User_Model->update_info('payment_id', $payment_id, 'law_payment', $uodate_data2);
-    $app_data['application_status'] = 'In Process';
-    $this->User_Model->update_info('application_id', $application_id, 'law_application', $app_data);
-
-    header('location:'.base_url().'Transaction/application_list');
-    // header('location:'.base_url().'Transaction/process_step_two');
-  }
 
   public function legal_doc_view($application_id){
     $user_id = $this->session->userdata('law_user_id');
@@ -1132,8 +1184,10 @@ class Transaction extends CI_Controller{
       $data['prn_no'] = $details->prn_no;
       $data['prn_date'] = $details->prn_date;
       $data['comment'] = $details->comment;
+      $data['legal_user'] = $details->legal_user;
     }
     // echo $data['application_date'];
+    $data['legal_user_list'] = $this->User_Model->legal_user_list();
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
     $this->load->view('Transaction/document_uploading',$data);
@@ -1145,19 +1199,65 @@ class Transaction extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
+    $user_data = $this->User_Model->get_info_arr('user_id', $user_id, 'law_user');
+
     $application_id = $this->input->post('application_id');
     $application_status = $this->input->post('application_status');
+
     if(isset($application_status) && $application_status != ''){
       $update_data['application_status'] = $this->input->post('application_status');
+
+      $applin_data = $this->User_Model->get_info_arr('application_id', $application_id, 'law_application');
+      $old_status = $applin_data[0]['application_status'];
+      $service_id = $applin_data[0]['service_id'];
+      // Get Brand Name...
+      if($service_id == 1){
+        $trade_details = $this->User_Model->get_info_arr('application_id', $application_id, 'law_trademark');
+        $b_name = 'Brand Name';
+        $b_detail = $trade_details[0]['BRAND'];
+      } elseif ($service_id == 2) {
+        $copy_details = $this->User_Model->get_info_arr('application_id', $application_id, 'law_copyright');
+        $b_name = 'Title of Copyright';
+        $b_detail = $trade_details[0]['copy_title'];
+      } else{
+        $other_details = $this->User_Model->get_info_arr('application_id', $application_id, 'law_otherservice');
+        $b_name = 'Title of Work';
+        $b_detail = $trade_details[0]['title_of_work'];
+      }
+      // Check Status Change...
+      if($old_status != $application_status){
+        // Send Email...
+        $this->load->library('email');
+        $to_email = $appli_data[0]['email'];
+        $from_email = $user_data[0]['user_email'];
+        $subject = "LawProtectors Status Change Mail";
+        $message = '<b>Your application status is changed</b> <br> <hr>
+        Application No : '.$appli_data[0]['application_no'].' <br>
+        '.$b_name.' : '.$b_detail.'<br>
+        Status : '.$application_status.' <br> <hr>';
+    		$headers  = 'MIME-Version: 1.0' . "\r\n";
+    		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    		$headers .= 'From: '.$from_email."\r\n".
+    		'Reply-To: '.$from_email."\r\n" .
+    		'X-Mailer: PHP/' . phpversion();
+
+    		$send = mail($to_email, $subject, $message, $headers);
+    		if($send){
+    			$this->session->set_flashdata('email_success','success');
+    		}
+    		else{
+    			$this->session->set_flashdata('email_error','error');
+    		}
+      }
     }
+    // Update Form Data...
     $update_data = array(
       'alert_days' => $this->input->post('alert_days'),
       'prn_no' => $this->input->post('prn_no'),
       'prn_date' => $this->input->post('prn_date'),
     );
-    // echo $application_id;
     $this->User_Model->update_info('application_id', $application_id, 'law_application', $update_data);
-
+    // Image Upload...
     if(isset($_FILES['doc_name']['name'])){
       $this->load->library('upload');
       $files = $_FILES;
@@ -1197,8 +1297,6 @@ class Transaction extends CI_Controller{
             $error = $this->upload->display_errors();
             $this->session->set_flashdata('status',$this->upload->display_errors());
             $this->User_Model->save_data('law_doc_upload', $file_data);
-
-            echo $error;
           }
       }
     }
@@ -1244,10 +1342,12 @@ class Transaction extends CI_Controller{
       $data['legal_user'] = $details->legal_user;
       $data['change_status'] = 'yes';
       $data['comment'] = $details->comment;
+      // $data['service_id'] = $details->service_id;
     }
 
     // echo $data['application_date'];
     $data['legal_user_list'] = $this->User_Model->legal_user_list();
+    $data['status_list'] = $this->User_Model->get_status_list($data['service_id']);
     // print_r($data['legal_user_list']);
     $this->load->view('Include/head',$data);
     $this->load->view('Include/navbar',$data);
@@ -1260,19 +1360,100 @@ class Transaction extends CI_Controller{
     $company_id = $this->session->userdata('law_company_id');
     $roll_id = $this->session->userdata('roll_id');
     if($user_id == null ){ header('location:'.base_url().'User'); }
+
     $application_id = $this->input->post('application_id');
     $legal_user = $this->input->post('legal_user');
     $application_status = $this->input->post('application_status');
+    $update_data = null;
     if(isset($legal_user) && $legal_user != ''){
       $update_data['legal_user'] = $this->input->post('legal_user');
     }
     if(isset($application_status) && $application_status != ''){
-      $update_data['application_status'] = $this->input->post('application_status');
+      $application_status = $this->input->post('application_status');
+      $alert_days = $this->input->post('alert_days');
+      $update_data['application_status'] = $application_status;
+      $update_data['alert_days'] = $alert_days;
+
+      if($application_status != 'In Process' && $application_status != 'Ready To File' && $application_status != 'Legal In Process' && $application_status != 'Pending for Legal' && $application_status != 'Legal Completed' && $application_status != 'Application Closed'){
+        $update_data['application_status_progress'] = 'Pending';
+        $today = date('d-m-Y');
+        $due_date = date('d-m-Y', strtotime($Date. ' + '.$alert_days.' days'));
+        $update_data['application_status_date'] = $today;
+        $update_data['application_status_due_date'] = $due_date;
+      } else{
+        $update_data['application_status_progress'] = 'Complete';
+      }
+
+      $appli_data = $this->User_Model->get_info_arr('application_id', $application_id, 'law_application');
+      $old_status = $appli_data[0]['application_status'];
+      $service_id = $appli_data[0]['service_id'];
+      if($service_id == 1){
+        $trade_details = $this->User_Model->get_info_arr('application_id', $application_id, 'law_trademark');
+        $b_name = 'Brand Name';
+        $b_detail = $trade_details[0]['BRAND'];
+      } elseif ($service_id == 2) {
+        $copy_details = $this->User_Model->get_info_arr('application_id', $application_id, 'law_copyright');
+        $b_name = 'Title of Copyright';
+        $b_detail = $trade_details[0]['copy_title'];
+      } else{
+        $other_details = $this->User_Model->get_info_arr('application_id', $application_id, 'law_otherservice');
+        $b_name = 'Title of Work';
+        $b_detail = $trade_details[0]['title_of_work'];
+      }
+
+      if($old_status != $application_status){
+        $branch_id =  $appli_data[0]['branch_id'];
+        $branch_data = $this->User_Model->get_info_arr('branch_id', $branch_id, 'law_branch');
+
+        $from_email = $branch_data[0]['branch_email'];
+        $to_email = $appli_data[0]['email'];
+
+        $manager_id = $appli_data[0]['manager_id'];
+        $manager_id_arr = explode (",", $manager_id);
+        foreach ($manager_id_arr as $manager_id) {
+          $manager_info = $this->User_Model->get_info_arr('user_id', $manager_id, 'law_user');
+          $to_email = $to_email.','.$manager_info[0]['user_email'];
+        }
+
+        $this->load->library('email');
+        $subject = "LawProtectors - Application Status";
+        $message = '<b>Your application status has been changed</b> <br> <hr>
+        Application No : '.$appli_data[0]['application_no'].' <br>
+        '.$b_name.' : '.$b_detail.'<br>
+        Status : '.$application_status.' <br> <hr>';
+    		$headers  = 'MIME-Version: 1.0' . "\r\n";
+    		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    		$headers .= 'From: '.$from_email."\r\n".
+    		'Reply-To: '.$from_email."\r\n" .
+    		'X-Mailer: PHP/' . phpversion();
+
+    		$send = mail($to_email, $subject, $message, $headers);
+    		if($send){
+    			$this->session->set_flashdata('email_success','success');
+    		}
+    		else{
+    			$this->session->set_flashdata('email_error','error');
+    		}
+      }
     }
     if($update_data){
       $this->User_Model->update_info('application_id', $application_id, 'law_application', $update_data);
     }
     header('location:'.base_url().'Transaction/application_list');
+  }
+
+  public function get_alert_days(){
+    $application_status = $this->input->post('application_status');
+    $service_id = $this->input->post('service_id');
+
+    $result = $this->Transaction_Model->get_alert_days($application_status,$service_id);
+    if($result){
+      $alert_days = $result[0]['status_days'];
+    } else{
+      $alert_days = null;
+    }
+    echo $alert_days;
+
   }
 
 /************************** Add Work Details ********************/
@@ -1622,6 +1803,7 @@ class Transaction extends CI_Controller{
       'invoice_addedby' => $user_id,
     );
     $this->User_Model->update_info('invoice_id', $invoice_id, 'law_invoice', $invoice_data);
+
     foreach($_POST['input'] as $user){
       if(isset($user['invoice_details_id'])){
         $invoice_details_id = $user['invoice_details_id'];
@@ -1636,6 +1818,7 @@ class Transaction extends CI_Controller{
         $this->db->insert('law_invoice_details', $user);
       }
     }
+
     header('location:'.base_url().'Transaction/sale_invoice_list');
   }
 
@@ -1664,6 +1847,7 @@ class Transaction extends CI_Controller{
       if(!isset($PAYMENTMODE_1))( $PAYMENTMODE_1 = '');
 
       $save_data['application_id'] = $this->input->post('application_id');
+      $save_data['payment_no'] = $this->input->post('payment_no');
       $save_data['GSTAMOUNT'] = $this->input->post('GSTAMOUNT');
       $save_data['RECEVIEDAMOUNT'] = $this->input->post('RECEVIEDAMOUNT');
       $save_data['BALANCEAMOUNT'] = $this->input->post('BALANCEAMOUNT');
@@ -1677,12 +1861,13 @@ class Transaction extends CI_Controller{
       $save_data['CHQDATE'] = $this->input->post('CHQDATE');
       $save_data['BANKNAME'] = $this->input->post('BANKNAME');
       $save_data['CHEQUEAMOUNT'] = $this->input->post('CHEQUEAMOUNT');
-      $save_data['payment_date'] = date('d-m-Y');
+      $save_data['payment_date'] = $this->input->post('payment_date');
       $this->User_Model->save_data('law_payment', $save_data);
       header('location:'.base_url().'Transaction/receipt_list');
     }
     $status = '';
     $data['application_list'] = $this->Transaction_Model->application_list($company_id,$status,'DESC');
+    $data['payment_no'] = $this->Transaction_Model->get_count_no('payment_no', 'law_payment');
     $this->load->view('Include/head', $data);
     $this->load->view('Include/navbar', $data);
     $this->load->view('Transaction/add_receipt', $data);
@@ -1721,6 +1906,8 @@ class Transaction extends CI_Controller{
     $this->load->view('Include/footer', $data);
   }
 
+
+
   public function edit_receipt($payment_id){
     $user_id = $this->session->userdata('law_user_id');
     $company_id = $this->session->userdata('law_company_id');
@@ -1731,6 +1918,8 @@ class Transaction extends CI_Controller{
     foreach ($payment_details as $info) {
       $data['update'] = 'update';
       $data['application_id'] = $info->application_id;
+      $data['payment_no'] = $info->payment_no;
+      $data['payment_date'] = $info->payment_date;
       $data['payment_id'] = $info->payment_id;
       $data['GSTAMOUNT'] = $info->GSTAMOUNT;
       $data['TOTALAMOUNT'] = $info->TOTALAMOUNT;
@@ -1766,6 +1955,7 @@ class Transaction extends CI_Controller{
       if(!isset($PAYMENTMODE_1))( $PAYMENTMODE_1 = '');
 
       $update_data['application_id'] = $this->input->post('application_id');
+      $save_data['payment_no'] = $this->input->post('payment_no');
       $update_data['GSTAMOUNT'] = $this->input->post('GSTAMOUNT');
       $update_data['RECEVIEDAMOUNT'] = $this->input->post('RECEVIEDAMOUNT');
       $update_data['BALANCEAMOUNT'] = $this->input->post('BALANCEAMOUNT');
@@ -1779,7 +1969,7 @@ class Transaction extends CI_Controller{
       $update_data['CHQDATE'] = $this->input->post('CHQDATE');
       $update_data['BANKNAME'] = $this->input->post('BANKNAME');
       $update_data['CHEQUEAMOUNT'] = $this->input->post('CHEQUEAMOUNT');
-      $update_data['payment_date'] = date('d-m-Y');
+      $update_data['payment_date'] = $this->input->post('payment_date');
 
       $this->User_Model->update_info('payment_id', $payment_id, 'law_payment', $update_data);
       header('location:'.base_url().'Transaction/receipt_list');
@@ -1860,11 +2050,62 @@ class Transaction extends CI_Controller{
     $data['payment_status'] = $this->input->post('payment_status');
     $data['pay_rec_by'] = $this->input->post('pay_rec_by');
     $this->User_Model->update_info('application_id', $application_id, 'law_application', $data);
+    $this->Transaction_Model->update_pay_status($application_id, $data);
+  }
+
+  public function update_rec_status(){
+    $payment_id = $this->input->post('payment_id');
+    $data['payment_status'] = $this->input->post('payment_status');
+    $data['pay_rec_by'] = $this->input->post('pay_rec_by');
+    $this->User_Model->update_info('payment_id', $payment_id, 'law_payment', $data);
+
+    echo $payment_id.' '.$data['payment_status'].' '.$data['pay_rec_by'];
   }
 
   public function add_comment(){
     $application_id = $this->input->post('application_id');
     $data['comment'] = $this->input->post('comment');
     $this->User_Model->update_info('application_id', $application_id, 'law_application', $data);
+  }
+
+
+
+  /**********************************************************************************/
+  public function pending_work(){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id == null ){ header('location:'.base_url().'User'); }
+    $today = date('d-m-Y');
+    $status = '';
+    $data['application_list'] = $this->Transaction_Model->pending_work_appln_list($company_id,$status,'DESC',$today);
+    $this->load->view('Include/head', $data);
+    $this->load->view('Include/navbar', $data);
+    $this->load->view('Transaction/pending_work', $data);
+    $this->load->view('Include/footer', $data);
+
+  }
+
+  public function update_work_status(){
+    $user_id = $this->session->userdata('law_user_id');
+    $application_id = $this->input->post('application_id');
+    $data['application_status_progress'] = $this->input->post('application_status_progress');
+    $data['application_status_user'] = $user_id;
+    $this->User_Model->update_info('application_id', $application_id, 'law_application', $data);
+  }
+
+  public function completed_work(){
+    $user_id = $this->session->userdata('law_user_id');
+    $company_id = $this->session->userdata('law_company_id');
+    $roll_id = $this->session->userdata('roll_id');
+    if($user_id == null ){ header('location:'.base_url().'User'); }
+    $today = date('d-m-Y');
+    $status = '';
+    $data['application_list'] = $this->Transaction_Model->completed_work_appln_list($company_id,$status,'DESC',$today);
+    $this->load->view('Include/head', $data);
+    $this->load->view('Include/navbar', $data);
+    $this->load->view('Transaction/complete_work', $data);
+    $this->load->view('Include/footer', $data);
+
   }
 }
